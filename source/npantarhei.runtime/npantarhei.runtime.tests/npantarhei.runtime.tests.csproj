@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8C5859A7-0ACC-4156-A98D-A442FDCC15BB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>npantarhei.runtime.tests</RootNamespace>
+    <AssemblyName>npantarhei.runtime.tests</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\..\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="data\test_NotifyingMultiQueue.cs" />
+    <Compile Include="patterns\test_Sequentialize.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="integration\test_FlowRuntime.cs" />
+    <Compile Include="operations\test_Create_task.cs" />
+    <Compile Include="operations\test_Execute_task.cs" />
+    <Compile Include="operations\test_Map_message_to_input_ports.cs" />
+    <Compile Include="samples\sample_ToDictionary.cs" />
+    <Compile Include="integration\test_FlowOperationContainer.cs" />
+    <Compile Include="messagetypes\test_Port.cs" />
+    <Compile Include="data\test_NotifyingSingleQueue.cs" />
+    <Compile Include="patterns\test_Asynchronize.cs" />
+    <Compile Include="integration\test_parallel_processing.cs" />
+    <Compile Include="patterns\test_Parallelize.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\npantarhei.runtime\npantarhei.runtime.csproj">
+      <Project>{164BC6FE-6CAF-47EE-B426-7AC022569345}</Project>
+      <Name>npantarhei.runtime</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

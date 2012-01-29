@@ -1,0 +1,89 @@
+Topics to address in future increments
+------------
+
+
+For functional units producing many results: do they really need to produce all results at once?
+That would make them use a thread for a long time. But if such a functional unit produces an IEnum using yield,
+then there is a chance of executing it in a piece meal fashion.
+However: if the IEnum would just get delivered to a consumer who then "pulls" on it, the producer would just
+execute on the consumer´s thread. Rather each element of the IEnum should be scheduled as an individual message.
+That way each "pull" could be executed sequentially on a different thread.
+This could work, if there was no single loop over the IEnum (a single foreach), but rather an element by element
+pull: a single element gets pulled from the IEnum and passed on to the consumer. Then the remaining IEnum gets
+resend to the pulling functional unit for the next pull.
+This could be a pattern operation or it could be a functionality to attach via a port annotation.
+Or... maybe the producer could return the IEnum wrapped in some special object which the Runtime interprets?
+Goal: Retain simplicity of IEnum for producer and consumer. But avoid processing all elements on same thread as consumer.
+
+
+Create contract project with stuff that implementors of operation would find useful
+
+
+Async processing on a single thread
+	Sync processing without an ever growing stack
+
+
+What happens on exec engine exceptions?
+	Shut down - send exeception to error port first
+
+What happens on operation exceptions?
+	Shut down - but send exeception to error port first
+	Or: let a causality handle the exeception
+		this becomes important for async/parallel execution
+
+
+Starting/pausing/stopping background threads and running operations
+	How to halt the whole processing in a gentle way?
+	Persistence of operations state and exec engine queues?
+	Propagate to background operations.
+	Can operations be notified? Should they need to conform to an interface?
+	
+Breakpoints
+	selective based on port name filters
+	
+
+Tracing
+	provide a log port on runtime
+	selective tracing based on port name filters
+	serialize any data graph
+	How to convert any message to text?
+
+Slow-motion
+	slow down flow of messages
+
+Consistency checking
+	are operations missing?
+	are there unused operations?
+	are operations connected in a type safe manner?
+		compare types of ports; no explicit types on streams are needed for this
+	do ports used in streams match ports of operations?
+		operations need to publish their ports; meta-data
+
+Create stream list from DSL
+
+Visualize stream list
+
+Operation adapters
+	EBC
+	method with out param
+	methods of a class
+		static
+		instance
+		only annotated with an attribute?
+		allow annotation for operation name and port names
+
+Compile stream list from assemblies
+	read from resources?
+	
+	
+Take from queue according to a pattern
+	This is supposed to emulate Erlang where "processes" can take from their mailboxes in order - but are not limited to the mailbox head.
+
+
+
+---------------------------------
+Implemented/solved:
+
+Parallel processing on many threads
+	but still sequential processing of message with each operation
+	do this with a special standard operation

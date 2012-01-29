@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "npantarhei.runtime", "npantarhei.runtime\npantarhei.runtime.csproj", "{164BC6FE-6CAF-47EE-B426-7AC022569345}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "npantarhei.runtime.tests", "npantarhei.runtime.tests\npantarhei.runtime.tests.csproj", "{8C5859A7-0ACC-4156-A98D-A442FDCC15BB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{869F4CB1-7587-4260-A0A0-727BCD890E8C}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\doc\pantarhei backlog.txt = ..\..\doc\pantarhei backlog.txt
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{164BC6FE-6CAF-47EE-B426-7AC022569345}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{164BC6FE-6CAF-47EE-B426-7AC022569345}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{164BC6FE-6CAF-47EE-B426-7AC022569345}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{164BC6FE-6CAF-47EE-B426-7AC022569345}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C5859A7-0ACC-4156-A98D-A442FDCC15BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C5859A7-0ACC-4156-A98D-A442FDCC15BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C5859A7-0ACC-4156-A98D-A442FDCC15BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C5859A7-0ACC-4156-A98D-A442FDCC15BB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = npantarhei.runtime\npantarhei.runtime.csproj
+	EndGlobalSection
+EndGlobal
