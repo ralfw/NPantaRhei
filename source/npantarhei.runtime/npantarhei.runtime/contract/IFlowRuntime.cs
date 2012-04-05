@@ -5,9 +5,9 @@ namespace npantarhei.runtime.contract
 {
 	public interface IFlowRuntime : IDisposable
 	{
-		void ProcessSync(IMessage message);
-		void ProcessAsync(IMessage message);
-		event Action<IMessage> Result;
+		void Process(IMessage message);
+
+        void SetResultHandler(Action<IMessage> resulthandler);
 		
 		void AddStream(IStream stream);
 		void AddOperation(IOperation operation);

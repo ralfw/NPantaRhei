@@ -1,6 +1,19 @@
 Topics to address in future increments
 ------------
 
+Exception handling in exec engine: exception port
+
+Move serial/parallel execution to special operations. No annotations necessary anymore. Makes for more flexibility in terms of threadpools
+for certain operations.
+
+Add means to receive exec engine output in certain sync context. Maybe replace engine events with explicit event handler registration.
+Then other params could be passed to the engine during registration like a sync ctx.
+
+Add join as a special operation (with the number of inputs as a ctor param). Watch out: the join needs to be thread-safe.
+
+Add causality push/pop as a special operations. Does the exec engine need to know about causalities? Or can they be completely handled within
+operations?
+
 
 For functional units producing many results: do they really need to produce all results at once?
 That would make them use a thread for a long time. But if such a functional unit produces an IEnum using yield,
@@ -83,6 +96,10 @@ Take from queue according to a pattern
 
 ---------------------------------
 Implemented/solved:
+
+
+Remove sync mode from exec engine. Should always run async with regard to environment.
+
 
 Parallel processing on many threads
 	but still sequential processing of message with each operation

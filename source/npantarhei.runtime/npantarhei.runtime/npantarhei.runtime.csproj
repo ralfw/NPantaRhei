@@ -58,7 +58,6 @@
     <Compile Include="operations\Signal_on_downstream_completion.cs" />
     <Compile Include="operations\Sync_dequeue_messages.cs" />
     <Compile Include="flows\Process_message.cs" />
-    <Compile Include="flows\Flow_synchronously.cs" />
     <Compile Include="flows\Flow_asynchronously.cs" />
     <Compile Include="patterns\Asynchronize.cs" />
     <Compile Include="data\NotifyingSingleQueue.cs" />

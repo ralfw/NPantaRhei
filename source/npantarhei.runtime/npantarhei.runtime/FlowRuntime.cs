@@ -18,21 +18,17 @@ namespace npantarhei.runtime
 			var regStream = new Register_stream();
 			var regOp = new Register_operation();
 			
-			var flowSync = new Flow_synchronously();
-			var flowAsync = new Flow_asynchronously();
+			var flow = new Flow_asynchronously();
 			
 			// Bind
 			_addStream += regStream.Process;
 			_addOperation += regOp.Process;
 			
-			_processSync += flowSync.Process;
-			flowSync.Result += _ => Result(_);
+			_process += flow.Process;
+		    flow.Result += _ => _resulthandler(_);
 			
-			_processAsync += flowAsync.Process;
-			flowAsync.Result += _ => Result(_);
-			
-			_start += flowAsync.Start;
-			_stop += flowAsync.Stop;
+			_start += flow.Start;
+			_stop += flow.Stop;
 			
 			// Inject
 			var streams = new List<IStream>();
@@ -41,33 +37,27 @@ namespace npantarhei.runtime
 			var operations = new Dictionary<string, IOperation>();
 			regOp.Inject(operations);
 			
-			flowSync.Inject(streams, operations);
-			flowAsync.Inject(streams, operations);
+			flow.Inject(streams, operations);
 		}
 		
 		#region IFlowRuntime implementation
-		private Action<IMessage> _processSync;
-		public void ProcessSync(IMessage message) { _processSync(message); }
+		private Action<IMessage> _process;
+		public void Process(IMessage message) { _process(message); }
 
-		private Action<IMessage> _processAsync;
-		public void ProcessAsync(IMessage message) { _processAsync(message); }
-		
-		public event Action<IMessage> Result;
-		
+	    private Action<IMessage> _resulthandler;
+		public void SetResultHandler(Action<IMessage> resulthandler) { _resulthandler = resulthandler; }
 		
 		private Action<IStream> _addStream;
 		public void AddStream (IStream stream) { _addStream(stream);}
 	
 		private Action<IOperation> _addOperation;
 		public void AddOperation (IOperation operation) { _addOperation(operation); }
-		public void AddOperations(IEnumerable<IOperation> operations) {
-			operations.ToList().ForEach(op => this.AddOperation(op));
-		}
+		public void AddOperations(IEnumerable<IOperation> operations) { operations.ToList().ForEach(this.AddOperation); }
 		
-		private Action _start;
+		private readonly Action _start;
 		public void Start() { _start(); }
 		
-		private Action _stop;
+		private readonly Action _stop;
 		public void Stop() { _stop(); }
 		#endregion
 		
