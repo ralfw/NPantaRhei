@@ -25,9 +25,9 @@ namespace npantarhei.runtime
 			_addOperation += regOp.Process;
 			
 			_process += flow.Process;
-		    flow.Message += _ => _messagehandler(_);
-		    flow.Result += _ => _resulthandler(_);
-		    flow.Exception += _ => _exceptionhandler(_);
+		    flow.Message += _ => Message(_);
+		    flow.Result += _ => Result(_);
+		    flow.UnhandledException += _ => UnhandledException(_);
 
 			_start += flow.Start;
 			_stop += flow.Stop;
@@ -43,22 +43,17 @@ namespace npantarhei.runtime
 		}
 		
 		#region IFlowRuntime implementation
-		private Action<IMessage> _process;
+		private readonly Action<IMessage> _process;
 		public void Process(IMessage message) { _process(message); }
 
-        private Action<IMessage> _messagehandler;
-        public void AddMessageHandler(Action<IMessage> messagehandler) { _messagehandler += messagehandler; }
-
-	    private Action<IMessage> _resulthandler;
-		public void AddResultHandler(Action<IMessage> resulthandler) { _resulthandler += resulthandler; }
-
-	    private Action<FlowRuntimeException> _exceptionhandler;
-        public void AddExceptionHandler(Action<FlowRuntimeException> exceptionhandler) { _exceptionhandler += exceptionhandler; }
+	    public event Action<IMessage> Message = _ => { };
+	    public event Action<FlowRuntimeException> UnhandledException;
+	    public event Action<IMessage> Result;
 		
-		private Action<IStream> _addStream;
+		private readonly Action<IStream> _addStream;
 		public void AddStream (IStream stream) { _addStream(stream);}
 	
-		private Action<IOperation> _addOperation;
+		private readonly Action<IOperation> _addOperation;
 		public void AddOperation (IOperation operation) { _addOperation(operation); }
 		public void AddOperations(IEnumerable<IOperation> operations) { operations.ToList().ForEach(this.AddOperation); }
 		

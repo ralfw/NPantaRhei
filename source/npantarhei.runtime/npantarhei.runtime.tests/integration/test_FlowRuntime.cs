@@ -26,11 +26,11 @@ namespace npantarhei.runtime.tests.integration
 
             _are = new AutoResetEvent(false);
             _result = null;
-            _sut.AddResultHandler(_ =>
-                                      {
-                                          _result = _;
-                                          _are.Set();
-                                      });
+            _sut.Result += _ =>
+                                {
+                                    _result = _;
+                                    _are.Set();
+                                };
         }
 
         [TearDown]
@@ -44,7 +44,7 @@ namespace npantarhei.runtime.tests.integration
 		public void No_processing_Just_redirect_input_to_output()
 		{
 			_sut.AddStream(new Stream(".in", ".out"));
-			
+
 			_sut.Process(new Message(".in", "hello"));
 
 		    Assert.IsTrue(_are.WaitOne(1000));
@@ -97,12 +97,12 @@ namespace npantarhei.runtime.tests.integration
 			
 			var results = new List<IMessage>();
 		    var n = 0;
-            _sut.AddResultHandler(_ =>
-                                        {
-                                            results.Add(_);
-                                            n++;
-                                            if (n==2) _are.Set();
-                                        });
+            _sut.Result += _ =>
+                            {
+                                results.Add(_);
+                                n++;
+                                if (n==2) _are.Set();
+                            };
 			
 			_sut.Process(new Message(".in", "hello"));
 
@@ -134,11 +134,11 @@ namespace npantarhei.runtime.tests.integration
             _sut.AddOperation(new Operation("ThrowEx", (input, outputCont) => { throw new NotImplementedException("xxx");}));
 
             FlowRuntimeException ex = null;
-            _sut.AddExceptionHandler(_ =>
-            {
-                ex = _;
-                _are.Set();
-            });
+            _sut.UnhandledException += _ =>
+                                            {
+                                                ex = _;
+                                                _are.Set();
+                                            };
 
             _sut.Process(new Message(".process", "hello"));
 
@@ -158,7 +158,7 @@ namespace npantarhei.runtime.tests.integration
             _sut.AddOperation(new Operation("B", (input, outputCont) => outputCont(new Message("B.out", input.Data.ToString() + "y"))));
 
             var messages = new List<string>();
-            _sut.AddMessageHandler(_ => messages.Add(_.Port.Fullname));
+            _sut.Message += _ => messages.Add(_.Port.Fullname);
 
             _sut.Process(new Message(".in", "hello"));
 

@@ -1,6 +1,9 @@
 Topics to address in future increments
 ------------
 
+Standard operation for syncing message processing
+
+
 Move serial/parallel execution to special operations. No annotations necessary anymore. Makes for more flexibility in terms of threadpools
 for certain operations.
 

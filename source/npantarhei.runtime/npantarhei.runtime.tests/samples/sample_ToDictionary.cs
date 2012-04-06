@@ -41,11 +41,11 @@ namespace npantarhei.runtime.tests
 
                 Dictionary<string, string> dict = null;
                 var are = new AutoResetEvent(false);
-                fr.AddResultHandler(_ =>
-                                        {
-                                            dict = (Dictionary<string, string>) _.Data;
-                                            are.Set();
-                                        });
+                fr.Result += _ =>
+                                {
+                                    dict = (Dictionary<string, string>) _.Data;
+                                    are.Set();
+                                };
 
                 fr.Process(new Message(".in", "a=1;b=2"));
 
@@ -88,11 +88,11 @@ namespace npantarhei.runtime.tests
 
                 Dictionary<string, string> dict = null;
                 var are = new AutoResetEvent(false);
-                fr.AddResultHandler(_ =>
-                                        {
-                                            dict = (Dictionary<string, string>) _.Data;
-                                            are.Set();
-                                        });
+                fr.Result += _ =>
+                                {
+                                    dict = (Dictionary<string, string>) _.Data;
+                                    are.Set();
+                                };
 
                 fr.Process(new Message(".in", "a=1;b=2"));
                 Assert.IsTrue(are.WaitOne(500));
@@ -137,12 +137,12 @@ namespace npantarhei.runtime.tests
 			
 			    Dictionary<string,string> dict = null;
 			    var are = new AutoResetEvent(false);
-			    fr.AddResultHandler(_ =>
-			                            {
-			                                dict = (Dictionary<string, string>) _.Data;
-			                                Console.WriteLine("Runtime thread: {0}", Thread.CurrentThread.GetHashCode());
-			                                are.Set();
-			                            });
+			    fr.Result += _ =>
+			                    {
+			                        dict = (Dictionary<string, string>) _.Data;
+			                        Console.WriteLine("Runtime thread: {0}", Thread.CurrentThread.GetHashCode());
+			                        are.Set();
+			                    };
 			
 			    Console.WriteLine("Caller thread: {0}", Thread.CurrentThread.GetHashCode());
 			    fr.Process(new Message(".in", "a=1;b=2"));

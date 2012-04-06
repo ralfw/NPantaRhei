@@ -50,15 +50,15 @@ namespace npantarhei.runtime.tests
 
                 var are = new AutoResetEvent(false);
                 var results = new List<int>();
-                sut.AddResultHandler(_ =>
-                                         {
-                                             Console.WriteLine("result: {0}.", _.Data);
-                                             lock (results)
-                                             {
-                                                 results.Add((int) _.Data);
-                                                 if (results.Count == 5) are.Set();
-                                             }
-                                         });
+                sut.Result += _ =>
+                                {
+                                    Console.WriteLine("result: {0}.", _.Data);
+                                    lock (results)
+                                    {
+                                        results.Add((int) _.Data);
+                                        if (results.Count == 5) are.Set();
+                                    }
+                                };
 
                 sut.Start();
                 sut.Process(new Message(".in", 1));

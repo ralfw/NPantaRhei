@@ -10,7 +10,7 @@ namespace npantarhei.runtime.flows
 {
 	internal class Flow_asynchronously
 	{
-		private Process_message _processMessage;
+		private readonly Process_message _processMessage;
 		
 		public Flow_asynchronously()
 		{
@@ -24,7 +24,7 @@ namespace npantarhei.runtime.flows
 		    async.Dequeued += handleException.Process;
 		    async.Dequeued += _ => Message(_);
             handleException.ContinueWith += _processMessage.Process;
-		    handleException.ExceptionCaught += _ => Exception(_);
+		    handleException.ExceptionCaught += _ => UnhandledException(_);
 			_processMessage.Continue += async.Enqueue;
             _processMessage.Result += _ => Message(_);
 			_processMessage.Result += _ => Result(_);
@@ -38,12 +38,12 @@ namespace npantarhei.runtime.flows
 			_processMessage.Inject(streams, operations);
 		}
 		
-		private Action<IMessage> _process;
+		private readonly Action<IMessage> _process;
 		public void Process(IMessage message) { _process(message); }
 
-        public event Action<IMessage> Message = _ => { };
+	    public event Action<IMessage> Message;
 		public event Action<IMessage> Result;
-	    public event Action<FlowRuntimeException> Exception;
+	    public event Action<FlowRuntimeException> UnhandledException;
 		
 		private Action _start;
 		public void Start() { _start(); }

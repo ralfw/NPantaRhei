@@ -7,9 +7,9 @@ namespace npantarhei.runtime.contract
 	{
 		void Process(IMessage message);
 
-        void AddMessageHandler(Action<IMessage> messagehandler);
-        void AddResultHandler(Action<IMessage> resulthandler);
-        void AddExceptionHandler(Action<FlowRuntimeException> exceptionhandler);
+        event Action<IMessage> Message;
+        event Action<FlowRuntimeException> UnhandledException;
+        event Action<IMessage> Result;
 		
 		void AddStream(IStream stream);
 		void AddOperation(IOperation operation);
