@@ -26,7 +26,7 @@ namespace npantarhei.runtime.tests.integration
 
             _are = new AutoResetEvent(false);
             _result = null;
-            _sut.SetResultHandler(_ =>
+            _sut.AddResultHandler(_ =>
                                       {
                                           _result = _;
                                           _are.Set();
@@ -97,7 +97,7 @@ namespace npantarhei.runtime.tests.integration
 			
 			var results = new List<IMessage>();
 		    var n = 0;
-            _sut.SetResultHandler(_ =>
+            _sut.AddResultHandler(_ =>
                                         {
                                             results.Add(_);
                                             n++;
@@ -124,6 +124,47 @@ namespace npantarhei.runtime.tests.integration
 			Assert.AreEqual(".out", _result.Port.Fullname);
 			Assert.AreEqual("hellox", _result.Data.ToString());
 		}
+
+        [Test]
+        public void Process_exception()
+        {
+            _sut.AddStream(new Stream(".process", "ThrowEx.in"));
+            _sut.AddStream(new Stream("ThrowEx.out", ".out"));
+
+            _sut.AddOperation(new Operation("ThrowEx", (input, outputCont) => { throw new NotImplementedException("xxx");}));
+
+            FlowRuntimeException ex = null;
+            _sut.AddExceptionHandler(_ =>
+            {
+                ex = _;
+                _are.Set();
+            });
+
+            _sut.Process(new Message(".process", "hello"));
+
+            Assert.IsTrue(_are.WaitOne(1000));
+            Assert.AreEqual("xxx", ex.InnerException.Message);
+            Assert.AreEqual(".process", ex.Context.Port.Fullname);
+        }
+
+        [Test]
+        public void Log_messages()
+        {
+            _sut.AddStream(new Stream(".in", "A.in"));
+            _sut.AddStream(new Stream("A.out", "B.in"));
+            _sut.AddStream(new Stream("B.out", ".out"));
+
+            _sut.AddOperation(new Operation("A", (input, outputCont) => outputCont(new Message("A.out", input.Data.ToString() + "x"))));
+            _sut.AddOperation(new Operation("B", (input, outputCont) => outputCont(new Message("B.out", input.Data.ToString() + "y"))));
+
+            var messages = new List<string>();
+            _sut.AddMessageHandler(_ => messages.Add(_.Port.Fullname));
+
+            _sut.Process(new Message(".in", "hello"));
+
+            Assert.IsTrue(_are.WaitOne(1000));
+            Assert.That(messages.ToArray(), Is.EquivalentTo(new[]{".in", "A.out", "B.out", ".out"}));
+        }
 	}
 }
 

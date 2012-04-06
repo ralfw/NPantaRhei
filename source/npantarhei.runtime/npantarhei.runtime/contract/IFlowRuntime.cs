@@ -3,11 +3,13 @@ using System.Collections.Generic;
 
 namespace npantarhei.runtime.contract
 {
-	public interface IFlowRuntime : IDisposable
+    public interface IFlowRuntime : IDisposable
 	{
 		void Process(IMessage message);
 
-        void SetResultHandler(Action<IMessage> resulthandler);
+        void AddMessageHandler(Action<IMessage> messagehandler);
+        void AddResultHandler(Action<IMessage> resulthandler);
+        void AddExceptionHandler(Action<FlowRuntimeException> exceptionhandler);
 		
 		void AddStream(IStream stream);
 		void AddOperation(IOperation operation);

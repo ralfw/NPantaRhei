@@ -33,9 +33,11 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="contract\FlowRuntimeException.cs" />
     <Compile Include="data\INotifyingResource.cs" />
     <Compile Include="data\NotifyingMultiQueue.cs" />
     <Compile Include="FlowRuntime.cs" />
+    <Compile Include="operations\Handle_exception.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="contract\IFlowRuntime.cs" />
     <Compile Include="contract\IMessage.cs" />

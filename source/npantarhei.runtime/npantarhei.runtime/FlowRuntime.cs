@@ -25,8 +25,10 @@ namespace npantarhei.runtime
 			_addOperation += regOp.Process;
 			
 			_process += flow.Process;
+		    flow.Message += _ => _messagehandler(_);
 		    flow.Result += _ => _resulthandler(_);
-			
+		    flow.Exception += _ => _exceptionhandler(_);
+
 			_start += flow.Start;
 			_stop += flow.Stop;
 			
@@ -44,8 +46,14 @@ namespace npantarhei.runtime
 		private Action<IMessage> _process;
 		public void Process(IMessage message) { _process(message); }
 
+        private Action<IMessage> _messagehandler;
+        public void AddMessageHandler(Action<IMessage> messagehandler) { _messagehandler += messagehandler; }
+
 	    private Action<IMessage> _resulthandler;
-		public void SetResultHandler(Action<IMessage> resulthandler) { _resulthandler = resulthandler; }
+		public void AddResultHandler(Action<IMessage> resulthandler) { _resulthandler += resulthandler; }
+
+	    private Action<FlowRuntimeException> _exceptionhandler;
+        public void AddExceptionHandler(Action<FlowRuntimeException> exceptionhandler) { _exceptionhandler += exceptionhandler; }
 		
 		private Action<IStream> _addStream;
 		public void AddStream (IStream stream) { _addStream(stream);}
@@ -58,7 +66,7 @@ namespace npantarhei.runtime
 		public void Start() { _start(); }
 		
 		private readonly Action _stop;
-		public void Stop() { _stop(); }
+	    public void Stop() { _stop(); }
 		#endregion
 		
 		

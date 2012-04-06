@@ -1,8 +1,6 @@
 Topics to address in future increments
 ------------
 
-Exception handling in exec engine: exception port
-
 Move serial/parallel execution to special operations. No annotations necessary anymore. Makes for more flexibility in terms of threadpools
 for certain operations.
 
@@ -98,8 +96,11 @@ Take from queue according to a pattern
 Implemented/solved:
 
 
-Remove sync mode from exec engine. Should always run async with regard to environment.
+Port on exec engine to listen on all messages flowing.
 
+Exception handling in exec engine: exception port
+
+Remove sync mode from exec engine. Should always run async with regard to environment.
 
 Parallel processing on many threads
 	but still sequential processing of message with each operation

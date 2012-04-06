@@ -41,7 +41,7 @@ namespace npantarhei.runtime.tests
 
                 Dictionary<string, string> dict = null;
                 var are = new AutoResetEvent(false);
-                fr.SetResultHandler(_ =>
+                fr.AddResultHandler(_ =>
                                         {
                                             dict = (Dictionary<string, string>) _.Data;
                                             are.Set();
@@ -88,7 +88,7 @@ namespace npantarhei.runtime.tests
 
                 Dictionary<string, string> dict = null;
                 var are = new AutoResetEvent(false);
-                fr.SetResultHandler(_ =>
+                fr.AddResultHandler(_ =>
                                         {
                                             dict = (Dictionary<string, string>) _.Data;
                                             are.Set();
@@ -137,7 +137,7 @@ namespace npantarhei.runtime.tests
 			
 			    Dictionary<string,string> dict = null;
 			    var are = new AutoResetEvent(false);
-			    fr.SetResultHandler(_ =>
+			    fr.AddResultHandler(_ =>
 			                            {
 			                                dict = (Dictionary<string, string>) _.Data;
 			                                Console.WriteLine("Runtime thread: {0}", Thread.CurrentThread.GetHashCode());

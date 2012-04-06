@@ -10,23 +10,27 @@ namespace npantarhei.runtime.flows
 {
 	internal class Flow_asynchronously
 	{
-		private Asynchronize<IMessage> _async;
 		private Process_message _processMessage;
 		
 		public Flow_asynchronously()
 		{
 			// Build
-			_async = new Asynchronize<IMessage>();
+			var async = new Asynchronize<IMessage>();
+		    var handleException = new Handle_exception();
 			_processMessage = new Process_message();
 			
 			// Bind
-			_process += _async.Enqueue;
-			_async.Dequeued += _processMessage.Process;
-			_processMessage.Continue += _async.Enqueue;
+			_process += async.Enqueue;
+		    async.Dequeued += handleException.Process;
+		    async.Dequeued += _ => Message(_);
+            handleException.ContinueWith += _processMessage.Process;
+		    handleException.ExceptionCaught += _ => Exception(_);
+			_processMessage.Continue += async.Enqueue;
+            _processMessage.Result += _ => Message(_);
 			_processMessage.Result += _ => Result(_);
 			
-			_start += _async.Start;
-			_stop += _async.Stop;
+			_start += async.Start;
+			_stop += async.Stop;
 		}
 		
 		public void Inject(List<IStream> streams, Dictionary<string, IOperation> operations)
@@ -36,8 +40,10 @@ namespace npantarhei.runtime.flows
 		
 		private Action<IMessage> _process;
 		public void Process(IMessage message) { _process(message); }
-		
+
+        public event Action<IMessage> Message = _ => { };
 		public event Action<IMessage> Result;
+	    public event Action<FlowRuntimeException> Exception;
 		
 		private Action _start;
 		public void Start() { _start(); }

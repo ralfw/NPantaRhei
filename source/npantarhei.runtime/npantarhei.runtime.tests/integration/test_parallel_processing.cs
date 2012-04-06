@@ -50,7 +50,7 @@ namespace npantarhei.runtime.tests
 
                 var are = new AutoResetEvent(false);
                 var results = new List<int>();
-                sut.SetResultHandler(_ =>
+                sut.AddResultHandler(_ =>
                                          {
                                              Console.WriteLine("result: {0}.", _.Data);
                                              lock (results)
