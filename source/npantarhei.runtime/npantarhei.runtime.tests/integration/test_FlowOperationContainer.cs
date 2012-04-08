@@ -17,7 +17,7 @@ namespace npantarhei.runtime.tests
 		{
 			var sut = new FlowOperationContainer();
 			
-			sut.RegisterFunction<string, int>("f", s => s.Length);
+			sut.AddFunc<string, int>("f", s => s.Length);
 			
 			var op = sut.Operations.First();
 						
@@ -32,7 +32,7 @@ namespace npantarhei.runtime.tests
 		{
 			var sut = new FlowOperationContainer();
 			
-			sut.RegisterFunction<string, string>("opname", s => s);
+			sut.AddFunc<string, string>("opname", s => s);
 			
 			var op = sut.Operations.First();
 			Assert.AreEqual("opname", op.Name);
@@ -50,7 +50,7 @@ namespace npantarhei.runtime.tests
 			var sut = new FlowOperationContainer();
 			
 			var result = "";
-			sut.RegisterAction<string>("p", s => result = s);
+			sut.AddAction<string>("p", s => result = s);
 			
 			var op = sut.Operations.First();
 						
@@ -65,7 +65,7 @@ namespace npantarhei.runtime.tests
 		{
 			var sut = new FlowOperationContainer();
 			
-			sut.RegisterAction<string, int>("p", Process_with_continuation);
+			sut.AddAction<string, int>("p", Process_with_continuation);
 			
 			var op = sut.Operations.First();
 						
@@ -82,7 +82,7 @@ namespace npantarhei.runtime.tests
 		{
 			var sut = new FlowOperationContainer();
 			
-			sut.RegisterAction<string, int>("opname", Process_with_continuation);
+			sut.AddAction<string, int>("opname", Process_with_continuation);
 			
 			var op = sut.Operations.First();
 			Assert.AreEqual("opname", op.Name);

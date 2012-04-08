@@ -29,13 +29,13 @@ namespace npantarhei.runtime.tests
                 fr.AddStream(new Stream("Build", ".out"));
 
                 var foc = new FlowOperationContainer();
-                foc.RegisterFunction<string, IEnumerable<string>>("Split",
+                foc.AddFunc<string, IEnumerable<string>>("Split",
                                                                   configuration =>
                                                                   configuration.Split(new[] {';'},
                                                                                       StringSplitOptions.
                                                                                           RemoveEmptyEntries));
-                foc.RegisterAction<IEnumerable<string>, IEnumerable<KeyValuePair<string, string>>>("Map", Map);
-                foc.RegisterFunction<IEnumerable<KeyValuePair<string, string>>, Dictionary<string, string>>("Build",
+                foc.AddAction<IEnumerable<string>, IEnumerable<KeyValuePair<string, string>>>("Map", Map);
+                foc.AddFunc<IEnumerable<KeyValuePair<string, string>>, Dictionary<string, string>>("Build",
                                                                                                             Build);
                 fr.AddOperations(foc.Operations);
 
@@ -76,13 +76,13 @@ namespace npantarhei.runtime.tests
                 fr.AddStream(new Stream("ToDict/Build", ".out"));
 
                 var foc = new FlowOperationContainer();
-                foc.RegisterFunction<string, IEnumerable<string>>("Split",
+                foc.AddFunc<string, IEnumerable<string>>("Split",
                                                                   configuration =>
                                                                   configuration.Split(new[] {';'},
                                                                                       StringSplitOptions.
                                                                                           RemoveEmptyEntries));
-                foc.RegisterAction<IEnumerable<string>, IEnumerable<KeyValuePair<string, string>>>("Map", Map);
-                foc.RegisterFunction<IEnumerable<KeyValuePair<string, string>>, Dictionary<string, string>>("Build",
+                foc.AddAction<IEnumerable<string>, IEnumerable<KeyValuePair<string, string>>>("Map", Map);
+                foc.AddFunc<IEnumerable<KeyValuePair<string, string>>, Dictionary<string, string>>("Build",
                                                                                                             Build);
                 fr.AddOperations(foc.Operations);
 
@@ -129,10 +129,10 @@ namespace npantarhei.runtime.tests
 			    fr.AddStream(new Stream("ToDict/Build", ".out"));
 			
 			    var foc = new FlowOperationContainer();
-			    foc.RegisterFunction<string,IEnumerable<string>>("Split", 
+			    foc.AddFunc<string,IEnumerable<string>>("Split", 
 													     configuration => configuration.Split(new[]{';'}, StringSplitOptions.RemoveEmptyEntries));
-			    foc.RegisterAction<IEnumerable<string>, IEnumerable<KeyValuePair<string,string>>>("Map", Map);
-			    foc.RegisterFunction<IEnumerable<KeyValuePair<string,string>>, Dictionary<string,string>>("Build", Build);
+			    foc.AddAction<IEnumerable<string>, IEnumerable<KeyValuePair<string,string>>>("Map", Map);
+			    foc.AddFunc<IEnumerable<KeyValuePair<string,string>>, Dictionary<string,string>>("Build", Build);
 			    fr.AddOperations(foc.Operations);
 			
 			    Dictionary<string,string> dict = null;

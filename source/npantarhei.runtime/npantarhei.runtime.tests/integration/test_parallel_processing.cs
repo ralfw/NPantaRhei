@@ -29,7 +29,7 @@ namespace npantarhei.runtime.tests
                 var container = new FlowOperationContainer();
 
                 var threads = new Dictionary<long, int>();
-                container.RegisterFunction<int, int>("doParallel",
+                container.AddFunc<int, int>("doParallel",
                                                      x =>
                                                          {
                                                              lock (threads)

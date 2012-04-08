@@ -34,9 +34,20 @@
       <HintPath>..\..\..\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="data\test_NotifyingMultiQueue.cs" />
+    <Compile Include="integration\test_sync_with_dialog.cs" />
+    <Compile Include="integration\test_sync_with_dialog_win.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="integration\test_sync_with_dialog_win.Designer.cs">
+      <DependentUpon>test_sync_with_dialog_win.cs</DependentUpon>
+    </Compile>
     <Compile Include="patterns\test_Sequentialize.cs" />
     <Compile Include="patterns\test_Synchronize.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -53,7 +64,11 @@
     <Compile Include="patterns\test_Parallelize.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="integration\test_sync_with_dialog_win.resx">
+      <DependentUpon>test_sync_with_dialog_win.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\npantarhei.runtime\npantarhei.runtime.csproj">
       <Project>{164BC6FE-6CAF-47EE-B426-7AC022569345}</Project>

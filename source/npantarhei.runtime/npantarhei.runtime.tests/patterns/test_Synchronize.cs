@@ -19,11 +19,11 @@ namespace npantarhei.runtime.tests.patterns
             {
                 sut.Start();
 
-                sut.AddStream(new Stream(".in", "sync"));
-                sut.AddStream(new Stream("sync", ".out"));
+                sut.AddStream(new Stream(".in", "syncNop"));
+                sut.AddStream(new Stream("syncNop", ".out"));
 
                 var cont = new FlowOperationContainer();
-                cont.RegisterSync("sync");
+                cont.AddFunc<string, string>("syncNop", _ => _).MakeSync();
                 sut.AddOperations(cont.Operations);
 
                 IMessage result = null;

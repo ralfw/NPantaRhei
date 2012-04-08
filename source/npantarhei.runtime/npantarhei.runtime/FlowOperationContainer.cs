@@ -10,10 +10,21 @@ namespace npantarhei.runtime
 {
 	public class FlowOperationContainer
 	{
-		private List<IOperation> _operations = new List<IOperation>();
-		
-		
-		public void RegisterFunction<TInput, TOutput>(string name, Func<TInput, TOutput> implementation)
+		private readonly List<IOperation> _operations = new List<IOperation>();
+
+
+        public FlowOperationContainer AddFunc<TOutput>(string name, Func<TOutput> implementation)
+        {
+            _operations.Add(new Operation(name,
+                                          (input, outputCont) => {
+                                                var result = implementation();
+                                                outputCont(new Message(name, result));
+                                          }
+                           ));
+            return this;
+        }
+
+		public FlowOperationContainer AddFunc<TInput, TOutput>(string name, Func<TInput, TOutput> implementation)
 		{
 			_operations.Add(new Operation(name, 
 										  (input, outputCont) => {
@@ -21,28 +32,39 @@ namespace npantarhei.runtime
 												outputCont(new Message(name, result));
 										  }
 						   ));
+		    return this;
 		}
 		
 		
-		public void RegisterAction<TInput>(string name, Action<TInput> implementation)
+		public FlowOperationContainer AddAction<TInput>(string name, Action<TInput> implementation)
 		{
 			_operations.Add(new Operation(name, (input, _) => implementation((TInput)input.Data)));
+		    return this;
 		}
 		
 		
-		public void RegisterAction<TInput, TOutput>(string name, Action<TInput, Action<TOutput>> implementation)
+		public FlowOperationContainer AddAction<TInput, TOutput>(string name, Action<TInput, Action<TOutput>> implementation)
 		{
 			_operations.Add(new Operation(name, 
 										  (input, outputCont) => implementation((TInput)input.Data, 
 															                    output => outputCont(new Message(name, output)))
 						   ));
+		    return this;
 		}
 		
 
-        public void RegisterSync(string name)
+        public FlowOperationContainer MakeSync()
         {
+            var asyncOp = _operations[_operations.Count - 1];
+            _operations.RemoveAt(_operations.Count-1);
+
             var sync = new Synchronize<IMessage>();
-            _operations.Add(new Operation(name, sync.Process));
+            var syncOp = new Operation(asyncOp.Name, 
+                                       (input, continueWith) => sync.Process(input, 
+                                                                             output => asyncOp.Implementation(output, continueWith)));
+
+            _operations.Add(syncOp);
+            return this;
         }
 		
 
