@@ -59,7 +59,7 @@ namespace npantarhei.runtime.tests.integration
 			_sut.AddStream(new Stream("A.out", ".out"));
 			
 			_sut.AddOperation(new Operation("A", (input, outputCont) => outputCont(new Message("A.out", input.Data.ToString() + "x"))));
-			
+
 			_sut.Process(new Message(".in", "hello"));
 
             Assert.IsTrue(_are.WaitOne(1000));

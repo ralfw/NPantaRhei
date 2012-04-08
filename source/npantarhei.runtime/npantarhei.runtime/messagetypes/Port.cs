@@ -57,6 +57,12 @@ namespace npantarhei.runtime.messagetypes
 			}
 		}
 		#endregion
+
+
+        public override string ToString()
+        {
+            return string.Format("Port(Fullname='{0}')", this.Fullname);
+        }
 	}
 }
 

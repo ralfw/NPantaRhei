@@ -38,6 +38,7 @@
   <ItemGroup>
     <Compile Include="data\test_NotifyingMultiQueue.cs" />
     <Compile Include="patterns\test_Sequentialize.cs" />
+    <Compile Include="patterns\test_Synchronize.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="integration\test_FlowRuntime.cs" />
     <Compile Include="operations\test_Create_task.cs" />

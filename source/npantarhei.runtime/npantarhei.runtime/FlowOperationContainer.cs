@@ -4,6 +4,7 @@ using System.Linq;
 
 using npantarhei.runtime.contract;
 using npantarhei.runtime.messagetypes;
+using npantarhei.runtime.patterns;
 
 namespace npantarhei.runtime
 {
@@ -37,7 +38,14 @@ namespace npantarhei.runtime
 						   ));
 		}
 		
+
+        public void RegisterSync(string name)
+        {
+            var sync = new Synchronize<IMessage>();
+            _operations.Add(new Operation(name, sync.Process));
+        }
 		
+
 		public IEnumerable<IOperation> Operations {	get { return _operations; }	}
 	}
 }

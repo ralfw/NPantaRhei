@@ -17,6 +17,11 @@ namespace npantarhei.runtime.messagetypes
 		public IPort Port { get; private set; }
 		public object Data { get; private set; }
 		#endregion
+
+        public override string ToString()
+        {
+            return string.Format("Message(Port='{0}', Data='{1}')", this.Port, this.Data);
+        }
 	}
 }
 
