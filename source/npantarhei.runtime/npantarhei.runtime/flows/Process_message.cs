@@ -8,8 +8,8 @@ namespace npantarhei.runtime.flows
 {
 	internal class Process_message
 	{
-		private Map_message_to_input_ports _map;
-		private Create_task _create;
+		private readonly Map_message_to_input_ports _map;
+		private readonly Create_task _create;
 		
 		public Process_message()
 		{
@@ -21,6 +21,7 @@ namespace npantarhei.runtime.flows
 			
 			// Bind	
 			_process += _map.Process;
+		    _map.Result += _ => Message(_);
 			_map.Result += output.Process;
 			output.Continue += _create.Process;
 			output.Result += _ => Result(_);
@@ -34,9 +35,10 @@ namespace npantarhei.runtime.flows
 			_create.Inject(operations);
 		}
 		
-		private Action<IMessage> _process;
+		private readonly Action<IMessage> _process;
 		public void Process(IMessage message) { _process(message); }
-		
+
+	    public event Action<IMessage> Message;
 		public event Action<IMessage> Continue;
 		public event Action<IMessage> Result;
 	}

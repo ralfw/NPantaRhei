@@ -163,7 +163,7 @@ namespace npantarhei.runtime.tests.integration
             _sut.Process(new Message(".in", "hello"));
 
             Assert.IsTrue(_are.WaitOne(1000));
-            Assert.That(messages.ToArray(), Is.EquivalentTo(new[]{".in", "A.out", "B.out", ".out"}));
+            Assert.That(messages.ToArray(), Is.EquivalentTo(new[]{"A.in", "B.in", ".out"}));
         }
 	}
 }

@@ -1,8 +1,6 @@
 Topics to address in future increments
 ------------
 
-Log messages before execution/after translation (instead of after retrieval from queue), i.e. log input messages
-
 Report exceptions from async wrappers
 
 
@@ -85,6 +83,8 @@ Take from queue according to a pattern
 
 ---------------------------------
 Implemented/solved:
+
+Log messages before execution/after translation (instead of after retrieval from queue), i.e. log input messages
 
 Explicitly stop async/parallel/serial operations when runtime is stopped
 
