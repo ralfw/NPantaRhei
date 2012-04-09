@@ -42,14 +42,6 @@ namespace npantarhei.runtime.patterns
 	}
 
 
-
-    class ScheduledTask<T>
-    {
-        public T Message;
-        public Action<T> ContinueWith;
-    }
-
-
     internal class Parallelize2<T> : IOperationImplementationWrapper<T>
     {
         private readonly NotifyingSingleQueue<ScheduledTask<T>> _messages;

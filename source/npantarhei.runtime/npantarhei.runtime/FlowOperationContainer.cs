@@ -96,6 +96,24 @@ namespace npantarhei.runtime
         }
 
 
+        private readonly Dictionary<string, Serialize2<IMessage>> _serializingOps = new Dictionary<string, Serialize2<IMessage>>();
+        public FlowOperationContainer MakeSerial() { return MakeSerial("~~~serial~~~"); }
+        public FlowOperationContainer MakeSerial(string name)
+        {
+            Serialize2<IMessage> serial;
+            if (!_serializingOps.TryGetValue(name, out serial))
+            {
+                serial = new Serialize2<IMessage>(_ => _.Port.Fullname);
+                serial.Start();
+                _serializingOps.Add(name, serial);
+            }
+
+            WrapLastOperation(serial);
+
+            return this;
+        }
+
+
         private void WrapLastOperation(IOperationImplementationWrapper<IMessage> wrapper)
         {
             var op = _operations[_operations.Count - 1];
