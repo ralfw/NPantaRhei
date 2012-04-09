@@ -68,12 +68,30 @@ namespace npantarhei.runtime
             if (!_asynchronizingOps.TryGetValue(name, out async))
             {
                 async = new Asynchronize2<IMessage>();
+                async.Start();
                 _asynchronizingOps.Add(name, async);
             }
-            async.Start();
-
+            
             WrapLastOperation(async);
             
+            return this;
+        }
+
+
+        private readonly Dictionary<string, Parallelize2<IMessage>> _parallelizingOps = new Dictionary<string, Parallelize2<IMessage>>();
+        public FlowOperationContainer MakeParallel() { return MakeParallel("~~~parallel~~~"); }
+        public FlowOperationContainer MakeParallel(string name)
+        {
+            Parallelize2<IMessage> parallel;
+            if (!_parallelizingOps.TryGetValue(name, out parallel))
+            {
+                parallel = new Parallelize2<IMessage>();
+                parallel.Start();
+                _parallelizingOps.Add(name, parallel);
+            }
+
+            WrapLastOperation(parallel);
+
             return this;
         }
 

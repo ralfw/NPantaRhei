@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="data\test_NotifyingMultiQueue.cs" />
+    <Compile Include="integration\test_Parallelize.cs" />
     <Compile Include="integration\test_Asynchronize.cs" />
     <Compile Include="integration\test_sync_with_dialog.cs" />
     <Compile Include="integration\test_sync_with_dialog_win.cs">

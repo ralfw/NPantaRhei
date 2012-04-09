@@ -4,13 +4,12 @@ Topics to address in future increments
 Move serial/parallel execution to special operations. No annotations necessary anymore. Makes for more flexibility in terms of threadpools
 for certain operations.
 
-Add means to receive exec engine output in certain sync context. Maybe replace engine events with explicit event handler registration.
-Then other params could be passed to the engine during registration like a sync ctx.
-
-Add join as a special operation (with the number of inputs as a ctor param). Watch out: the join needs to be thread-safe.
 
 Add causality push/pop as a special operations. Does the exec engine need to know about causalities? Or can they be completely handled within
 operations?
+
+
+Add join as a special operation (with the number of inputs as a ctor param). Watch out: the join needs to be thread-safe.
 
 
 For functional units producing many results: do they really need to produce all results at once?
@@ -27,20 +26,14 @@ Or... maybe the producer could return the IEnum wrapped in some special object w
 Goal: Retain simplicity of IEnum for producer and consumer. But avoid processing all elements on same thread as consumer.
 
 
+Explicitly stop async/parallel/serial operations when runtime is stopped
+
+
 Create contract project with stuff that implementors of operation would find useful
-
-
-Async processing on a single thread
-	Sync processing without an ever growing stack
 
 
 What happens on exec engine exceptions?
 	Shut down - send exeception to error port first
-
-What happens on operation exceptions?
-	Shut down - but send exeception to error port first
-	Or: let a causality handle the exeception
-		this becomes important for async/parallel execution
 
 
 Starting/pausing/stopping background threads and running operations
