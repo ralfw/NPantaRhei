@@ -11,7 +11,7 @@ namespace npantarhei.runtime.patterns
 {
 	internal class Asynchronize<T>
 	{
-		private Parallelize<T> _parallelize;
+		private readonly Parallelize<T> _parallelize;
 		
 		internal Asynchronize() { 
 			_parallelize = new Parallelize<T>(1);
@@ -28,5 +28,20 @@ namespace npantarhei.runtime.patterns
 		
 		public event Action<T> Dequeued;
 	}
+
+
+    internal class Asynchronize2<T> : IOperationImplementationWrapper<T>
+    {
+        private readonly Parallelize2<T> _parallelize;
+
+        internal Asynchronize2() { _parallelize = new Parallelize2<T>(1); }
+
+
+        public void Process(T message, Action<T> continueWith) { _parallelize.Process(message, continueWith); }
+
+
+        public void Start() { _parallelize.Start(); }
+        public void Stop() { _parallelize.Stop(); }
+    }
 }
 

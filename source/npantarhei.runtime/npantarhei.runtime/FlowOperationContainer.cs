@@ -42,7 +42,6 @@ namespace npantarhei.runtime
 		    return this;
 		}
 		
-		
 		public FlowOperationContainer AddAction<TInput, TOutput>(string name, Action<TInput, Action<TOutput>> implementation)
 		{
 			_operations.Add(new Operation(name, 
@@ -55,16 +54,39 @@ namespace npantarhei.runtime
 
         public FlowOperationContainer MakeSync()
         {
-            var asyncOp = _operations[_operations.Count - 1];
-            _operations.RemoveAt(_operations.Count-1);
-
             var sync = new Synchronize<IMessage>();
-            var syncOp = new Operation(asyncOp.Name, 
-                                       (input, continueWith) => sync.Process(input, 
-                                                                             output => asyncOp.Implementation(output, continueWith)));
-
-            _operations.Add(syncOp);
+            WrapLastOperation(sync);
             return this;
+        }
+
+
+        private readonly Dictionary<string, Asynchronize2<IMessage>> _asynchronizingOps = new Dictionary<string, Asynchronize2<IMessage>>();
+        public FlowOperationContainer MakeAsync() { return MakeAsync("~~~async~~~"); }
+        public FlowOperationContainer MakeAsync(string name)
+        {
+            Asynchronize2<IMessage> async;
+            if (!_asynchronizingOps.TryGetValue(name, out async))
+            {
+                async = new Asynchronize2<IMessage>();
+                _asynchronizingOps.Add(name, async);
+            }
+            async.Start();
+
+            WrapLastOperation(async);
+            
+            return this;
+        }
+
+
+        private void WrapLastOperation(IOperationImplementationWrapper<IMessage> wrapper)
+        {
+            var op = _operations[_operations.Count - 1];
+            _operations.RemoveAt(_operations.Count - 1);
+
+            var wrappingOp = new Operation(op.Name,
+                                          (input, continueWith) => wrapper.Process(input,
+                                                                                   output => op.Implementation(output, continueWith)));
+            _operations.Add(wrappingOp);
         }
 		
 

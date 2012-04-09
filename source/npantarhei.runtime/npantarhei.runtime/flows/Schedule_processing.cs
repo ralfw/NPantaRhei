@@ -11,7 +11,7 @@ namespace npantarhei.runtime.flows
 		public Schedule_processing ()
 		{	
 			var sel = new Select_processing_mode();
-			var seq = new Sequentialize<IMessage>();
+			var seq = new Serialize<IMessage>();
 			var par = new Parallelize<IMessage>();
 			
 			_process = sel.Process;

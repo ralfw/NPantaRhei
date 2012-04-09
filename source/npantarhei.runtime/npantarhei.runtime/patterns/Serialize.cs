@@ -6,14 +6,14 @@ using npantarhei.runtime.data;
 
 namespace npantarhei.runtime.patterns
 {
-    internal class Sequentialize<T>
+    internal class Serialize<T>
     {
         private readonly NotifyingMultiQueue<T> _messages;
         private readonly List<Wait_for_work<T>> _waitForWork;
 
 
-        public Sequentialize() : this(4) { }
-        public Sequentialize(int numberOfThreads)
+        public Serialize() : this(4) { }
+        public Serialize(int numberOfThreads)
         {
             _messages = new NotifyingMultiQueue<T>();
 
@@ -35,7 +35,7 @@ namespace npantarhei.runtime.patterns
 
         public void Enqueue(Tuple<T, string> portAfineMessage) 
         { 
-            Console.WriteLine("seq: {0}", portAfineMessage.Item2);
+            Console.WriteLine("ser: {0}", portAfineMessage.Item2);
             _messages.Enqueue(portAfineMessage.Item1, portAfineMessage.Item2);
         }
 

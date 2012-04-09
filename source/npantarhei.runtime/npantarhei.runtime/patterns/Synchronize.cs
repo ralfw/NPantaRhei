@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using npantarhei.runtime.contract;
 
 namespace npantarhei.runtime.patterns
 {
-    internal class Synchronize<T>
+    internal class Synchronize<T> : IOperationImplementationWrapper<T>
     {
         private readonly SynchronizationContext _synchronizationContext;
 

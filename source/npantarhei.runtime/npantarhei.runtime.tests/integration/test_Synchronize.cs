@@ -7,7 +7,7 @@ using NUnit.Framework;
 using npantarhei.runtime.contract;
 using npantarhei.runtime.messagetypes;
 
-namespace npantarhei.runtime.tests.patterns
+namespace npantarhei.runtime.tests.integration
 {
     [TestFixture]
     public class test_Synchronize
