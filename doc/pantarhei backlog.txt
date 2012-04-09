@@ -1,11 +1,12 @@
 Topics to address in future increments
 ------------
 
-Move serial/parallel execution to special operations. No annotations necessary anymore. Makes for more flexibility in terms of threadpools
-for certain operations.
+Log messages before execution/after translation (instead of after retrieval from queue), i.e. log input messages
+
+Report exceptions from async wrappers
 
 
-Add causality push/pop as a special operations. Does the exec engine need to know about causalities? Or can they be completely handled within
+Add causality push/pop as special operations. Does the exec engine need to know about causalities? Or can they be completely handled within
 operations?
 
 
@@ -24,9 +25,6 @@ resend to the pulling functional unit for the next pull.
 This could be a pattern operation or it could be a functionality to attach via a port annotation.
 Or... maybe the producer could return the IEnum wrapped in some special object which the Runtime interprets?
 Goal: Retain simplicity of IEnum for producer and consumer. But avoid processing all elements on same thread as consumer.
-
-
-Explicitly stop async/parallel/serial operations when runtime is stopped
 
 
 Create contract project with stuff that implementors of operation would find useful
@@ -88,6 +86,10 @@ Take from queue according to a pattern
 ---------------------------------
 Implemented/solved:
 
+Explicitly stop async/parallel/serial operations when runtime is stopped
+
+Move serial/parallel execution to special operations. No annotations necessary anymore. Makes for more flexibility in terms of threadpools
+for certain operations.
 
 Standard operation for syncing message processing
 

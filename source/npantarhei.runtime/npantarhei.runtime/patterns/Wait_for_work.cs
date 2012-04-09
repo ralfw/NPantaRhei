@@ -24,19 +24,21 @@ namespace npantarhei.runtime.patterns
 		public void Start() { Start(Dequeue_messages); }
 		internal void Start(Action<Func<bool>> backgroundTask)
 		{
-			if (_th == null)
-			{
-				_th = new Thread(() => backgroundTask(() => _running));
-				_th.IsBackground = true;
-				_running = true;
-				_th.Start();
-			}
+		    if (_th != null) return;
+
+		    _th = new Thread(() => backgroundTask(() => _running))
+		              {
+		                  IsBackground = true
+		              };
+		    _th.Start();
+		    _running = true;
 		}
 		
 		public void Stop() { 
 			_running = false; 
 			_resource.Notify();
 			if (_th != null) _th.Join();
+		    _th = null;
 		}
 		
 		
@@ -51,7 +53,7 @@ namespace npantarhei.runtime.patterns
 				if (work.Item1) 
 					Dequeued(work.Item2);
 				else
-					_resource.Wait(Timeout.Infinite);
+					_resource.Wait(1000);
 			} while(isRunning());
 		}
 	}

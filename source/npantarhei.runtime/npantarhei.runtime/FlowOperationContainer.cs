@@ -55,7 +55,8 @@ namespace npantarhei.runtime
         public FlowOperationContainer MakeSync()
         {
             var sync = new Synchronize<IMessage>();
-            WrapLastOperation(sync);
+            WrapLastOperation(op => new Operation(op.Name, (input, continueWith) => sync.Process(input,
+                                                                                                 output => op.Implementation(output, continueWith))));
             return this;
         }
 
@@ -71,8 +72,8 @@ namespace npantarhei.runtime
                 async.Start();
                 _asynchronizingOps.Add(name, async);
             }
-            
-            WrapLastOperation(async);
+
+            WrapLastOperation(op => new AsyncOperation(async, op));
             
             return this;
         }
@@ -90,7 +91,7 @@ namespace npantarhei.runtime
                 _parallelizingOps.Add(name, parallel);
             }
 
-            WrapLastOperation(parallel);
+            WrapLastOperation(op => new AsyncOperation(parallel, op));
 
             return this;
         }
@@ -106,22 +107,21 @@ namespace npantarhei.runtime
                 serial = new Serialize<IMessage>(_ => _.Port.Fullname);
                 serial.Start();
                 _serializingOps.Add(name, serial);
-            }
+            };
 
-            WrapLastOperation(serial);
+            WrapLastOperation(op => new AsyncOperation(serial, op));
 
             return this;
         }
 
 
-        private void WrapLastOperation(IOperationImplementationWrapper<IMessage> wrapper)
+        private void WrapLastOperation(Func<IOperation, IOperation> wrappingOperationFactory)
         {
             var op = _operations[_operations.Count - 1];
             _operations.RemoveAt(_operations.Count - 1);
 
-            var wrappingOp = new Operation(op.Name,
-                                          (input, continueWith) => wrapper.Process(input,
-                                                                                   output => op.Implementation(output, continueWith)));
+            var wrappingOp = wrappingOperationFactory(op);
+
             _operations.Add(wrappingOp);
         }
 		

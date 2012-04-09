@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Threading;
 using npantarhei.runtime.contract;
 using npantarhei.runtime.data;
+using npantarhei.runtime.messagetypes;
 
 namespace npantarhei.runtime.patterns
 {
-    internal class Serialize<T> : IOperationImplementationWrapper<T>
+    internal class Serialize<T> : IAsynchronizer<T>
     {
         private readonly NotifyingMultiQueue<ScheduledTask<T>> _messages;
         private readonly List<Wait_for_work<ScheduledTask<T>>> _waitForWork;

@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 using npantarhei.runtime.contract;
 using npantarhei.runtime.data;
+using npantarhei.runtime.messagetypes;
 
 namespace npantarhei.runtime.patterns
 {
-    internal class Asynchronize<T> : IOperationImplementationWrapper<T>
+    internal class Asynchronize<T> : IAsynchronizer<T>
     {
         private readonly Parallelize<T> _parallelize;
 

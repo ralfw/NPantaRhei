@@ -17,8 +17,6 @@ namespace npantarhei.runtime.tests.integration
         {
             using (var sut = new FlowRuntime())
             {
-                sut.Start();
-
                 sut.AddStream(new Stream(".in", "parNop"));
                 sut.AddStream(new Stream("parNop", ".out"));
 
@@ -52,6 +50,8 @@ namespace npantarhei.runtime.tests.integration
                                           if (results.Count == N) are.Set();
                                       }
                                   };
+
+                sut.Start(); // consciously start the runtime here to check if starting async ops is idempotent
 
                 for (var i = 0; i < N; i++ )
                     sut.Process(new Message(".in", "x" + i));

@@ -34,10 +34,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="contract\FlowRuntimeException.cs" />
-    <Compile Include="contract\IOperationImplementationWrapper.cs" />
     <Compile Include="data\INotifyingResource.cs" />
     <Compile Include="data\NotifyingMultiQueue.cs" />
     <Compile Include="FlowRuntime.cs" />
+    <Compile Include="messagetypes\AsyncOperation.cs" />
+    <Compile Include="operations\Start_async_operations.cs" />
     <Compile Include="operations\Handle_exception.cs" />
     <Compile Include="patterns\ScheduledTask.cs" />
     <Compile Include="patterns\Synchronize.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="patterns\Serialize.cs" />
     <Compile Include="patterns\Parallelize.cs" />
     <Compile Include="patterns\Wait_for_work.cs" />
+    <Compile Include="operations\Stop_async_operations.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />
