@@ -66,8 +66,6 @@
     <Compile Include="flows\Flow_asynchronously.cs" />
     <Compile Include="patterns\Asynchronize.cs" />
     <Compile Include="data\NotifyingSingleQueue.cs" />
-    <Compile Include="flows\Schedule_processing.cs" />
-    <Compile Include="operations\Select_processing_mode.cs" />
     <Compile Include="patterns\Serialize.cs" />
     <Compile Include="patterns\Parallelize.cs" />
     <Compile Include="patterns\Wait_for_work.cs" />

@@ -18,14 +18,18 @@ namespace npantarhei.runtime.flows
 			var async = new Asynchronize<IMessage>();
 		    var handleException = new Handle_exception();
 			_processMessage = new Process_message();
-			
+
+            Action<IMessage> enqueue = _ => async.Process(_, output => 
+                                                                      {
+                                                                          Message(_);
+                                                                          handleException.Process(output);
+                                                                      });
+
 			// Bind
-			_process += async.Enqueue;
-		    async.Dequeued += handleException.Process;
-		    async.Dequeued += _ => Message(_);
+		    _process += enqueue;
             handleException.ContinueWith += _processMessage.Process;
 		    handleException.ExceptionCaught += _ => UnhandledException(_);
-			_processMessage.Continue += async.Enqueue;
+		    _processMessage.Continue += enqueue;
             _processMessage.Result += _ => Message(_);
 			_processMessage.Result += _ => Result(_);
 			

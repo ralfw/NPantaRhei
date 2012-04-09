@@ -16,15 +16,13 @@ namespace npantarhei.runtime.flows
 			// Build
 			_map = new Map_message_to_input_ports();
 			var output = new Output_result();
-			var schedule = new Schedule_processing();
 			_create = new Create_task();
 			var exec = new Execute_task();
 			
 			// Bind	
 			_process += _map.Process;
 			_map.Result += output.Process;
-			output.Continue += schedule.Process;
-			schedule.Result += _create.Process;
+			output.Continue += _create.Process;
 			output.Result += _ => Result(_);
 			_create.Result += exec.Process;
 			exec.Result += _ => Continue(_);

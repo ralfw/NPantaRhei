@@ -60,14 +60,14 @@ namespace npantarhei.runtime
         }
 
 
-        private readonly Dictionary<string, Asynchronize2<IMessage>> _asynchronizingOps = new Dictionary<string, Asynchronize2<IMessage>>();
+        private readonly Dictionary<string, Asynchronize<IMessage>> _asynchronizingOps = new Dictionary<string, Asynchronize<IMessage>>();
         public FlowOperationContainer MakeAsync() { return MakeAsync("~~~async~~~"); }
         public FlowOperationContainer MakeAsync(string name)
         {
-            Asynchronize2<IMessage> async;
+            Asynchronize<IMessage> async;
             if (!_asynchronizingOps.TryGetValue(name, out async))
             {
-                async = new Asynchronize2<IMessage>();
+                async = new Asynchronize<IMessage>();
                 async.Start();
                 _asynchronizingOps.Add(name, async);
             }
@@ -78,14 +78,14 @@ namespace npantarhei.runtime
         }
 
 
-        private readonly Dictionary<string, Parallelize2<IMessage>> _parallelizingOps = new Dictionary<string, Parallelize2<IMessage>>();
+        private readonly Dictionary<string, Parallelize<IMessage>> _parallelizingOps = new Dictionary<string, Parallelize<IMessage>>();
         public FlowOperationContainer MakeParallel() { return MakeParallel("~~~parallel~~~"); }
         public FlowOperationContainer MakeParallel(string name)
         {
-            Parallelize2<IMessage> parallel;
+            Parallelize<IMessage> parallel;
             if (!_parallelizingOps.TryGetValue(name, out parallel))
             {
-                parallel = new Parallelize2<IMessage>();
+                parallel = new Parallelize<IMessage>();
                 parallel.Start();
                 _parallelizingOps.Add(name, parallel);
             }
@@ -96,14 +96,14 @@ namespace npantarhei.runtime
         }
 
 
-        private readonly Dictionary<string, Serialize2<IMessage>> _serializingOps = new Dictionary<string, Serialize2<IMessage>>();
+        private readonly Dictionary<string, Serialize<IMessage>> _serializingOps = new Dictionary<string, Serialize<IMessage>>();
         public FlowOperationContainer MakeSerial() { return MakeSerial("~~~serial~~~"); }
         public FlowOperationContainer MakeSerial(string name)
         {
-            Serialize2<IMessage> serial;
+            Serialize<IMessage> serial;
             if (!_serializingOps.TryGetValue(name, out serial))
             {
-                serial = new Serialize2<IMessage>(_ => _.Port.Fullname);
+                serial = new Serialize<IMessage>(_ => _.Port.Fullname);
                 serial.Start();
                 _serializingOps.Add(name, serial);
             }

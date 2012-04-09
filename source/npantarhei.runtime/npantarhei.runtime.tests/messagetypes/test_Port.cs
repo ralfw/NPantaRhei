@@ -35,21 +35,6 @@ namespace npantarhei.runtime.tests
 			sut = new Port(".portname");
 			Assert.IsFalse(sut.IsOperationPort);
 		}
-		
-		[Test]
-		public void Identify_processing_mode()
-		{
-			var sut = new Port("op");
-			Assert.AreEqual(PortProcessingModes.Synchronous, sut.ProcessingMode);
-			
-			sut = new Port("op*");
-			Assert.AreEqual(PortProcessingModes.Sequential, sut.ProcessingMode);
-			Assert.AreEqual("op", sut.Fullname);
-			
-			sut = new Port("op**");
-			Assert.AreEqual(PortProcessingModes.Parallel, sut.ProcessingMode);
-			Assert.AreEqual("op", sut.Fullname);
-		}
 	}
 }
 

@@ -2,24 +2,13 @@ using System;
 
 namespace npantarhei.runtime.contract
 {
-	public enum PortProcessingModes
-	{
-		Synchronous,
-		Sequential,
-		Parallel
-	}
-	
 	/*
 	 * Examples:
-	 * 		op		: operation only port (synchronous processing)
+	 * 		op		: operation with default ports
 	 * 		a/b/op	: operation with a path
-	 * 		op.p	: operation with a port
+	 * 		op.p	: operation with an explicit port
 	 * 		.p
 	 *		a/b/.p	: port without an operation
-	 * 		op*
-	 * 		op.p*	: async sequential processing
-	 * 		op**
-	 * 		op.p**	: parallel processing
 	 * 
 	 */
 	public interface IPort
@@ -28,7 +17,6 @@ namespace npantarhei.runtime.contract
 		string Path {get;}
 		string OperationName {get;}
 		string Name{get;}
-		PortProcessingModes ProcessingMode {get;}
 		
 		bool IsOperationPort {get;}
 	}

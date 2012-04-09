@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading;
 
 using NUnit.Framework;
-
+using npantarhei.runtime.contract;
 using npantarhei.runtime.patterns;
 
 namespace npantarhei.runtime.tests
@@ -23,7 +23,7 @@ namespace npantarhei.runtime.tests
 			var are = new AutoResetEvent(false);
 			var results = new List<int>();
 			var threads = new Dictionary<long,bool>();
-			sut.Dequeued += _ => {
+			Action<int> dequeue = _ => {
 				lock(results)
 				{
 					if (!threads.ContainsKey(Thread.CurrentThread.GetHashCode()))
@@ -36,7 +36,7 @@ namespace npantarhei.runtime.tests
 			
 			sut.Start();
 			for(var i = 1; i<=N; i++)
-				sut.Enqueue(i);
+				sut.Process(i, dequeue);
 			
 			Assert.IsTrue(are.WaitOne(3000));
 			Assert.AreEqual((N*(N+1)/2), results.Sum());
