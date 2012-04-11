@@ -19,7 +19,19 @@ namespace npantarhei.runtime.messagetypes
         {
             _asyncer = asyncer;
             this.Name = operationToWrap.Name;
-            this.Implementation = (input, continueWith) => asyncer.Process(input, output => operationToWrap.Implementation(output, continueWith));
+            this.Implementation = (input, continueWith, unhandledException) => 
+                                                asyncer.Process(input, 
+                                                                output =>
+                                                                    {
+                                                                        try
+                                                                        {
+                                                                            operationToWrap.Implementation(output, continueWith, unhandledException);
+                                                                        }
+                                                                        catch (Exception ex)
+                                                                        {
+                                                                            unhandledException(new FlowRuntimeException(ex, output));
+                                                                        }
+                                                                    });
         }
 
         public void Start() { _asyncer.Start(); }

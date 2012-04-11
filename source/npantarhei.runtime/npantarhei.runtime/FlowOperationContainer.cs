@@ -16,7 +16,7 @@ namespace npantarhei.runtime
         public FlowOperationContainer AddFunc<TOutput>(string name, Func<TOutput> implementation)
         {
             _operations.Add(new Operation(name,
-                                          (input, outputCont) => {
+                                          (input, outputCont, _) => {
                                                 var result = implementation();
                                                 outputCont(new Message(name, result));
                                           }
@@ -27,7 +27,7 @@ namespace npantarhei.runtime
 		public FlowOperationContainer AddFunc<TInput, TOutput>(string name, Func<TInput, TOutput> implementation)
 		{
 			_operations.Add(new Operation(name, 
-										  (input, outputCont) => {
+										  (input, outputCont, _) => {
 										  		var result = implementation((TInput)input.Data);
 												outputCont(new Message(name, result));
 										  }
@@ -38,14 +38,14 @@ namespace npantarhei.runtime
 		
 		public FlowOperationContainer AddAction<TInput>(string name, Action<TInput> implementation)
 		{
-			_operations.Add(new Operation(name, (input, _) => implementation((TInput)input.Data)));
+			_operations.Add(new Operation(name, (input, _, __) => implementation((TInput)input.Data)));
 		    return this;
 		}
 		
 		public FlowOperationContainer AddAction<TInput, TOutput>(string name, Action<TInput, Action<TOutput>> implementation)
 		{
 			_operations.Add(new Operation(name, 
-										  (input, outputCont) => implementation((TInput)input.Data, 
+										  (input, outputCont, _) => implementation((TInput)input.Data, 
 															                    output => outputCont(new Message(name, output)))
 						   ));
 		    return this;
@@ -55,8 +55,19 @@ namespace npantarhei.runtime
         public FlowOperationContainer MakeSync()
         {
             var sync = new Synchronize<IMessage>();
-            WrapLastOperation(op => new Operation(op.Name, (input, continueWith) => sync.Process(input,
-                                                                                                 output => op.Implementation(output, continueWith))));
+            WrapLastOperation(op => new Operation(op.Name, (input, continueWith, unhandledException) => 
+                                                                sync.Process(input,
+                                                                             output =>
+                                                                                 {
+                                                                                     try
+                                                                                     {
+                                                                                         op.Implementation(output, continueWith, unhandledException);
+                                                                                     }
+                                                                                     catch (Exception ex)
+                                                                                     {
+                                                                                         unhandledException(new FlowRuntimeException(ex, output));
+                                                                                     }
+                                                                                 })));
             return this;
         }
 

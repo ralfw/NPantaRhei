@@ -8,7 +8,9 @@ namespace npantarhei.runtime.operations
 	{
 		public void Process(Task task)
 		{
-			task.Operation.Implementation(task.Message, output => Put_output_in_same_context_as_input(task.Message, output));
+            task.Operation.Implementation(task.Message,
+                                          output => Put_output_in_same_context_as_input(task.Message, output),
+                                          ex => { throw ex; });
 		}
 		
 		private void Put_output_in_same_context_as_input(IMessage input, IMessage output)

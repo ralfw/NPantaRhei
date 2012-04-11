@@ -17,7 +17,7 @@ namespace npantarhei.runtime.tests.operations
 			
 			var msg = new Message("x.in", "hello");
 			var task = new Task(msg, 
-								new Operation("x", (input, outputCont) => {
+								new Operation("x", (input, outputCont, _) => {
 																		  		outputCont(input);
 																		  }));
 			
@@ -36,7 +36,7 @@ namespace npantarhei.runtime.tests.operations
 			
 			var msg = new Message("x.in", "hello");
 			var task = new Task(msg, 
-								new Operation("x", (input, outputCont) => {
+								new Operation("x", (input, outputCont, _) => {
 																		  		outputCont(new Message("1", input.Data.ToString() + "x"));
 																				outputCont(new Message("2", input.Data.ToString() + "y"));
 																		  }));
@@ -59,7 +59,7 @@ namespace npantarhei.runtime.tests.operations
 			
 			var msg = new Message("a/b/x.in", "hello");
 			var task = new Task(msg, 
-								new Operation("x", (input, outputCont) => {
+								new Operation("x", (input, outputCont, _) => {
 																		  		outputCont(new Message("x.out", input.Data.ToString() + "x"));
 																		  }));
 			var results = new List<IMessage>();

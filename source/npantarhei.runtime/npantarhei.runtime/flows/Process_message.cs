@@ -23,8 +23,8 @@ namespace npantarhei.runtime.flows
 			_process += _map.Process;
 		    _map.Result += _ => Message(_);
 			_map.Result += output.Process;
+            output.Result += _ => Result(_);
 			output.Continue += _create.Process;
-			output.Result += _ => Result(_);
 			_create.Result += exec.Process;
 			exec.Result += _ => Continue(_);
 		}

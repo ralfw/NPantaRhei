@@ -58,7 +58,7 @@ namespace npantarhei.runtime.tests.integration
 			_sut.AddStream(new Stream(".in", "A.in"));
 			_sut.AddStream(new Stream("A.out", ".out"));
 			
-			_sut.AddOperation(new Operation("A", (input, outputCont) => outputCont(new Message("A.out", input.Data.ToString() + "x"))));
+			_sut.AddOperation(new Operation("A", (input, outputCont, _) => outputCont(new Message("A.out", input.Data.ToString() + "x"))));
 
 			_sut.Process(new Message(".in", "hello"));
 
@@ -74,8 +74,8 @@ namespace npantarhei.runtime.tests.integration
 			_sut.AddStream(new Stream("A.out", "B.in"));
 			_sut.AddStream(new Stream("B.out", ".out"));
 			
-			_sut.AddOperation(new Operation("A", (input, outputCont) => outputCont(new Message("A.out", input.Data.ToString() + "x"))));
-			_sut.AddOperation(new Operation("B", (input, outputCont) => outputCont(new Message("B.out", input.Data.ToString() + "y"))));
+			_sut.AddOperation(new Operation("A", (input, outputCont, _) => outputCont(new Message("A.out", input.Data.ToString() + "x"))));
+			_sut.AddOperation(new Operation("B", (input, outputCont, _) => outputCont(new Message("B.out", input.Data.ToString() + "y"))));
 			
 			_sut.Process(new Message(".in", "hello"));
 
@@ -92,8 +92,8 @@ namespace npantarhei.runtime.tests.integration
 			_sut.AddStream(new Stream("A.out", ".out"));
 			_sut.AddStream(new Stream("B.out", ".out"));
 			
-			_sut.AddOperation(new Operation("A", (input, outputCont) => outputCont(new Message("A.out", input.Data.ToString() + "x"))));
-			_sut.AddOperation(new Operation("B", (input, outputCont) => outputCont(new Message("B.out", input.Data.ToString() + "y"))));
+			_sut.AddOperation(new Operation("A", (input, outputCont, _) => outputCont(new Message("A.out", input.Data.ToString() + "x"))));
+			_sut.AddOperation(new Operation("B", (input, outputCont, _) => outputCont(new Message("B.out", input.Data.ToString() + "y"))));
 			
 			var results = new List<IMessage>();
 		    var n = 0;
@@ -116,7 +116,7 @@ namespace npantarhei.runtime.tests.integration
 			_sut.AddStream(new Stream(".in", "A/B/X.in"));
 			_sut.AddStream(new Stream("A/B/X.out", ".out"));
 			
-			_sut.AddOperation(new Operation("X", (input, outputCont) => outputCont(new Message("A/B/X.out", input.Data.ToString() + "x"))));
+			_sut.AddOperation(new Operation("X", (input, outputCont, _) => outputCont(new Message("A/B/X.out", input.Data.ToString() + "x"))));
 			
 			_sut.Process(new Message(".in", "hello"));
 
@@ -131,7 +131,7 @@ namespace npantarhei.runtime.tests.integration
             _sut.AddStream(new Stream(".process", "ThrowEx.in"));
             _sut.AddStream(new Stream("ThrowEx.out", ".out"));
 
-            _sut.AddOperation(new Operation("ThrowEx", (input, outputCont) => { throw new NotImplementedException("xxx");}));
+            _sut.AddOperation(new Operation("ThrowEx", (input, outputCont, _) => { throw new NotImplementedException("xxx");}));
 
             FlowRuntimeException ex = null;
             _sut.UnhandledException += _ =>
@@ -154,8 +154,8 @@ namespace npantarhei.runtime.tests.integration
             _sut.AddStream(new Stream("A.out", "B.in"));
             _sut.AddStream(new Stream("B.out", ".out"));
 
-            _sut.AddOperation(new Operation("A", (input, outputCont) => outputCont(new Message("A.out", input.Data.ToString() + "x"))));
-            _sut.AddOperation(new Operation("B", (input, outputCont) => outputCont(new Message("B.out", input.Data.ToString() + "y"))));
+            _sut.AddOperation(new Operation("A", (input, outputCont, _) => outputCont(new Message("A.out", input.Data.ToString() + "x"))));
+            _sut.AddOperation(new Operation("B", (input, outputCont, _) => outputCont(new Message("B.out", input.Data.ToString() + "y"))));
 
             var messages = new List<string>();
             _sut.Message += _ => messages.Add(_.Port.Fullname);

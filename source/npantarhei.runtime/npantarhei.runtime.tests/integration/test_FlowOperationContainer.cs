@@ -22,7 +22,7 @@ namespace npantarhei.runtime.tests
 			var op = sut.Operations.First();
 						
 			IMessage result = null;
-			op.Implementation(new Message("f", "hello"), _ => result = _);
+			op.Implementation(new Message("f", "hello"), _ => result = _, null);
 		
 			Assert.AreEqual(5, (int)result.Data);
 		}
@@ -38,7 +38,7 @@ namespace npantarhei.runtime.tests
 			Assert.AreEqual("opname", op.Name);
 						
 			IMessage result = null;
-			op.Implementation(new Message("xyz.someport", "x"), _ => result = _);
+			op.Implementation(new Message("xyz.someport", "x"), _ => result = _, null);
 			
 			Assert.AreEqual("opname", result.Port.Fullname);
 		}
@@ -54,7 +54,7 @@ namespace npantarhei.runtime.tests
 			
 			var op = sut.Operations.First();
 						
-			op.Implementation(new Message("f", "hello"), null);
+			op.Implementation(new Message("f", "hello"), null, null);
 		
 			Assert.AreEqual("hello", result);
 		}
@@ -70,7 +70,7 @@ namespace npantarhei.runtime.tests
 			var op = sut.Operations.First();
 						
 			IMessage result = null;
-			op.Implementation(new Message("f", "hello"), _ => result = _);
+			op.Implementation(new Message("f", "hello"), _ => result = _, null);
 		
 			Assert.AreEqual(5, (int)result.Data);
 		}
@@ -88,7 +88,7 @@ namespace npantarhei.runtime.tests
 			Assert.AreEqual("opname", op.Name);
 						
 			IMessage result = null;
-			op.Implementation(new Message("xyz.someport", "x"), _ => result = _);
+			op.Implementation(new Message("xyz.someport", "x"), _ => result = _, null);
 			
 			Assert.AreEqual("opname", result.Port.Fullname);
 		}
