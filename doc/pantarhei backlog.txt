@@ -1,8 +1,6 @@
 Topics to address in future increments
 ------------
 
-Report exceptions from async wrappers
-
 
 Add causality push/pop as special operations. Does the exec engine need to know about causalities? Or can they be completely handled within
 operations?
@@ -83,6 +81,8 @@ Take from queue according to a pattern
 
 ---------------------------------
 Implemented/solved:
+
+Report exceptions from async wrappers
 
 Log messages before execution/after translation (instead of after retrieval from queue), i.e. log input messages
 

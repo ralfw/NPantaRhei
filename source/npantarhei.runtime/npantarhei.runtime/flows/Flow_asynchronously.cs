@@ -28,7 +28,8 @@ namespace npantarhei.runtime.flows
 		    _processMessage.Message += _ => Message(_);
 		    _processMessage.Continue += enqueue;
 			_processMessage.Result += _ => Result(_);
-			
+		    _processMessage.ExceptionCaught += _ => UnhandledException(_);
+
 			_start += async.Start;
 			_stop += async.Stop;
 		}

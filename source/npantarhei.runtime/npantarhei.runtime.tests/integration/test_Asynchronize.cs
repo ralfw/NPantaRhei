@@ -49,5 +49,33 @@ namespace npantarhei.runtime.tests.integration
                 Assert.AreNotEqual(runtimeThreadId, asyncThreadId);
             }
         }
+
+        [Test]
+        public void Catch_exception_from_background()
+        {
+            using (var sut = new FlowRuntime())
+            {
+                sut.Start();
+
+                sut.AddStream(new Stream(".in", "throw"));
+
+                var cont = new FlowOperationContainer();
+                cont.AddAction<string>("throw", _ => { throw new ApplicationException("xxx"); }).MakeAsync();
+                sut.AddOperations(cont.Operations);
+
+                FlowRuntimeException ex = null;
+                var are = new AutoResetEvent(false);
+                sut.UnhandledException += _ =>
+                                                {
+                                                    ex = _;
+                                                    are.Set();
+                                                };
+
+                sut.Process(new Message(".in", "hello"));
+
+                Assert.IsTrue(are.WaitOne(1000));
+                Assert.AreEqual("xxx", ex.InnerException.Message);
+            }
+        }
     }
 }

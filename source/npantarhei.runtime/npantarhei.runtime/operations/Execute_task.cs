@@ -10,7 +10,7 @@ namespace npantarhei.runtime.operations
 		{
             task.Operation.Implementation(task.Message,
                                           output => Put_output_in_same_context_as_input(task.Message, output),
-                                          ex => { throw ex; });
+                                          ex => ExceptionCaught(ex));
 		}
 		
 		private void Put_output_in_same_context_as_input(IMessage input, IMessage output)
@@ -21,6 +21,7 @@ namespace npantarhei.runtime.operations
 		}
 		
 		public event Action<IMessage> Result;
+	    public event Action<FlowRuntimeException> ExceptionCaught;
 	}
 }
 

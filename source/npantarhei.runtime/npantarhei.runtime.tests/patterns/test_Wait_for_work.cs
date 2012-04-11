@@ -12,7 +12,7 @@ using npantarhei.runtime.patterns;
 namespace npantarhei.runtime.tests.patterns
 {
 	[TestFixture()]
-	public class test_Asynchronize
+	public class test_Wait_for_work
 	{
 		[Test()]
 		public void Stop_sets_termination_flag()
