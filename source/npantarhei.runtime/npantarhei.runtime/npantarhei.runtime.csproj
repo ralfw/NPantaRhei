@@ -37,7 +37,7 @@
     <Compile Include="data\INotifyingResource.cs" />
     <Compile Include="data\NotifyingMultiQueue.cs" />
     <Compile Include="FlowRuntime.cs" />
-    <Compile Include="messagetypes\AsyncOperation.cs" />
+    <Compile Include="messagetypes\AsyncWrapperOperation.cs" />
     <Compile Include="operations\Start_async_operations.cs" />
     <Compile Include="operations\Handle_exception.cs" />
     <Compile Include="patterns\ScheduledTask.cs" />

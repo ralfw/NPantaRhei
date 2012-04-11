@@ -73,7 +73,7 @@ namespace npantarhei.runtime
                 _asynchronizingOps.Add(name, async);
             }
 
-            WrapLastOperation(op => new AsyncOperation(async, op));
+            WrapLastOperation(op => new AsyncWrapperOperation(async, op));
             
             return this;
         }
@@ -91,7 +91,7 @@ namespace npantarhei.runtime
                 _parallelizingOps.Add(name, parallel);
             }
 
-            WrapLastOperation(op => new AsyncOperation(parallel, op));
+            WrapLastOperation(op => new AsyncWrapperOperation(parallel, op));
 
             return this;
         }
@@ -109,7 +109,7 @@ namespace npantarhei.runtime
                 _serializingOps.Add(name, serial);
             };
 
-            WrapLastOperation(op => new AsyncOperation(serial, op));
+            WrapLastOperation(op => new AsyncWrapperOperation(serial, op));
 
             return this;
         }

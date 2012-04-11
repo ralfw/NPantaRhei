@@ -9,7 +9,7 @@ namespace npantarhei.runtime.operations
         public void Process()
         {
             foreach(var op in _operations.Values)
-                if (op as AsyncOperation != null) ((AsyncOperation)op).Start();
+                if (op as AsyncWrapperOperation != null) ((AsyncWrapperOperation)op).Start();
         }
 
 

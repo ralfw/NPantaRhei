@@ -11,11 +11,11 @@ namespace npantarhei.runtime.messagetypes
         void Stop();
     }
 
-    public class AsyncOperation : IOperation
+    public class AsyncWrapperOperation : IOperation
     {
         private readonly IAsynchronizer<IMessage> _asyncer;
 
-        public AsyncOperation(IAsynchronizer<IMessage> asyncer, IOperation operationToWrap)
+        public AsyncWrapperOperation(IAsynchronizer<IMessage> asyncer, IOperation operationToWrap)
         {
             _asyncer = asyncer;
             this.Name = operationToWrap.Name;
