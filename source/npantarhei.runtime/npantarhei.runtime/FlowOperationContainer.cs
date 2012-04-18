@@ -50,7 +50,21 @@ namespace npantarhei.runtime
 						   ));
 		    return this;
 		}
-		
+
+
+        public FlowOperationContainer AddPushCausality(string name, string portname) { return AddPushCausality(name, new Port(portname)); }
+        public FlowOperationContainer AddPushCausality(string name, IPort exceptionHandler)
+        {
+            _operations.Add(new PushCausality(name, exceptionHandler));
+            return this;
+        }
+
+        public FlowOperationContainer AddPopCausality(string name)
+        {
+            _operations.Add(new PopCausality(name));
+            return this;
+        }
+
 
         public FlowOperationContainer MakeSync()
         {

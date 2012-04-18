@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using npantarhei.runtime.contract;
 
 namespace npantarhei.runtime.messagetypes
@@ -11,12 +12,21 @@ namespace npantarhei.runtime.messagetypes
 		{
 			this.Port = port;
 			this.Data = data;
+            this.Causalities = new CausalityStack();
 		}
 
 		#region IMessage implementation
 		public IPort Port { get; private set; }
 		public object Data { get; private set; }
-		#endregion
+
+	    private CausalityStack _causalities;
+	    public CausalityStack Causalities 
+	    {
+            get { return _causalities; }
+            set { _causalities = value.Copy(); }
+	    }
+
+	    #endregion
 
         public override string ToString()
         {

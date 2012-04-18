@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-
 using npantarhei.runtime.contract;
 using npantarhei.runtime.messagetypes;
 
-namespace npantarhei.runtime
+namespace npantarhei.runtime.operations
 {
 	internal class Create_task
 	{

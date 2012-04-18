@@ -33,13 +33,15 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="contract\CausalityStack.cs" />
     <Compile Include="contract\FlowRuntimeException.cs" />
     <Compile Include="data\INotifyingResource.cs" />
     <Compile Include="data\NotifyingMultiQueue.cs" />
     <Compile Include="FlowRuntime.cs" />
     <Compile Include="messagetypes\AsyncWrapperOperation.cs" />
     <Compile Include="operations\Start_async_operations.cs" />
-    <Compile Include="operations\Handle_exception.cs" />
+    <Compile Include="patterns\PopCausality.cs" />
+    <Compile Include="patterns\PushCausality.cs" />
     <Compile Include="patterns\ScheduledTask.cs" />
     <Compile Include="patterns\Synchronize.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -61,8 +63,6 @@
     <Compile Include="contract\IPort.cs" />
     <Compile Include="messagetypes\Port.cs" />
     <Compile Include="operations\Enqueue_message_for_processing.cs" />
-    <Compile Include="operations\Signal_on_downstream_completion.cs" />
-    <Compile Include="operations\Sync_dequeue_messages.cs" />
     <Compile Include="flows\Process_message.cs" />
     <Compile Include="flows\Flow_asynchronously.cs" />
     <Compile Include="patterns\Asynchronize.cs" />

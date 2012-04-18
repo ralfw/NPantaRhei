@@ -20,13 +20,14 @@ namespace npantarhei.runtime.operations
 		public void Process(IMessage outputMessage)
 		{
 			var inputPorts = _streams.Where(s => s.FromPort.Fullname == outputMessage.Port.Fullname)
-				    				 .Select(s => s.ToPort);
+				    				 .Select(s => s.ToPort)
+                                     .ToArray();
 			
-			if (inputPorts.Count() == 0)
+			if (!inputPorts.Any())
 				throw new InvalidOperationException(string.Format("Unknown output port: '{0}'!", outputMessage.Port.Fullname));
 			
 			foreach(var port in inputPorts)
-				Result(new Message(port, outputMessage.Data));	
+				Result(new Message(port, outputMessage.Data){Causalities = outputMessage.Causalities});	
 		}
 		
 		

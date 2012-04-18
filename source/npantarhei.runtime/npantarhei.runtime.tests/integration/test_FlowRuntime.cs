@@ -144,7 +144,7 @@ namespace npantarhei.runtime.tests.integration
 
             Assert.IsTrue(_are.WaitOne(1000));
             Assert.AreEqual("xxx", ex.InnerException.Message);
-            Assert.AreEqual(".process", ex.Context.Port.Fullname);
+            Assert.AreEqual("ThrowEx.in", ex.Context.Port.Fullname);
         }
 
         [Test]

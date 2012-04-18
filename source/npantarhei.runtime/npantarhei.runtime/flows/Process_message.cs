@@ -27,7 +27,8 @@ namespace npantarhei.runtime.flows
 			output.Continue += _create.Process;
 			_create.Result += exec.Process;
 			exec.Result += _ => Continue(_);
-		    exec.ExceptionCaught += _ => ExceptionCaught(_);
+		    exec.HandledException += _ => Continue(_);
+		    exec.UnhandledException += _ => UnhandledException(_);
 		}
 		
 		public void Inject(List<IStream> streams, Dictionary<string, IOperation> operations)
@@ -42,7 +43,7 @@ namespace npantarhei.runtime.flows
 	    public event Action<IMessage> Message;
 		public event Action<IMessage> Continue;
 		public event Action<IMessage> Result;
-	    public event Action<FlowRuntimeException> ExceptionCaught;
+	    public event Action<FlowRuntimeException> UnhandledException;
 	}
 }
 
