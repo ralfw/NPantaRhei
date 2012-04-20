@@ -40,6 +40,8 @@
     <Compile Include="FlowRuntime.cs" />
     <Compile Include="messagetypes\AsyncWrapperOperation.cs" />
     <Compile Include="operations\Start_async_operations.cs" />
+    <Compile Include="patterns\AutoResetJoin.cs" />
+    <Compile Include="patterns\AutoResetJoinOf.cs" />
     <Compile Include="patterns\PopCausality.cs" />
     <Compile Include="patterns\PushCausality.cs" />
     <Compile Include="patterns\ScheduledTask.cs" />

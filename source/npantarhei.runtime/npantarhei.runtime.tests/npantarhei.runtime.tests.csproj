@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="contract\test_CausalityStack.cs" />
     <Compile Include="data\test_NotifyingMultiQueue.cs" />
+    <Compile Include="integration\test_AutoResetJoin.cs" />
     <Compile Include="integration\test_causality_handling.cs" />
     <Compile Include="integration\test_Serialize.cs" />
     <Compile Include="integration\test_Parallelize.cs" />
@@ -55,6 +56,7 @@
     </Compile>
     <Compile Include="integration\test_Synchronize.cs" />
     <Compile Include="messagetypes\test_AsyncWrapperOperation.cs" />
+    <Compile Include="patterns\test_AutoResetJoin.cs" />
     <Compile Include="patterns\test_causality_operations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="integration\test_FlowRuntime.cs" />

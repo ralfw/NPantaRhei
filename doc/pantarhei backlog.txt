@@ -1,12 +1,22 @@
 Topics to address in future increments
 ------------
 
-
-Add causality push/pop as special operations. Does the exec engine need to know about causalities? Or can they be completely handled within
-operations?
-
-
 Add join as a special operation (with the number of inputs as a ctor param). Watch out: the join needs to be thread-safe.
+	Instantiate with n inputs. Internally use a general join op, outwardly use a typesafe join.
+	The join results in a tuple<...>.
+	A join needs queues for each input.
+	Auto reset join: pair input i with input j and remove queue head messages.
+		input A: A1 A2    A3
+		input B:       B1    B2  B3
+		output:        (A1,B1)
+						     (A2,B2)
+							     (A3,B3)
+	Normal join: more complicated than auto reset join.
+		input A: A1 A2    A3
+		input B:       B1    B2
+		output:        (A1,B1)/(A2,B1)
+		                  (A3,B1)
+						     (A3,B2)
 
 
 For functional units producing many results: do they really need to produce all results at once?
@@ -81,6 +91,9 @@ Take from queue according to a pattern
 
 ---------------------------------
 Implemented/solved:
+
+Add causality push/pop as special operations. Does the exec engine need to know about causalities? Or can they be completely handled within
+operations?
 
 Report exceptions from async wrappers
 
