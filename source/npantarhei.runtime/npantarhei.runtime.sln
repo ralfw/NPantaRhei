@@ -10,22 +10,56 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\..\doc\pantarhei backlog.txt = ..\..\doc\pantarhei backlog.txt
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{C07B3671-8FCC-4B1E-8860-912CF07A4D85}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Count words", "Count words\Count words.csproj", "{3B493469-F78B-4E8B-A628-0900EEA305E6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{164BC6FE-6CAF-47EE-B426-7AC022569345}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{164BC6FE-6CAF-47EE-B426-7AC022569345}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{164BC6FE-6CAF-47EE-B426-7AC022569345}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{164BC6FE-6CAF-47EE-B426-7AC022569345}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{164BC6FE-6CAF-47EE-B426-7AC022569345}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{164BC6FE-6CAF-47EE-B426-7AC022569345}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{164BC6FE-6CAF-47EE-B426-7AC022569345}.Release|Any CPU.Build.0 = Release|Any CPU
+		{164BC6FE-6CAF-47EE-B426-7AC022569345}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{164BC6FE-6CAF-47EE-B426-7AC022569345}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{164BC6FE-6CAF-47EE-B426-7AC022569345}.Release|x86.ActiveCfg = Release|Any CPU
 		{8C5859A7-0ACC-4156-A98D-A442FDCC15BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8C5859A7-0ACC-4156-A98D-A442FDCC15BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C5859A7-0ACC-4156-A98D-A442FDCC15BB}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{8C5859A7-0ACC-4156-A98D-A442FDCC15BB}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{8C5859A7-0ACC-4156-A98D-A442FDCC15BB}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{8C5859A7-0ACC-4156-A98D-A442FDCC15BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C5859A7-0ACC-4156-A98D-A442FDCC15BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C5859A7-0ACC-4156-A98D-A442FDCC15BB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{8C5859A7-0ACC-4156-A98D-A442FDCC15BB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{8C5859A7-0ACC-4156-A98D-A442FDCC15BB}.Release|x86.ActiveCfg = Release|Any CPU
+		{3B493469-F78B-4E8B-A628-0900EEA305E6}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{3B493469-F78B-4E8B-A628-0900EEA305E6}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{3B493469-F78B-4E8B-A628-0900EEA305E6}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{3B493469-F78B-4E8B-A628-0900EEA305E6}.Debug|x86.ActiveCfg = Debug|x86
+		{3B493469-F78B-4E8B-A628-0900EEA305E6}.Debug|x86.Build.0 = Debug|x86
+		{3B493469-F78B-4E8B-A628-0900EEA305E6}.Release|Any CPU.ActiveCfg = Release|x86
+		{3B493469-F78B-4E8B-A628-0900EEA305E6}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{3B493469-F78B-4E8B-A628-0900EEA305E6}.Release|Mixed Platforms.Build.0 = Release|x86
+		{3B493469-F78B-4E8B-A628-0900EEA305E6}.Release|x86.ActiveCfg = Release|x86
+		{3B493469-F78B-4E8B-A628-0900EEA305E6}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{3B493469-F78B-4E8B-A628-0900EEA305E6} = {C07B3671-8FCC-4B1E-8860-912CF07A4D85}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = npantarhei.runtime\npantarhei.runtime.csproj

@@ -5,7 +5,7 @@ using npantarhei.runtime.messagetypes;
 
 namespace npantarhei.runtime.patterns
 {
-    public class AutoResetJoin<T0, T1> : AutoResetJoinBase
+    internal class AutoResetJoin<T0, T1> : AutoResetJoinBase
     {
         public AutoResetJoin(string name) : base(name, 2, Create_join_tuple) { }
 
@@ -16,7 +16,7 @@ namespace npantarhei.runtime.patterns
         }
     }
 
-    public class AutoResetJoin<T0, T1, T2> : AutoResetJoinBase
+    internal class AutoResetJoin<T0, T1, T2> : AutoResetJoinBase
     {
         public AutoResetJoin(string name) : base(name, 3, Create_join_tuple) { }
 
@@ -33,7 +33,7 @@ namespace npantarhei.runtime.patterns
      *      input: .in0, .in1, ..., .in9 (last char in port name is index of input)
      *      output: none (only name of operation)
      */
-    public class AutoResetJoinBase : IOperation
+    internal class AutoResetJoinBase : IOperation
     {
         private readonly AutoResetJoin _arj;
 

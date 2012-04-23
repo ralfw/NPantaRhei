@@ -42,6 +42,9 @@
     <Compile Include="operations\Start_async_operations.cs" />
     <Compile Include="patterns\AutoResetJoin.cs" />
     <Compile Include="patterns\AutoResetJoinOf.cs" />
+    <Compile Include="patterns\AOperation.cs" />
+    <Compile Include="patterns\operations\Gather.cs" />
+    <Compile Include="patterns\operations\Scatter.cs" />
     <Compile Include="patterns\PopCausality.cs" />
     <Compile Include="patterns\PushCausality.cs" />
     <Compile Include="patterns\ScheduledTask.cs" />

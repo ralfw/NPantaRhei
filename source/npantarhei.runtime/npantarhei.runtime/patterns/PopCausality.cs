@@ -1,32 +1,17 @@
 using npantarhei.runtime.contract;
 using npantarhei.runtime.messagetypes;
+using npantarhei.runtime.patterns.operations;
 
 namespace npantarhei.runtime.patterns
 {
-    class PopCausality : IOperation
+    class PopCausality : AOperation
     {
-        private readonly string _name;
-        private readonly OperationAdapter _implementation;
+        public PopCausality(string name) : base(name) {}
 
-
-        public PopCausality(string name)
+        protected override void Process(IMessage input, System.Action<IMessage> continueWith, System.Action<FlowRuntimeException> unhandledException)
         {
-            _name = name;
-            _implementation = (input, outputCont, _) =>
-                                  {
-                                      input.Causalities.Pop();
-                                      outputCont(input);
-                                  };
-        }
-
-        public string Name
-        {
-            get { return _name; }
-        }
-
-        public OperationAdapter Implementation
-        {
-            get { return _implementation; }
+ 	        input.Causalities.Pop();
+            continueWith(input);
         }
     }
 }
