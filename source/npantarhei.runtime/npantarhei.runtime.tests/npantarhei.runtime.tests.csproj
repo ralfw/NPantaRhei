@@ -44,6 +44,7 @@
     <Compile Include="data\test_NotifyingMultiQueue.cs" />
     <Compile Include="integration\test_AutoResetJoin.cs" />
     <Compile Include="integration\test_causality_handling.cs" />
+    <Compile Include="integration\test_Scatter_Gather.cs" />
     <Compile Include="integration\test_Serialize.cs" />
     <Compile Include="integration\test_Parallelize.cs" />
     <Compile Include="integration\test_Asynchronize.cs" />
