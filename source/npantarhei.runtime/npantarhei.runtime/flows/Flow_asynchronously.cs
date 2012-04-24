@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-
 using npantarhei.runtime.contract;
 using npantarhei.runtime.operations;
 using npantarhei.runtime.data;
@@ -16,11 +15,13 @@ namespace npantarhei.runtime.flows
 		{
 			// Build
 			var async = new Asynchronize<IMessage>();
+		    var throttle = new Throttle_message_flow();
 			_processMessage = new Process_message();
 
-            Action<IMessage> enqueue = _ => async.Process(_, _processMessage.Process);
+            Action<IMessage> enqueue = _ => async.Process(_, throttle.Process);
 
 			// Bind
+		    throttle.Continue += _processMessage.Process;
 		    _process += enqueue;
 		    _processMessage.Message += _ => Message(_);
 		    _processMessage.Continue += enqueue;
@@ -29,6 +30,7 @@ namespace npantarhei.runtime.flows
 
 			_start += async.Start;
 			_stop += async.Stop;
+		    _throttle += throttle.Delay;
 		}
 		
 		public void Inject(List<IStream> streams, Dictionary<string, IOperation> operations)
@@ -43,11 +45,14 @@ namespace npantarhei.runtime.flows
 		public event Action<IMessage> Result;
 	    public event Action<FlowRuntimeException> UnhandledException;
 		
-		private Action _start;
+		private readonly Action _start;
 		public void Start() { _start(); }
 		
-		private Action _stop;
+		private readonly Action _stop;
 		public void Stop() { _stop(); }
-	}
+
+        private readonly Action<int> _throttle;
+        public void Throttle(int delayMilliseconds) { _throttle(delayMilliseconds); }
+    }
 }
 

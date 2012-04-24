@@ -35,6 +35,8 @@ namespace npantarhei.runtime
 
             _stop += flow.Stop;
             _stop += opStop.Process;
+
+		    _throttle += flow.Throttle;
 			
 			// Inject
 			var streams = new List<IStream>();
@@ -68,6 +70,9 @@ namespace npantarhei.runtime
 		
 		private readonly Action _stop;
 	    public void Stop() { _stop(); }
+
+	    private readonly Action<int> _throttle;
+        public void Throttle(int delayMilliseconds) { _throttle(delayMilliseconds); }
 		#endregion
 		
 		

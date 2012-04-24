@@ -17,6 +17,13 @@ namespace npantarhei.runtime.contract
 		
 		void Start();
 		void Stop();
+
+        //void Pause();
+        //void BreakOnPort(string includeFilter);
+        //void BreakOnMessage(Func<IMessage, bool> includeFilter);
+        //void Resume();
+
+        void Throttle(int delayMilliseconds);
 	}
 }
 

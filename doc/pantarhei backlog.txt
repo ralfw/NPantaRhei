@@ -30,10 +30,6 @@ Goal: Retain simplicity of IEnum for producer and consumer. But avoid processing
 Create contract project with stuff that implementors of operation would find useful
 
 
-What happens on exec engine exceptions?
-	Shut down - send exeception to error port first
-
-
 Starting/pausing/stopping background threads and running operations
 	How to halt the whole processing in a gentle way?
 	Persistence of operations state and exec engine queues?
@@ -49,9 +45,6 @@ Tracing
 	selective tracing based on port name filters
 	serialize any data graph
 	How to convert any message to text?
-
-Slow-motion
-	slow down flow of messages
 
 Consistency checking
 	are operations missing?
@@ -85,6 +78,11 @@ Take from queue according to a pattern
 
 ---------------------------------
 Implemented/solved:
+
+
+Slow-motion (throttling)
+	slow down flow of messages
+
 
 	Auto reset join: pair input i with input j and remove queue head messages.
 		input A: A1 A2    A3
