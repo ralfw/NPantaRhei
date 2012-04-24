@@ -36,16 +36,13 @@ namespace npantarhei.runtime.tests.integration
                 fr.AddStream(new Stream("sleep", "gather.stream"));
                 fr.AddStream(new Stream("gather", ".out"));
 
-                IMessage result = null;
-                var are = new AutoResetEvent(false);
-                fr.Result += _ => { result = _; are.Set(); };
-
                 fr.Start();
 
                 var list = new[] {10, 200, 100, 30, 200, 70};
                 fr.Process(new Message(".in", list));
 
-                Assert.IsTrue(are.WaitOne(1000));
+                IMessage result = null;
+                Assert.IsTrue(fr.WaitForResult(1000, _ => result = _));
                 Assert.That(list, Is.EquivalentTo(((List<int>)result.Data).ToArray()));
             }
         }

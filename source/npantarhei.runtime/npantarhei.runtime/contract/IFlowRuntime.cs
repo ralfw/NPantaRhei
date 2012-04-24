@@ -10,8 +10,12 @@ namespace npantarhei.runtime.contract
         event Action<IMessage> Message;
         event Action<FlowRuntimeException> UnhandledException;
         event Action<IMessage> Result;
+
+        bool WaitForResult(int milliseconds);
+        bool WaitForResult(int milliseconds, Action<IMessage> processResult);
 		
 		void AddStream(IStream stream);
+        void AddStream(string fromPortName, string toPortName);
 		void AddOperation(IOperation operation);
 		void AddOperations(IEnumerable<IOperation> operations);
 		

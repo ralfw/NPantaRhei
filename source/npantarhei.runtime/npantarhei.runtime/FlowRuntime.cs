@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading;
 using npantarhei.runtime.contract;
+using npantarhei.runtime.messagetypes;
 using npantarhei.runtime.operations;
 using npantarhei.runtime.flows;
 using npantarhei.runtime.data;
@@ -57,8 +58,21 @@ namespace npantarhei.runtime
 	    public event Action<IMessage> Message = _ => { };
 	    public event Action<FlowRuntimeException> UnhandledException;
 	    public event Action<IMessage> Result;
+
+        public bool WaitForResult(int milliseconds) { return WaitForResult(milliseconds, _ => {}); }
+        public bool WaitForResult(int milliseconds, Action<IMessage> processResult)
+        {
+            var are = new AutoResetEvent(false);
+            this.Result += _ =>
+                               {
+                                   processResult(_);
+                                   are.Set();
+                               };
+            return are.WaitOne(milliseconds);
+        }
 		
 		private readonly Action<IStream> _addStream;
+        public void AddStream(string fromPortName, string toPortName) { AddStream(new Stream(fromPortName, toPortName));}
 		public void AddStream (IStream stream) { _addStream(stream);}
 	
 		private readonly Action<IOperation> _addOperation;
