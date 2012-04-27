@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -28,7 +29,7 @@ namespace npantarhei.runtime
 			
 			_process += flow.Process;
 		    flow.Message += _ => Message(_);
-		    flow.Result += _ => Result(_);
+		    flow.Result += Pass_result_to_environment;
 		    flow.UnhandledException += _ => UnhandledException(_);
 
 		    _start += opStart.Process;
@@ -50,14 +51,46 @@ namespace npantarhei.runtime
             opStart.Inject(operations);
 		    opStop.Inject(operations);
 		}
-		
-		#region IFlowRuntime implementation
+
+
+	    private readonly ConcurrentQueue<IMessage> _resultBuffer = new ConcurrentQueue<IMessage>();
+        private void Pass_result_to_environment(IMessage message)
+        {
+            if (_result == null)
+                Buffer_result(message);
+            else
+                Empty_result_buffer();
+        }
+
+	    private void Buffer_result(IMessage message)
+	    {
+	        _resultBuffer.Enqueue(message);
+	    }
+
+	    private void Empty_result_buffer()
+	    {
+	        IMessage previousMessage = null;
+	        while (_resultBuffer.TryDequeue(out previousMessage))
+	            _result(previousMessage);
+	    }
+
+
+	    #region IFlowRuntime implementation
 		private readonly Action<IMessage> _process;
 		public void Process(IMessage message) { _process(message); }
 
 	    public event Action<IMessage> Message = _ => { };
 	    public event Action<FlowRuntimeException> UnhandledException;
-	    public event Action<IMessage> Result;
+
+	    private event Action<IMessage> _result;
+	    public event Action<IMessage> Result { 
+            add
+            {
+                _result += value;
+                Empty_result_buffer();
+            }
+	        remove { _result -= value; }
+	    }
 
         public bool WaitForResult(int milliseconds) { return WaitForResult(milliseconds, _ => {}); }
         public bool WaitForResult(int milliseconds, Action<IMessage> processResult)
