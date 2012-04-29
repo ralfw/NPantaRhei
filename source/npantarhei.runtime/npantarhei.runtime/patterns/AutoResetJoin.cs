@@ -4,6 +4,12 @@ using System.Linq;
 
 namespace npantarhei.runtime.patterns
 {
+    /*
+     * in0: A1  A2
+     * in1:   B1               B2
+     * in2:       C1         C2
+     * out:       (A1,B1,C1)   (A2,B2,C2)
+     */
     internal class AutoResetJoin
     {
         private readonly List<Queue<object>> _inputQueues;
