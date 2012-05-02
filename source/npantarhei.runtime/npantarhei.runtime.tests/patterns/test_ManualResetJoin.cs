@@ -12,44 +12,82 @@ namespace npantarhei.runtime.tests.patterns
     public class test_ManualResetJoin
     {
         [Test]
-        public void Single_join_on_new_item()
+        public void Fire_when_ready()
         {
             var sut = new ManualResetJoin(3);
 
             var results = new List<List<object>>();
             Action<List<object>> onJoin = results.Add;
 
-            sut.Process(0, "1", onJoin);
-            sut.Process(1, 1, onJoin);
-            sut.Process(2, "a", onJoin);
-            Assert.That(new object[]{new object[]{"1", 1, "a"}}, Is.EqualTo(results));
-
-            results.Clear();
-            sut.Process(1, 2, onJoin);
-            sut.Process(0, "2", onJoin);
-            Assert.That(new object[] { new object[] { "2", 2, "a" } }, Is.EqualTo(results));
+            sut.Process(0, "a1", onJoin);
+            sut.Process(1, "b1", onJoin);
+            sut.Process(2, "c1", onJoin);
+            Assert.That(new object[]{new object[]{"a1", "b1", "c1"}}, Is.EqualTo(results));
         }
 
-    
+
         [Test]
-        public void Multiple_joins_on_new_item()
+        public void Keep_firing_while_ready()
         {
             var sut = new ManualResetJoin(3);
 
             var results = new List<List<object>>();
             Action<List<object>> onJoin = results.Add;
 
-            sut.Process(0, "1", onJoin);
-            sut.Process(1, 1, onJoin);
-            sut.Process(0, "2", onJoin);
-            sut.Process(1, 2, onJoin);
-            sut.Process(0, "3", onJoin);
-            sut.Process(2, "a", onJoin);
-            Assert.That(new object[] { new object[] { "1", 1, "a" }, new object[] { "2", 2, "a" } }, Is.EqualTo(results));
+            sut.Process(0, "a1", onJoin);
+            sut.Process(1, "b1", onJoin);
+            sut.Process(2, "c1", onJoin);
 
             results.Clear();
-            sut.Process(1, 3, onJoin);
-            Assert.That(new object[] { new object[] { "3", 3, "a" } }, Is.EqualTo(results));
+            sut.Process(0, "a2", onJoin);
+            Assert.That(new object[] { new object[] { "a2", "b1", "c1" } }, Is.EqualTo(results));
+
+            results.Clear();
+            sut.Process(1, "b2", onJoin);
+            Assert.That(new object[] { new object[] { "a2", "b2", "c1" } }, Is.EqualTo(results));
+        }
+
+
+        [Test]
+        public void Deplete_more_than_ready_join()
+        {
+            var sut = new ManualResetJoin(3);
+
+            var results = new List<List<object>>();
+            Action<List<object>> onJoin = results.Add;
+
+            sut.Process(0, "a1", onJoin);
+            sut.Process(1, "b1", onJoin);
+            sut.Process(0, "a2", onJoin);
+            sut.Process(1, "b2", onJoin);
+            sut.Process(1, "b3", onJoin);
+            sut.Process(2, "c1", onJoin);
+
+            Assert.That(results, Is.EquivalentTo(new object[] { new object[] { "a1", "b1", "c1" },
+                                                                new object[] { "a2", "b1", "c1" },
+                                                                new object[] { "a2", "b2", "c1" },
+                                                                new object[] { "a2", "b3", "c1" } }));
+        }
+
+
+        [Test]
+        public void Stay_ready_after_depletion()
+        {
+            var sut = new ManualResetJoin(3);
+
+            var results = new List<List<object>>();
+            Action<List<object>> onJoin = results.Add;
+
+            sut.Process(0, "a1", onJoin);
+            sut.Process(1, "b1", onJoin);
+            sut.Process(0, "a2", onJoin);
+            sut.Process(1, "b2", onJoin);
+            sut.Process(1, "b3", onJoin);
+            sut.Process(2, "c1", onJoin);
+
+            results.Clear();
+            sut.Process(2, "c2", onJoin);
+            Assert.That(new object[] { new object[] { "a2", "b3", "c2" } }, Is.EqualTo(results));
         }
     }
 }

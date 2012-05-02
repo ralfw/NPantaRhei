@@ -22,21 +22,9 @@ namespace npantarhei.runtime.patterns
         }
 
 
-        public void Process(int inputIndex, object inputData, Action<List<object>> continueOnJoin)
-        {
-            lock (this)
-            {
-                _inputQueues[inputIndex].Enqueue(inputData);
-
-                while (Is_ready_to_join())
-                    continueOnJoin(Join_inputs(inputIndex));
-            }
-        }
-
-
         public void Reset()
         {
-            lock(this)
+            lock (this)
             {
                 _inputQueues = new List<Queue<object>>();
                 for (var i = 0; i < _numberOfInputs; i++)
@@ -45,14 +33,59 @@ namespace npantarhei.runtime.patterns
         }
 
 
-        private bool Is_ready_to_join()
+        public void Process(int inputIndex, object inputData, Action<List<object>> continueOnJoin)
+        {
+            lock (this)
+            {
+                Enqueue(inputIndex, inputData);
+                Deplete_if_necessary(continueOnJoin);
+                Join_if_ready(continueOnJoin);
+            }
+        }
+
+
+        private void Enqueue(int inputIndex, object inputData)
+        {
+            if (Is_ready())
+                _inputQueues[inputIndex].Dequeue();
+            _inputQueues[inputIndex].Enqueue(inputData);
+        }
+
+        private void Deplete_if_necessary(Action<List<object>> continueOnJoin)
+        {
+            while (Is_more_than_ready())
+            {
+                continueOnJoin(Join_inputs());
+                Lessen_readiness();
+            }
+        }
+
+        private void Join_if_ready(Action<List<object>> continueOnJoin)
+        {
+            if (Is_ready())
+                continueOnJoin(Join_inputs());
+        }
+
+
+        private bool Is_ready()
         {
             return _inputQueues.Count(q => q.Count > 0) == _inputQueues.Count;
         }
 
-        private List<object> Join_inputs(int currentIndex)
+        private bool Is_more_than_ready()
         {
-            return new List<object>(_inputQueues.Select((q,i) => i==currentIndex ? q.Peek() : q.Dequeue()));
+            return Is_ready() && _inputQueues.Any(q => q.Count > 1);
+        }
+
+
+        private List<object> Join_inputs()
+        {
+            return new List<object>(_inputQueues.Select(q => q.Peek()));
+        }
+
+        private void Lessen_readiness()
+        {
+            _inputQueues.First(q => q.Count > 1).Dequeue();
         }
     }
 }
