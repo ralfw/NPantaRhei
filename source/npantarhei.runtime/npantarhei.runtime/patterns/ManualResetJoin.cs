@@ -5,10 +5,10 @@ using System.Linq;
 namespace npantarhei.runtime.patterns
 {
     /*
-     * in0: A1  A2                          A3         A4
-     * in1:   B1               B2                          B3           B4
-     * in2:       C1                      C2             C3           C4
-     * out:       (A1,B1,C1)   (A2,B2,C1)   (A3,B2,C2)     (A3,B3,C3)   (A4,B4,C4)
+     * in0: A1  A2         
+     * in1:   B1    B2   B3  
+     * in2:                   C1
+     * out:                   (A1,B1,C1), (A2,B1,C1), (A2,B2,C1), (A2,B3,C1)
      */
     internal class ManualResetJoin
     {
@@ -56,7 +56,7 @@ namespace npantarhei.runtime.patterns
             while (Is_more_than_ready())
             {
                 continueOnJoin(Join_inputs());
-                Lessen_readiness();
+                Deplete();
             }
         }
 
@@ -83,7 +83,7 @@ namespace npantarhei.runtime.patterns
             return new List<object>(_inputQueues.Select(q => q.Peek()));
         }
 
-        private void Lessen_readiness()
+        private void Deplete()
         {
             _inputQueues.First(q => q.Count > 1).Dequeue();
         }

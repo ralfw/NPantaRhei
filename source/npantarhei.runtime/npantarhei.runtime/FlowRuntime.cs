@@ -59,7 +59,7 @@ namespace npantarhei.runtime
             if (_result == null)
                 Buffer_result(message);
             else
-                Empty_result_buffer();
+                _result(message);
         }
 
 	    private void Buffer_result(IMessage message)

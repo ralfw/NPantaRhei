@@ -64,6 +64,18 @@ namespace npantarhei.runtime
             return this;
         }
 
+        public FlowOperationContainer AddManualResetJoin<T0, T1>(string name)
+        {
+            _operations.Add(new ManualResetJoin<T0, T1>(name));
+            return this;
+        }
+
+        public FlowOperationContainer AddManualResetJoin<T0, T1, T2>(string name)
+        {
+            _operations.Add(new ManualResetJoin<T0, T1, T2>(name));
+            return this;
+        }
+
 
         public FlowOperationContainer AddPushCausality(string name, string portname) { return AddPushCausality(name, new Port(portname)); }
         public FlowOperationContainer AddPushCausality(string name, IPort exceptionHandler)

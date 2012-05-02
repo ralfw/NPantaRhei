@@ -25,11 +25,17 @@ namespace npantarhei.runtime.tests.integration
                 fr.AddStream(new Stream(".inInt", "arj.in1"));
                 fr.AddStream(new Stream("arj", ".out"));
 
+                fr.Message += _ => Console.WriteLine(_.Port);
+
                 fr.Start();
 
                 IMessage result = null;
                 var are = new AutoResetEvent(false);
-                fr.Result += _ => { result = _; are.Set(); };
+                fr.Result += _ =>
+                                 {
+                                     result = _; 
+                                     are.Set();
+                                 };
 
                 fr.Process(new Message(".inString", "x"));
                 fr.Process(new Message(".inInt", 42));

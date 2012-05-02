@@ -6,9 +6,9 @@ using npantarhei.runtime.messagetypes;
 
 namespace npantarhei.runtime.patterns
 {
-    public class AutoResetJoin<T0, T1> : AutoResetJoinBase
+    internal class ManualResetJoin<T0, T1> : ManualResetJoinBase
     {
-        public AutoResetJoin(string name) : base(name, 2, Create_join_tuple) { }
+        public ManualResetJoin(string name) : base(name, 2, Create_join_tuple) { }
 
         private static object Create_join_tuple(List<object> joinList)
         {
@@ -17,9 +17,9 @@ namespace npantarhei.runtime.patterns
         }
     }
 
-    public class AutoResetJoin<T0, T1, T2> : AutoResetJoinBase
+    internal class ManualResetJoin<T0, T1, T2> : ManualResetJoinBase
     {
-        public AutoResetJoin(string name) : base(name, 3, Create_join_tuple) { }
+        public ManualResetJoin(string name) : base(name, 3, Create_join_tuple) { }
 
         private static object Create_join_tuple(List<object> joinList)
         {
@@ -32,27 +32,33 @@ namespace npantarhei.runtime.patterns
     /*
      * Port names:
      *      input: .in0, .in1, ..., .in9 (last char in port name is index of input)
+     *             .reset
      *      output: none (only name of operation)
      */
-    public class AutoResetJoinBase : IOperation
+    internal class ManualResetJoinBase : IOperation
     {
-        private readonly AutoResetJoin _arj;
+        private readonly ManualResetJoin _mrj;
 
-        public AutoResetJoinBase(string name, int numberOfInputs, Func<List<object>, object> createJoinTuple)
+        public ManualResetJoinBase(string name, int numberOfInputs, Func<List<object>, object> createJoinTuple)
         {
             if (numberOfInputs>10) throw new ArgumentException("Maximum of 10 input ports exceeded!");
 
             _name = name;
-            _arj = new AutoResetJoin(numberOfInputs);
+            _mrj = new ManualResetJoin(numberOfInputs);
 
             _implementation = (input, continueWith, _) =>
                                   {
-                                      if (!Regex.Match(input.Port.Name, "^in[0-9]$", RegexOptions.IgnoreCase).Success) 
-                                          throw new ArgumentException("AutoResetJoin: Invalid port name! Use 'in0'..'in9'.");
-                                      
-                                      var inputIndex = int.Parse(input.Port.Name.Substring(input.Port.Name.Length - 1));
-                                      _arj.Process(inputIndex, input.Data, 
-                                                   joinList => continueWith(new Message(_name, createJoinTuple(joinList))));
+                                      if (!Regex.Match(input.Port.Name, "^in[0-9]$|^reset$", RegexOptions.IgnoreCase).Success)
+                                          throw new ArgumentException("ManualResetJoin: Invalid port name! Use 'in0'..'in9' or 'reset'.");
+
+                                      if (input.Port.Name.ToLower() == "reset")
+                                          _mrj.Reset();
+                                      else
+                                      {
+                                          var inputIndex = int.Parse(input.Port.Name.Substring(input.Port.Name.Length - 1));
+                                          _mrj.Process(inputIndex, input.Data,
+                                                       joinList => continueWith(new Message(_name, createJoinTuple(joinList))));
+                                      }
                                   };
         }
 
