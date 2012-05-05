@@ -15,7 +15,7 @@ namespace npantarhei.runtime.operations
 		
 		public void Process(IOperation operation)
 		{
-			_operations.Add(operation.Name, operation);
+			_operations.Add(operation.Name.ToLower(), operation);
 		}
 	}
 }

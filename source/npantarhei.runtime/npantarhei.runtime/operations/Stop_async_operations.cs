@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using npantarhei.runtime.contract;
 using npantarhei.runtime.messagetypes;
+using npantarhei.runtime.patterns;
 
 namespace npantarhei.runtime.operations
 {

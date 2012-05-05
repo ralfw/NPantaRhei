@@ -39,7 +39,7 @@
     <Compile Include="data\NotifyingMultiQueue.cs" />
     <Compile Include="FlowRuntime.cs" />
     <Compile Include="operations\Throttle_message_flow.cs" />
-    <Compile Include="messagetypes\AsyncWrapperOperation.cs" />
+    <Compile Include="patterns\AsyncWrapperOperation.cs" />
     <Compile Include="operations\Start_async_operations.cs" />
     <Compile Include="patterns\AutoResetJoin.cs" />
     <Compile Include="patterns\AutoResetJoinOf.cs" />

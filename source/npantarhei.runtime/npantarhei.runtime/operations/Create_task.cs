@@ -17,7 +17,11 @@ namespace npantarhei.runtime.operations
 		
 		public void Process(IMessage message)
 		{
-			var operation = _operations[message.Port.OperationName];
+		    var normalizedOpName = message.Port.OperationName.ToLower();
+
+            if (!_operations.ContainsKey(normalizedOpName)) throw new InvalidOperationException(string.Format("No task can be created for unknown operation '{0}'!", normalizedOpName));
+
+            var operation = _operations[normalizedOpName];
 			Result(new Task(message, operation));
 		}
 		

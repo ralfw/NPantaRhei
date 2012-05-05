@@ -1,7 +1,7 @@
 using System;
 using npantarhei.runtime.contract;
 
-namespace npantarhei.runtime.messagetypes
+namespace npantarhei.runtime.patterns
 {
     public interface IAsynchronizer<T>
     {

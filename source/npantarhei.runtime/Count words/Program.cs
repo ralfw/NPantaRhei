@@ -22,6 +22,49 @@ namespace Count_words
         {
             using (var fr = new FlowRuntime())
             {
+                fr.AddStream(".in", "pushc");
+                fr.AddStream("pushc", "Find files");
+                fr.AddStream("Find files", "Count words");
+                fr.AddStream("Count words", "popc");
+                fr.AddStream("popc", "Total");
+                fr.AddStream("Total", ".out");
+                fr.AddStream("exception", "Handle exception");
+
+                var foc = new FlowOperationContainer()
+                    .AddFunc<string, IEnumerable<String>>("Find files", Find_files)
+                    .AddFunc<IEnumerable<string>, IEnumerable<int>>("Count words", Count_words3)
+                    .AddFunc<IEnumerable<int>, Tuple<int, int>>("Total", Total)
+                    .AddPushCausality("pushc", "exception")
+                    .AddPopCausality("popc")
+                    .AddAction<FlowRuntimeException>("Handle exception", HandleException);
+                fr.AddOperations(foc.Operations);
+
+                fr.Start();
+
+                fr.Process(new Message(".in", "x"));
+
+                Tuple<int, int> result = null;
+                fr.WaitForResult(5000, _ => result = (Tuple<int, int>)_.Data);
+
+                if (result != null)
+                    Console.WriteLine("{0} words in {1} files", result.Item2, result.Item1);
+            }
+        }
+
+        static void HandleException(Exception ex)
+        {
+            Console.WriteLine("*** Exception during file processing: {0}", ex.InnerException);
+        }
+
+        static IEnumerable<int> Count_words3(IEnumerable<string> filenames)
+        {
+            throw new ApplicationException("arghhh!");
+        }
+
+        static void Main3(string[] args)
+        {
+            using (var fr = new FlowRuntime())
+            {
                 fr.AddStream(".in", "Find files");
                 fr.AddStream("Find files", "Count words");
                 fr.AddStream("Count words", "Total");

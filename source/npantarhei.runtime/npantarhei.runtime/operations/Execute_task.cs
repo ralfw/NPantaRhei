@@ -12,21 +12,11 @@ namespace npantarhei.runtime.operations
 		    {
                 task.Operation.Implementation(task.Message,
                                               output => Put_output_in_same_context_as_input(task.Message, output),
-                                              ex =>
-                                              {
-                                                  if (task.Message.Causalities.IsEmpty)
-                                                      UnhandledException(ex);
-                                                  else
-                                                      Catch_exception_with_causality(task, ex);
-                                              });
+                                              ex => Handle_exception(task, ex));
 		    }
 		    catch (Exception ex)
 		    {
-		        var flowEx = new FlowRuntimeException(ex, task.Message);
-                if (task.Message.Causalities.IsEmpty)
-                    UnhandledException(flowEx);
-                else
-                    Catch_exception_with_causality(task, flowEx);
+		        Handle_exception(task, ex);
 		    }
 
 		}
@@ -39,6 +29,16 @@ namespace npantarhei.runtime.operations
 		    output.Causalities = input.Causalities;
 			Result(output);
 		}
+
+        private void Handle_exception(Task task, Exception ex)
+        {
+            var exFlow = ex as FlowRuntimeException ?? new FlowRuntimeException(ex, task.Message);
+
+            if (task.Message.Causalities.IsEmpty)
+                UnhandledException(exFlow);
+            else
+                Catch_exception_with_causality(task, exFlow);
+        }
 
         private void Catch_exception_with_causality(Task task, FlowRuntimeException ex)
         {

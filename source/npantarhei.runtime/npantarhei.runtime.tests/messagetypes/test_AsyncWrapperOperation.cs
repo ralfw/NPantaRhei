@@ -20,7 +20,7 @@ namespace npantarhei.runtime.tests.messagetypes
             sut.Start();
             try
             {
-                FlowRuntimeException ex = null;
+                Exception ex = null;
                 var are = new AutoResetEvent(false);
                 sut.Implementation(new Message("p", "hello"), _ => {}, _ => { ex = _; are.Set(); });
 
