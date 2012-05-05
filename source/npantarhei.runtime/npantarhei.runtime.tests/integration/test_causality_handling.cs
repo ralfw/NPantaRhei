@@ -20,7 +20,7 @@ namespace npantarhei.runtime.tests.integration
         public void Setup()
         {
             var opcont = new FlowOperationContainer();
-            opcont.AddPushCausality("push", "catchEx");
+            opcont.AddPushCausality("push");
             opcont.AddPopCausality("pop");
 
             opcont.AddFunc<int, int>("exOn0", i =>
@@ -52,7 +52,7 @@ namespace npantarhei.runtime.tests.integration
             _fr = new FlowRuntime();
             _fr.AddStream(new Stream(".in", "push"));
             _fr.AddStream(new Stream("push", "exOn0"));
-            _fr.AddStream(new Stream("catchEx", "handleEx"));
+            _fr.AddStream(new Stream("push.exception", "handleEx"));
             _fr.AddStream(new Stream("exOn0", "exOn1"));
             _fr.AddStream(new Stream("exOn1", "pop"));
             _fr.AddStream(new Stream("pop", "exOn2"));
@@ -77,7 +77,7 @@ namespace npantarhei.runtime.tests.integration
         {
             _fr.Process(new Message(".in", 0));
 
-            Assert.IsTrue(_are.WaitOne());
+            Assert.IsTrue(_are.WaitOne(500));
             Assert.AreEqual("exOn0", _exCausality.Context.Port.Fullname);
         }
 
@@ -86,7 +86,7 @@ namespace npantarhei.runtime.tests.integration
         {
             _fr.Process(new Message(".in", 1));
 
-            Assert.IsTrue(_are.WaitOne());
+            Assert.IsTrue(_are.WaitOne(500));
             Assert.AreEqual("exOn1", _exCausality.Context.Port.Fullname);
         }
 
@@ -95,7 +95,7 @@ namespace npantarhei.runtime.tests.integration
         {
             _fr.Process(new Message(".in", 2));
 
-            Assert.IsTrue(_are.WaitOne());
+            Assert.IsTrue(_are.WaitOne(500));
             Assert.AreEqual("exOn2", _exUnhandled.Context.Port.Fullname);
         }
     }

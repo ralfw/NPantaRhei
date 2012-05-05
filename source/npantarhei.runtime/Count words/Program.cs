@@ -28,13 +28,13 @@ namespace Count_words
                 fr.AddStream("Count words", "popc");
                 fr.AddStream("popc", "Total");
                 fr.AddStream("Total", ".out");
-                fr.AddStream("exception", "Handle exception");
+                fr.AddStream("pushc.exception", "Handle exception");
 
                 var foc = new FlowOperationContainer()
                     .AddFunc<string, IEnumerable<String>>("Find files", Find_files)
                     .AddFunc<IEnumerable<string>, IEnumerable<int>>("Count words", Count_words3)
                     .AddFunc<IEnumerable<int>, Tuple<int, int>>("Total", Total)
-                    .AddPushCausality("pushc", "exception")
+                    .AddPushCausality("pushc")
                     .AddPopCausality("popc")
                     .AddAction<FlowRuntimeException>("Handle exception", HandleException);
                 fr.AddOperations(foc.Operations);

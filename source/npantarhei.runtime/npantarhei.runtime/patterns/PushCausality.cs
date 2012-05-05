@@ -10,13 +10,12 @@ namespace npantarhei.runtime.patterns
 {
     class PushCausality : AOperation
     {
-        public PushCausality(string name, IPort exceptionHandler) : base(name)
+        public PushCausality(string name) : base(name) {}
+
+        protected override void Process(IMessage input, Action<IMessage> continueWith, Action<FlowRuntimeException> unhandledException)
         {
-            base.Implementation = (input, outputCont, _) =>
-                                        {
-                                            input.Causalities.Push(exceptionHandler);
-                                            outputCont(input);
-                                        };
+            input.Causalities.Push(new Port(input.Port.Fullname + ".exception"));
+            continueWith(input);   
         }
     }
 }

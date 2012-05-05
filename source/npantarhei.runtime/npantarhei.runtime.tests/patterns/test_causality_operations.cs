@@ -15,13 +15,13 @@ namespace npantarhei.runtime.tests.patterns
         [Test]
         public void Push()
         {
-            var sut = new PushCausality("pc", new Port("handler"));
+            var sut = new PushCausality("pc");
             Assert.AreEqual("pc", sut.Name);
 
             CausalityStack result = null;
             sut.Implementation(new Message("x", "hello"), _ => result = _.Causalities, null);
 
-            Assert.AreEqual("handler", result.Peek().Port.Fullname);
+            Assert.AreEqual("x.exception", result.Peek().Port.Fullname);
         }
 
 

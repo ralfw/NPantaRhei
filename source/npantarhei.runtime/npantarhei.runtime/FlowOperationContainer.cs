@@ -77,10 +77,9 @@ namespace npantarhei.runtime
         }
 
 
-        public FlowOperationContainer AddPushCausality(string name, string portname) { return AddPushCausality(name, new Port(portname)); }
-        public FlowOperationContainer AddPushCausality(string name, IPort exceptionHandler)
+        public FlowOperationContainer AddPushCausality(string name)
         {
-            _operations.Add(new PushCausality(name, exceptionHandler));
+            _operations.Add(new PushCausality(name));
             return this;
         }
 
