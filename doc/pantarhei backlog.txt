@@ -1,6 +1,11 @@
 Topics to address in future increments
 ------------
 
+
+Make it easier to implement multi-port operations with custom port names. (No code generation must be used, to avoid incompatibility with
+MonoTouch and like platforms.)
+
+
 For functional units producing many results: do they really need to produce all results at once?
 That would make them use a thread for a long time. But if such a functional unit produces an IEnum using yield,
 then there is a chance of executing it in a piece meal fashion.
@@ -14,8 +19,6 @@ This could be a pattern operation or it could be a functionality to attach via a
 Or... maybe the producer could return the IEnum wrapped in some special object which the Runtime interprets?
 Goal: Retain simplicity of IEnum for producer and consumer. But avoid processing all elements on same thread as consumer.
 
-
-Create contract project with stuff that implementors of operation would find useful
 
 
 Starting/pausing/stopping background threads and running operations
@@ -46,14 +49,6 @@ Create stream list from DSL
 
 Visualize stream list
 
-Operation adapters
-	EBC
-	method with out param
-	methods of a class
-		static
-		instance
-		only annotated with an attribute?
-		allow annotation for operation name and port names
 
 Compile stream list from assemblies
 	read from resources?

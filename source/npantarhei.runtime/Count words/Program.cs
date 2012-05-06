@@ -22,21 +22,21 @@ namespace Count_words
         {
             using (var fr = new FlowRuntime())
             {
-                fr.AddStream(".in", "pushc");
-                fr.AddStream("pushc", "Find files");
-                fr.AddStream("Find files", "Count words");
-                fr.AddStream("Count words", "popc");
-                fr.AddStream("popc", "Total");
+                fr.AddStream(".in", "Pushc");
+                fr.AddStream("Pushc", "Find Files");
+                fr.AddStream("Pushc.exception", "Handle Exception");
+                fr.AddStream("Find Files", "Count Words");
+                fr.AddStream("Count Words", "popc");
+                fr.AddStream("Popc", "Total");
                 fr.AddStream("Total", ".out");
-                fr.AddStream("pushc.exception", "Handle exception");
 
                 var foc = new FlowOperationContainer()
-                    .AddFunc<string, IEnumerable<String>>("Find files", Find_files)
-                    .AddFunc<IEnumerable<string>, IEnumerable<int>>("Count words", Count_words3)
+                    .AddFunc<string, IEnumerable<String>>("Find Files", Find_files)
+                    .AddFunc<IEnumerable<string>, IEnumerable<int>>("Count Words", Count_words3)
                     .AddFunc<IEnumerable<int>, Tuple<int, int>>("Total", Total)
-                    .AddPushCausality("pushc")
-                    .AddPopCausality("popc")
-                    .AddAction<FlowRuntimeException>("Handle exception", HandleException);
+                    .AddPushCausality("Pushc")
+                    .AddPopCausality("Popc")
+                    .AddAction<FlowRuntimeException>("Handle Exception", Handle_exception);
                 fr.AddOperations(foc.Operations);
 
                 fr.Start();
@@ -51,7 +51,7 @@ namespace Count_words
             }
         }
 
-        static void HandleException(Exception ex)
+        static void Handle_exception(FlowRuntimeException ex)
         {
             Console.WriteLine("*** Exception during file processing: {0}", ex.InnerException);
         }
@@ -60,6 +60,7 @@ namespace Count_words
         {
             throw new ApplicationException("arghhh!");
         }
+
 
         static void Main3(string[] args)
         {
@@ -88,6 +89,7 @@ namespace Count_words
                 Console.WriteLine("{0} words in {1} files, {2}msec", result.Item2, result.Item1, delta);
             }
         }
+
 
         static void Main2(string[] args)
         {
@@ -146,6 +148,7 @@ namespace Count_words
             return new Tuple<int, int>(wordCounts.Count(), wordCounts.Sum());
         }
     }
+
 
     class Total : AOperation
     {

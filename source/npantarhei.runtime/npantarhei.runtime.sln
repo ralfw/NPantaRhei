@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{C07B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Count words", "Count words\Count words.csproj", "{3B493469-F78B-4E8B-A628-0900EEA305E6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tracing with Rx", "Tracing with Rx\Tracing with Rx.csproj", "{7D51E409-99BE-466B-A9C7-49696DE1E098}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,12 +56,23 @@ Global
 		{3B493469-F78B-4E8B-A628-0900EEA305E6}.Release|Mixed Platforms.Build.0 = Release|x86
 		{3B493469-F78B-4E8B-A628-0900EEA305E6}.Release|x86.ActiveCfg = Release|x86
 		{3B493469-F78B-4E8B-A628-0900EEA305E6}.Release|x86.Build.0 = Release|x86
+		{7D51E409-99BE-466B-A9C7-49696DE1E098}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{7D51E409-99BE-466B-A9C7-49696DE1E098}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{7D51E409-99BE-466B-A9C7-49696DE1E098}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{7D51E409-99BE-466B-A9C7-49696DE1E098}.Debug|x86.ActiveCfg = Debug|x86
+		{7D51E409-99BE-466B-A9C7-49696DE1E098}.Debug|x86.Build.0 = Debug|x86
+		{7D51E409-99BE-466B-A9C7-49696DE1E098}.Release|Any CPU.ActiveCfg = Release|x86
+		{7D51E409-99BE-466B-A9C7-49696DE1E098}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{7D51E409-99BE-466B-A9C7-49696DE1E098}.Release|Mixed Platforms.Build.0 = Release|x86
+		{7D51E409-99BE-466B-A9C7-49696DE1E098}.Release|x86.ActiveCfg = Release|x86
+		{7D51E409-99BE-466B-A9C7-49696DE1E098}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{3B493469-F78B-4E8B-A628-0900EEA305E6} = {C07B3671-8FCC-4B1E-8860-912CF07A4D85}
+		{7D51E409-99BE-466B-A9C7-49696DE1E098} = {C07B3671-8FCC-4B1E-8860-912CF07A4D85}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = npantarhei.runtime\npantarhei.runtime.csproj
