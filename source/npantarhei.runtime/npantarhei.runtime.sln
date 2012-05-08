@@ -16,6 +16,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Count words", "Count words\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tracing with Rx", "Tracing with Rx\Tracing with Rx.csproj", "{7D51E409-99BE-466B-A9C7-49696DE1E098}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alarm clock", "Alarm clock\Alarm clock.csproj", "{38423746-6331-4164-A3F3-D17D89729434}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -66,6 +68,16 @@ Global
 		{7D51E409-99BE-466B-A9C7-49696DE1E098}.Release|Mixed Platforms.Build.0 = Release|x86
 		{7D51E409-99BE-466B-A9C7-49696DE1E098}.Release|x86.ActiveCfg = Release|x86
 		{7D51E409-99BE-466B-A9C7-49696DE1E098}.Release|x86.Build.0 = Release|x86
+		{38423746-6331-4164-A3F3-D17D89729434}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{38423746-6331-4164-A3F3-D17D89729434}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{38423746-6331-4164-A3F3-D17D89729434}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{38423746-6331-4164-A3F3-D17D89729434}.Debug|x86.ActiveCfg = Debug|x86
+		{38423746-6331-4164-A3F3-D17D89729434}.Debug|x86.Build.0 = Debug|x86
+		{38423746-6331-4164-A3F3-D17D89729434}.Release|Any CPU.ActiveCfg = Release|x86
+		{38423746-6331-4164-A3F3-D17D89729434}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{38423746-6331-4164-A3F3-D17D89729434}.Release|Mixed Platforms.Build.0 = Release|x86
+		{38423746-6331-4164-A3F3-D17D89729434}.Release|x86.ActiveCfg = Release|x86
+		{38423746-6331-4164-A3F3-D17D89729434}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -73,6 +85,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{3B493469-F78B-4E8B-A628-0900EEA305E6} = {C07B3671-8FCC-4B1E-8860-912CF07A4D85}
 		{7D51E409-99BE-466B-A9C7-49696DE1E098} = {C07B3671-8FCC-4B1E-8860-912CF07A4D85}
+		{38423746-6331-4164-A3F3-D17D89729434} = {C07B3671-8FCC-4B1E-8860-912CF07A4D85}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = npantarhei.runtime\npantarhei.runtime.csproj

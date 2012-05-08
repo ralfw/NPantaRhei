@@ -19,7 +19,7 @@ namespace npantarhei.runtime.operations
 
 		public void Process(IMessage outputMessage)
 		{
-			var inputPorts = _streams.Where(s => s.FromPort.Fullname == outputMessage.Port.Fullname)
+			var inputPorts = _streams.Where(s => s.FromPort.Fullname.ToLower() == outputMessage.Port.Fullname.ToLower())
 				    				 .Select(s => s.ToPort)
                                      .ToArray();
 			

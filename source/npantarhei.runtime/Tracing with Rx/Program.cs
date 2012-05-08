@@ -28,12 +28,15 @@ namespace Tracing_with_Rx
 
                 fr.Start();
 
+
                 // Trace messages selectively using Rx
-                var filter = new Subject<IMessage>();
-                filter.Where(msg => msg.Port.OperationName == "B") // message filter
-                      .Subscribe(m => Console.WriteLine("{0} -> B", m.Data), // message handler
+                var tracer = new Subject<IMessage>();
+                tracer.Where(msg => msg.Port.OperationName == "B") // message filter
+                      .Select(msg => (int)msg.Data)
+                      .Subscribe(i => Console.WriteLine("{0} -> B", i), // message handler
                                  _ => { }); 
-                fr.Message += filter.OnNext;
+                fr.Message += tracer.OnNext;
+
 
                 fr.Process(new Message(".in", 1));
                 fr.Process(new Message(".in", 2));

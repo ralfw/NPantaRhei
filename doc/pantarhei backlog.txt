@@ -31,12 +31,6 @@ Breakpoints
 	selective based on port name filters
 	
 
-Tracing
-	provide a log port on runtime
-	selective tracing based on port name filters
-	serialize any data graph
-	How to convert any message to text?
-
 Consistency checking
 	are operations missing?
 	are there unused operations?
