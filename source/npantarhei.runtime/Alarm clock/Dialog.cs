@@ -22,9 +22,30 @@ namespace Alarm_clock
             _continueWith(new npantarhei.runtime.messagetypes.Message(this.Name + ".closed", null));
         }
 
-        void Show_dialog()
+        private void btnStartStop_Click(object sender, EventArgs e)
         {
-            Application.Run(this);
+            if (btnStartStop.Text.StartsWith("Set"))
+                _continueWith(new npantarhei.runtime.messagetypes.Message(this.Name + ".setAlarm",
+                                                                          DateTime.Parse(this.txtAlarmTime.Text)));
+            else
+                _continueWith(new npantarhei.runtime.messagetypes.Message(this.Name + ".stopAlarm", null));
+        }
+
+
+        public void Display_time_diff(TimeSpan timeDiff)
+        {
+            lblTimeDiff.Text = timeDiff.ToString(@"hh\:mm\:ss");
+        }
+
+        public void Alarm_switched_on()
+        {
+            btnStartStop.Text = "Stop Alarm";
+        }
+
+        public void Alarm_switched_off()
+        {
+            lblTimeDiff.Text = "<no alarm set>";
+            btnStartStop.Text = "Set Alarm";
         }
 
 
@@ -36,9 +57,6 @@ namespace Alarm_clock
             {
                 case "config":
                     _continueWith = continueWith;
-                    break;
-                case "show":
-                    this.Show_dialog();
                     break;
             }
         }

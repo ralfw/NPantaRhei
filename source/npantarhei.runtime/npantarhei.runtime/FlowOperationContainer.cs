@@ -34,7 +34,13 @@ namespace npantarhei.runtime
 						   ));
 		    return this;
 		}
-		
+
+
+        public FlowOperationContainer AddAction(string name, Action implementation)
+        {
+            _operations.Add(new Operation(name, (input, _, __) => implementation()));
+            return this;
+        }
 		
 		public FlowOperationContainer AddAction<TInput>(string name, Action<TInput> implementation)
 		{
