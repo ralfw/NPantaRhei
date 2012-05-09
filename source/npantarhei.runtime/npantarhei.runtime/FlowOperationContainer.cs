@@ -57,6 +57,15 @@ namespace npantarhei.runtime
 		    return this;
 		}
 
+        public FlowOperationContainer AddAction<TInput>(string name, Action<TInput, Action> implementation)
+        {
+            _operations.Add(new Operation(name,
+                                          (input, outputCont, _) => implementation((TInput)input.Data,
+                                                                                () => outputCont(new Message(name, null)))
+                           ));
+            return this;
+        }
+
 
         public FlowOperationContainer AddAutoResetJoin<T0, T1>(string name)
         {
