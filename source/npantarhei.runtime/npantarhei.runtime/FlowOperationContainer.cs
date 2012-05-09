@@ -48,7 +48,16 @@ namespace npantarhei.runtime
 		    return this;
 		}
 		
-		public FlowOperationContainer AddAction<TInput, TOutput>(string name, Action<TInput, Action<TOutput>> implementation)
+        public FlowOperationContainer AddAction<TInput>(string name, Action<TInput, Action> implementation)
+        {
+            _operations.Add(new Operation(name,
+                                          (input, outputCont, _) => implementation((TInput)input.Data,
+                                                                                () => outputCont(new Message(name, null)))
+                           ));
+            return this;
+        }
+
+        public FlowOperationContainer AddAction<TInput, TOutput>(string name, Action<TInput, Action<TOutput>> implementation)
 		{
 			_operations.Add(new Operation(name, 
 										  (input, outputCont, _) => implementation((TInput)input.Data, 
@@ -57,11 +66,12 @@ namespace npantarhei.runtime
 		    return this;
 		}
 
-        public FlowOperationContainer AddAction<TInput>(string name, Action<TInput, Action> implementation)
+        public FlowOperationContainer AddAction<TInput, TOutput0, TOutput1>(string name, Action<TInput, Action<TOutput0>, Action<TOutput1>> implementation)
         {
             _operations.Add(new Operation(name,
                                           (input, outputCont, _) => implementation((TInput)input.Data,
-                                                                                () => outputCont(new Message(name, null)))
+                                                                                   output0 => outputCont(new Message(name + ".out0", output0)),
+                                                                                   output1 => outputCont(new Message(name + ".out1", output1)))
                            ));
             return this;
         }

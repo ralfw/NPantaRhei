@@ -92,6 +92,33 @@ namespace npantarhei.runtime.tests
 			
 			Assert.AreEqual("opname", result.Port.Fullname);
 		}
+
+	    [Test]
+	    public void Procedure_with_2_continuations()
+	    {
+	        var sut = new FlowOperationContainer();
+
+	        sut.AddAction<int, string, bool>("opname", Bifurcate);
+
+	        var op = sut.Operations.First();
+
+	        IMessage result0 = null;
+	        IMessage result1 = null;
+	        op.Implementation(new Message("x", 2), msg =>
+	                                                   {
+                                                           if (msg.Port.Name == "out0") result0 = msg;
+                                                           if (msg.Port.Name == "out1") result1 = msg;
+	                                                   }, null);
+
+            Assert.AreEqual("2x", (string)result0.Data);
+            Assert.IsTrue((bool)result1.Data);
+	    }
+
+        void Bifurcate(int i, Action<string> continueWith0, Action<bool> continueWith1)
+        {
+            continueWith0(i + "x");
+            continueWith1(i%2 == 0);
+        }
 	}
 }
 
