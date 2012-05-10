@@ -17,8 +17,6 @@ namespace npantarhei.runtime.tests.integration
         {
             using (var sut = new FlowRuntime())
             {
-                sut.Start();
-
                 sut.AddStream(new Stream(".in", "syncNop"));
                 sut.AddStream(new Stream("syncNop", ".out"));
 

@@ -36,8 +36,6 @@ namespace npantarhei.runtime.tests.integration
                 fr.AddStream(new Stream("sleep", "gather.stream"));
                 fr.AddStream(new Stream("gather", ".out"));
 
-                fr.Start();
-
                 var list = new[] {10, 200, 100, 30, 200, 70};
                 fr.Process(new Message(".in", list));
 

@@ -66,8 +66,6 @@ namespace Alarm_clock
                 fr.UnhandledException += Console.WriteLine;
 
                 // Execute flow
-                fr.Start();
-
                 fr.Process(new npantarhei.runtime.messagetypes.Message(".config", null));
 
                 // Feature: start application

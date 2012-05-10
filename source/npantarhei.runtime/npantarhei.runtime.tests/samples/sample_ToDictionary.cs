@@ -18,8 +18,6 @@ namespace npantarhei.runtime.tests
 		{
             using (var fr = new FlowRuntime())
             {
-                fr.Start();
-
                 /*
                  * (.in) -> (Split) -> (Map) -> (Build) -> (.out)
                  */
@@ -62,8 +60,6 @@ namespace npantarhei.runtime.tests
 		{
             using (var fr = new FlowRuntime())
             {
-                fr.Start();
-
                 /*
                  * (.in) -> (ToDict) -> (.out).
                  * ToDict {
@@ -115,8 +111,6 @@ namespace npantarhei.runtime.tests
 		{	
 			using(var fr = new FlowRuntime())
 			{
-			    fr.Start();
-			
 			    /*
 			     * (.in) -> (ToDict) -> (.out).
 			     * ToDict {

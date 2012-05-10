@@ -27,8 +27,6 @@ namespace npantarhei.runtime.tests.integration
 
                 fr.Message += _ => Console.WriteLine(_.Port);
 
-                fr.Start();
-
                 IMessage result = null;
                 var are = new AutoResetEvent(false);
                 fr.Result += _ =>

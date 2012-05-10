@@ -19,9 +19,6 @@ namespace npantarhei.runtime.contract
 		void AddOperation(IOperation operation);
 		void AddOperations(IEnumerable<IOperation> operations);
 		
-		void Start();
-		void Stop();
-
         //void Pause();
         //void BreakOnPort(string includeFilter);
         //void BreakOnMessage(Func<IMessage, bool> includeFilter);

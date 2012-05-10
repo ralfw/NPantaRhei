@@ -50,6 +50,9 @@ namespace npantarhei.runtime
 			flow.Inject(streams, operations);
             opStart.Inject(operations);
 		    opStop.Inject(operations);
+
+            // Run
+		    Start();
 		}
 
 
@@ -111,17 +114,17 @@ namespace npantarhei.runtime
 		private readonly Action<IOperation> _addOperation;
 		public void AddOperation (IOperation operation) { _addOperation(operation); }
 		public void AddOperations(IEnumerable<IOperation> operations) { operations.ToList().ForEach(this.AddOperation); }
-		
-		private readonly Action _start;
-		public void Start() { _start(); }
-		
-		private readonly Action _stop;
-	    public void Stop() { _stop(); }
-
+	
 	    private readonly Action<int> _throttle;
         public void Throttle(int delayMilliseconds) { _throttle(delayMilliseconds); }
 		#endregion
-		
+
+
+        private readonly Action _start;
+        private void Start() { _start(); }
+
+        private readonly Action _stop;
+        private void Stop() { _stop(); }
 		
 		public void Dispose() { Stop(); }
 	}

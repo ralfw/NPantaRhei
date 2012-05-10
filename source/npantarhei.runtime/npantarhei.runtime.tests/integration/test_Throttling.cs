@@ -38,8 +38,6 @@ namespace npantarhei.runtime.tests.integration
                 var are = new AutoResetEvent(false);
                 fr.Result += _ => { if ((int)_.Data == -1) are.Set(); };
 
-                fr.Start();
-
                 fr.Throttle(100);
 
                 new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, -1 }.ToList().ForEach(i => fr.Process(new Message(".in", i)));

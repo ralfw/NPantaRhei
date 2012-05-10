@@ -64,8 +64,6 @@ namespace npantarhei.runtime.tests.integration
                                                 _exUnhandled = _;
                                                 _are.Set();
                                            };
-
-            _fr.Start();
         }
 
         [TearDown]

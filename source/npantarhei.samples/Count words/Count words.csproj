@@ -34,7 +34,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="npantarhei.runtime, Version=1.0.4512.25935, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="npantarhei.runtime, Version=1.0.4513.24154, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\bin\npantarhei.runtime.dll</HintPath>
     </Reference>
     <Reference Include="System" />

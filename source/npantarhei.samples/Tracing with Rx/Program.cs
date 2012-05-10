@@ -26,8 +26,6 @@ namespace Tracing_with_Rx
                                     .AddAction<int>("C", i => Console.WriteLine("={0}", i))
                                     .Operations);
 
-                fr.Start();
-
 
                 // Trace messages selectively using Rx
                 var tracer = new Subject<IMessage>();

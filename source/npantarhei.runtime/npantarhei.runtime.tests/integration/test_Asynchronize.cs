@@ -17,8 +17,6 @@ namespace npantarhei.runtime.tests.integration
         {
             using (var sut = new FlowRuntime())
             {
-                sut.Start();
-
                 sut.AddStream(new Stream(".in", "asyncNop"));
                 sut.AddStream(new Stream("asyncNop", ".out"));
 
@@ -55,8 +53,6 @@ namespace npantarhei.runtime.tests.integration
         {
             using (var sut = new FlowRuntime())
             {
-                sut.Start();
-
                 sut.AddStream(new Stream(".in", "throw"));
 
                 var cont = new FlowOperationContainer();

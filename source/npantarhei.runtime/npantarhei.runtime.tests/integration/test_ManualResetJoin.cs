@@ -27,7 +27,6 @@ namespace npantarhei.runtime.tests.integration
                 fr.AddStream(new Stream("mrj", ".out"));
 
                 fr.UnhandledException += Console.WriteLine;
-                fr.Start();
 
                 fr.Process(new Message(".inString", "x"));
                 fr.Process(new Message(".inInt", 42));

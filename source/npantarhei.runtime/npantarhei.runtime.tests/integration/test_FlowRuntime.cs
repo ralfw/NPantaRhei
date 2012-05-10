@@ -22,7 +22,6 @@ namespace npantarhei.runtime.tests.integration
         public void Setup()
         {
             _sut = new FlowRuntime();
-            _sut.Start();
 
             _are = new AutoResetEvent(false);
             _result = null;

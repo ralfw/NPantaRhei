@@ -19,7 +19,6 @@ namespace npantarhei.runtime.tests.integration
         public test_sync_with_dialog_win()
         {
             InitializeComponent();
-            _fr.Start();
 
             _fr.AddStream(new Stream(".in", "gettime"));
             _fr.AddStream(new Stream("gettime", "showtime"));

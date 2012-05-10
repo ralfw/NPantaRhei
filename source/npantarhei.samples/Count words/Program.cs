@@ -39,8 +39,6 @@ namespace Count_words
                     .AddFunc<IEnumerable<int>, Tuple<int, int>>("Total", Total);
                 fr.AddOperations(foc.Operations);
 
-                fr.Start();
-
                 fr.Process(new Message(".in", "x"));
 
                 Tuple<int, int> result = null;

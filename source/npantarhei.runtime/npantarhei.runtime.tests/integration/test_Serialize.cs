@@ -17,8 +17,6 @@ namespace npantarhei.runtime.tests.integration
         {
             using (var sut = new FlowRuntime())
             {
-                sut.Start();
-
                 sut.AddStream(new Stream(".in", "serNop0"));
                 sut.AddStream(new Stream("serNop0", "serNop1"));
                 sut.AddStream(new Stream("serNop1", ".out"));

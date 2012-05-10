@@ -21,8 +21,6 @@ namespace npantarhei.runtime.tests
 
             using (var sut = new FlowRuntime())
             {
-                sut.Start();
-
                 sut.AddStream(new Stream(".in", "doParallel**"));
                 sut.AddStream(new Stream("doParallel", ".out"));
 
@@ -60,7 +58,6 @@ namespace npantarhei.runtime.tests
                                     }
                                 };
 
-                sut.Start();
                 sut.Process(new Message(".in", 1));
                 sut.Process(new Message(".in", 2));
                 sut.Process(new Message(".in", 3));

@@ -51,8 +51,6 @@ namespace npantarhei.runtime.tests.integration
                                       }
                                   };
 
-                sut.Start(); // consciously start the runtime here to check if starting async ops is idempotent
-
                 for (var i = 0; i < N; i++ )
                     sut.Process(new Message(".in", "x" + i));
 
