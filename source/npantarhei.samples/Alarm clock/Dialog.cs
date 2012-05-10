@@ -10,6 +10,7 @@ using npantarhei.runtime.contract;
 
 namespace Alarm_clock
 {
+    [ActiveOperation]
     public partial class Dialog : Form, IOperation
     {
         public Dialog()
@@ -50,15 +51,11 @@ namespace Alarm_clock
 
 
         private Action<IMessage> _continueWith;
-
         void Process(IMessage input, Action<IMessage> continueWith, Action<FlowRuntimeException> unhandledException)
         {
-            switch(input.Port.Name.ToLower())
-            {
-                case "config":
-                    _continueWith = continueWith;
-                    break;
-            }
+            if (!(input is ActivationMessage)) return;
+            
+            _continueWith = continueWith;
         }
 
 

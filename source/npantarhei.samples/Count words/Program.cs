@@ -75,8 +75,6 @@ namespace Count_words
                     .AddFunc<IEnumerable<int>, Tuple<int, int>>("Total", Total);
                 fr.AddOperations(foc.Operations);
 
-                fr.Start();
-
                 var start = DateTime.Now;
                 fr.Process(new Message(".in", "x"));
 
@@ -109,8 +107,6 @@ namespace Count_words
 
                 fr.AddOperation(new Scatter<string>("scatter"));
                 fr.AddOperation(new Gather<int>("gather"));
-
-                fr.Start();
 
                 var start = DateTime.Now;
                 fr.Process(new Message(".in", "x"));

@@ -20,13 +20,7 @@ namespace Alarm_clock
 
             using(var fr = new FlowRuntime())
             {
-                var dlg = new Dialog();
-
                 // Define flow
-                // Configure active operations
-                fr.AddStream(".config", "Dialog.config");
-                fr.AddStream(".config", "Clock.config");
-
                 // Feature: close application
                 fr.AddStream("Dialog.closed", ".stop");
 
@@ -47,10 +41,12 @@ namespace Alarm_clock
                 fr.AddStream("Alarm time reached", "Sound alarm");
 
                 // Register operations
+                var dlg = new Dialog();
+                var clock = new Clock();
                 var player = new Soundplayer();
 
                 fr.AddOperation(dlg);
-                fr.AddOperation(new Clock());
+                fr.AddOperation(clock);
                 fr.AddOperations(new FlowOperationContainer()
                                      .AddAction("Alarm switched off", dlg.Alarm_switched_off).MakeSync()
                                      .AddAction("Alarm switched on", dlg.Alarm_switched_on).MakeSync()
@@ -66,8 +62,6 @@ namespace Alarm_clock
                 fr.UnhandledException += Console.WriteLine;
 
                 // Execute flow
-                fr.Process(new npantarhei.runtime.messagetypes.Message(".config", null));
-
                 // Feature: start application
                 Application.Run(dlg); // needs to run on this thread; cannot be done on flow runtime thread.
             }

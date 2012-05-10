@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using npantarhei.runtime.contract;
+using npantarhei.runtime.messagetypes;
 using npantarhei.runtime.operations;
 using npantarhei.runtime.data;
 using npantarhei.runtime.patterns;
@@ -28,6 +29,8 @@ namespace npantarhei.runtime.flows
 			_processMessage.Result += _ => Result(_);
 		    _processMessage.UnhandledException += _ => UnhandledException(_);
 
+		    _execute += _processMessage.Execute;
+
 			_start += async.Start;
 			_stop += async.Stop;
 		    _throttle += throttle.Delay;
@@ -40,6 +43,9 @@ namespace npantarhei.runtime.flows
 		
 		private readonly Action<IMessage> _process;
 		public void Process(IMessage message) { _process(message); }
+
+	    private readonly Action<Task> _execute;
+        public void Execute(Task task) { _execute(task); }
 
 	    public event Action<IMessage> Message;
 		public event Action<IMessage> Result;

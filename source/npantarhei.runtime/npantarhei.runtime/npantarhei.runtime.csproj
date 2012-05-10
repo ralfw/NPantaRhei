@@ -33,8 +33,10 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="contract\ActiveOperationAttribute.cs" />
     <Compile Include="contract\CausalityStack.cs" />
     <Compile Include="contract\FlowRuntimeException.cs" />
+    <Compile Include="operations\Create_activation_task_for_operation.cs" />
     <Compile Include="data\INotifyingResource.cs" />
     <Compile Include="data\NotifyingMultiQueue.cs" />
     <Compile Include="FlowRuntime.cs" />

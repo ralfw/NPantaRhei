@@ -18,6 +18,7 @@ namespace npantarhei.runtime
 			// Build
 			var regStream = new Register_stream();
 			var regOp = new Register_operation();
+		    var configOp = new Create_activation_task_for_operation();
 			
 			var flow = new Flow_asynchronously();
 		    var opStart = new Start_async_operations();
@@ -26,6 +27,8 @@ namespace npantarhei.runtime
 			// Bind
 			_addStream += regStream.Process;
 			_addOperation += regOp.Process;
+		    _addOperation += configOp.Process;
+            configOp.Result += flow.Execute;
 			
 			_process += flow.Process;
 		    flow.Message += _ => Message(_);

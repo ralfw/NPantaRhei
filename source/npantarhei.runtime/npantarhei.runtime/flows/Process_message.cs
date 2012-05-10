@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 
 using npantarhei.runtime.contract;
+using npantarhei.runtime.messagetypes;
 using npantarhei.runtime.operations;
 
 namespace npantarhei.runtime.flows
@@ -29,6 +30,8 @@ namespace npantarhei.runtime.flows
 			exec.Result += _ => Continue(_);
 		    exec.HandledException += _ => Continue(_);
 		    exec.UnhandledException += _ => UnhandledException(_);
+
+		    _execute += exec.Process;
 		}
 		
 		public void Inject(List<IStream> streams, Dictionary<string, IOperation> operations)
@@ -39,6 +42,9 @@ namespace npantarhei.runtime.flows
 		
 		private readonly Action<IMessage> _process;
 		public void Process(IMessage message) { _process(message); }
+
+        private readonly Action<Task> _execute;
+        public void Execute(Task task) { _execute(task); }
 
 	    public event Action<IMessage> Message;
 		public event Action<IMessage> Continue;

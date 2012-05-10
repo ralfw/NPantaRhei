@@ -45,6 +45,7 @@
     <Compile Include="integration\test_ManualResetJoin.cs" />
     <Compile Include="integration\test_AutoResetJoin.cs" />
     <Compile Include="integration\test_causality_handling.cs" />
+    <Compile Include="integration\test_Operation_activation.cs" />
     <Compile Include="integration\test_Scatter_Gather.cs" />
     <Compile Include="integration\test_Serialize.cs" />
     <Compile Include="integration\test_Parallelize.cs" />

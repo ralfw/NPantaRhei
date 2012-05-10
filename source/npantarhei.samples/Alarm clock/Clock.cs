@@ -5,6 +5,7 @@ using npantarhei.runtime.patterns;
 
 namespace Alarm_clock
 {
+    [ActiveOperation]
     internal class Clock : AOperation
     {
         public Clock() : base("Clock") {}
@@ -15,14 +16,11 @@ namespace Alarm_clock
 
         protected override void Process(IMessage input, Action<IMessage> continueWith, Action<FlowRuntimeException> unhandledException)
         {
-            switch(input.Port.Name.ToLower())
-            {
-                case "config":
-                    _continueWith = continueWith;
-                    _timer = new System.Threading.Timer(_ => _continueWith(new Message(this.Name + ".now", DateTime.Now)), 
-                                                        null, 100, 1000);
-                    break;
-            }    
+            if (!(input is ActivationMessage)) return;
+
+            _continueWith = continueWith;
+            _timer = new System.Threading.Timer(_ => _continueWith(new Message(this.Name + ".now", DateTime.Now)), 
+                                                null, 100, 1000);
         }
     }
 }
