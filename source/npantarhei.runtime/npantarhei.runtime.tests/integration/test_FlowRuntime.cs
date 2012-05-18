@@ -13,30 +13,30 @@ namespace npantarhei.runtime.tests.integration
 	[TestFixture]
 	public class test_FlowRuntime
 	{
-        private FlowRuntime _sut;
-        private AutoResetEvent _are;
-        private IMessage _result;
+		private FlowRuntime _sut;
+		private AutoResetEvent _are;
+		private IMessage _result;
 
 
-        [SetUp]
-        public void Setup()
-        {
-            _sut = new FlowRuntime();
+		[SetUp]
+		public void Setup()
+		{
+			_sut = new FlowRuntime();
 
-            _are = new AutoResetEvent(false);
-            _result = null;
-            _sut.Result += _ =>
-                                {
-                                    _result = _;
-                                    _are.Set();
-                                };
-        }
+			_are = new AutoResetEvent(false);
+			_result = null;
+			_sut.Result += _ =>
+								{
+									_result = _;
+									_are.Set();
+								};
+		}
 
-        [TearDown]
-        public void TearDown()
-        {
-            _sut.Dispose();
-        }
+		[TearDown]
+		public void TearDown()
+		{
+			_sut.Dispose();
+		}
 
 
 		[Test]
@@ -46,7 +46,7 @@ namespace npantarhei.runtime.tests.integration
 
 			_sut.Process(new Message(".in", "hello"));
 
-		    Assert.IsTrue(_are.WaitOne(1000));
+			Assert.IsTrue(_are.WaitOne(1000));
 			Assert.AreEqual(".out", _result.Port.Fullname);
 			Assert.AreEqual("hello", _result.Data.ToString());
 		}
@@ -61,7 +61,7 @@ namespace npantarhei.runtime.tests.integration
 
 			_sut.Process(new Message(".in", "hello"));
 
-            Assert.IsTrue(_are.WaitOne(1000));
+			Assert.IsTrue(_are.WaitOne(1000));
 			Assert.AreEqual(".out", _result.Port.Fullname);
 			Assert.AreEqual("hellox", _result.Data.ToString());
 		}
@@ -78,7 +78,7 @@ namespace npantarhei.runtime.tests.integration
 			
 			_sut.Process(new Message(".in", "hello"));
 
-            Assert.IsTrue(_are.WaitOne(1000));
+			Assert.IsTrue(_are.WaitOne(1000));
 			Assert.AreEqual(".out", _result.Port.Fullname);
 			Assert.AreEqual("helloxy", _result.Data.ToString());
 		}
@@ -95,17 +95,17 @@ namespace npantarhei.runtime.tests.integration
 			_sut.AddOperation(new Operation("B", (input, outputCont, _) => outputCont(new Message("B.out", input.Data.ToString() + "y"))));
 			
 			var results = new List<IMessage>();
-		    var n = 0;
-            _sut.Result += _ =>
-                            {
-                                results.Add(_);
-                                n++;
-                                if (n==2) _are.Set();
-                            };
+			var n = 0;
+			_sut.Result += _ =>
+							{
+								results.Add(_);
+								n++;
+								if (n==2) _are.Set();
+							};
 			
 			_sut.Process(new Message(".in", "hello"));
 
-            Assert.IsTrue(_are.WaitOne(1000));
+			Assert.IsTrue(_are.WaitOne(1000));
 			Assert.That(results.Select(m => m.Data.ToString()).ToArray(), Is.EquivalentTo(new[]{"hellox", "helloy"}));
 		}
 		
@@ -119,51 +119,63 @@ namespace npantarhei.runtime.tests.integration
 			
 			_sut.Process(new Message(".in", "hello"));
 
-            Assert.IsTrue(_are.WaitOne(1000));
+			Assert.IsTrue(_are.WaitOne(1000));
 			Assert.AreEqual(".out", _result.Port.Fullname);
 			Assert.AreEqual("hellox", _result.Data.ToString());
 		}
 
-        [Test]
-        public void Process_exception()
-        {
-            _sut.AddStream(new Stream(".process", "ThrowEx.in"));
-            _sut.AddStream(new Stream("ThrowEx.out", ".out"));
+		[Test]
+		public void Process_exception()
+		{
+			_sut.AddStream(new Stream(".process", "ThrowEx.in"));
+			_sut.AddStream(new Stream("ThrowEx.out", ".out"));
 
-            _sut.AddOperation(new Operation("ThrowEx", (input, outputCont, _) => { throw new NotImplementedException("xxx");}));
+			_sut.AddOperation(new Operation("ThrowEx", (input, outputCont, _) => { throw new NotImplementedException("xxx");}));
 
-            FlowRuntimeException ex = null;
-            _sut.UnhandledException += _ =>
-                                            {
-                                                ex = _;
-                                                _are.Set();
-                                            };
+			FlowRuntimeException ex = null;
+			_sut.UnhandledException += _ =>
+											{
+												ex = _;
+												_are.Set();
+											};
 
-            _sut.Process(new Message(".process", "hello"));
+			_sut.Process(new Message(".process", "hello"));
 
-            Assert.IsTrue(_are.WaitOne(1000));
-            Assert.AreEqual("xxx", ex.InnerException.Message);
-            Assert.AreEqual("ThrowEx.in", ex.Context.Port.Fullname);
-        }
+			Assert.IsTrue(_are.WaitOne(1000));
+			Assert.AreEqual("xxx", ex.InnerException.Message);
+			Assert.AreEqual("ThrowEx.in", ex.Context.Port.Fullname);
+		}
 
-        [Test]
-        public void Log_messages()
-        {
-            _sut.AddStream(new Stream(".in", "A.in"));
-            _sut.AddStream(new Stream("A.out", "B.in"));
-            _sut.AddStream(new Stream("B.out", ".out"));
+		[Test, Explicit]
+		// Watch for exception output in test window. It should show an exception reporting a missing exception handler.
+		public void Report_missing_exception_handler()
+		{
+			_sut.AddStream(new Stream(".process", "ThrowEx.in"));
+			_sut.AddStream(new Stream("ThrowEx.out", ".out"));
 
-            _sut.AddOperation(new Operation("A", (input, outputCont, _) => outputCont(new Message("A.out", input.Data.ToString() + "x"))));
-            _sut.AddOperation(new Operation("B", (input, outputCont, _) => outputCont(new Message("B.out", input.Data.ToString() + "y"))));
+			_sut.AddOperation(new Operation("ThrowEx", (input, outputCont, _) => { throw new NotImplementedException("xxx"); }));
 
-            var messages = new List<string>();
-            _sut.Message += _ => messages.Add(_.Port.Fullname);
+			_sut.Process(new Message(".process", "hello"));
+		}
 
-            _sut.Process(new Message(".in", "hello"));
+		[Test]
+		public void Log_messages()
+		{
+			_sut.AddStream(new Stream(".in", "A.in"));
+			_sut.AddStream(new Stream("A.out", "B.in"));
+			_sut.AddStream(new Stream("B.out", ".out"));
 
-            Assert.IsTrue(_are.WaitOne(1000));
-            Assert.That(messages.ToArray(), Is.EquivalentTo(new[]{"A.in", "B.in", ".out"}));
-        }
+			_sut.AddOperation(new Operation("A", (input, outputCont, _) => outputCont(new Message("A.out", input.Data.ToString() + "x"))));
+			_sut.AddOperation(new Operation("B", (input, outputCont, _) => outputCont(new Message("B.out", input.Data.ToString() + "y"))));
+
+			var messages = new List<string>();
+			_sut.Message += _ => messages.Add(_.Port.Fullname);
+
+			_sut.Process(new Message(".in", "hello"));
+
+			Assert.IsTrue(_are.WaitOne(1000));
+			Assert.That(messages.ToArray(), Is.EquivalentTo(new[]{"A.in", "B.in", ".out"}));
+		}
 	}
 }
 
