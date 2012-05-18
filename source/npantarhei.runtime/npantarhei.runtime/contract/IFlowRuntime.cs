@@ -18,6 +18,9 @@ namespace npantarhei.runtime.contract
         void AddStream(string fromPortName, string toPortName);
 		void AddOperation(IOperation operation);
 		void AddOperations(IEnumerable<IOperation> operations);
+
+        Action CreateEventProcessor(string portname);
+        Action<T> CreateEventProcessor<T>(string portname);
 		
         //void Pause();
         //void BreakOnPort(string includeFilter);

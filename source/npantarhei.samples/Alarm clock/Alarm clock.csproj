@@ -33,6 +33,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Alarm_clock.Program2</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="npantarhei.runtime, Version=1.0.4513.24154, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -51,6 +54,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Clock.cs" />
+    <Compile Include="Clock2.cs" />
+    <Compile Include="Program2.cs" />
+    <Compile Include="Dialog2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialog2.Designer.cs">
+      <DependentUpon>Dialog2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Dialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -60,6 +71,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Soundplayer.cs" />
+    <EmbeddedResource Include="Dialog2.resx">
+      <DependentUpon>Dialog2.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Dialog.resx">
       <DependentUpon>Dialog.cs</DependentUpon>
     </EmbeddedResource>
