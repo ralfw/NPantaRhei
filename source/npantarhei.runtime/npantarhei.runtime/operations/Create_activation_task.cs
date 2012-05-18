@@ -4,7 +4,7 @@ using npantarhei.runtime.messagetypes;
 
 namespace npantarhei.runtime.operations
 {
-    internal class Create_activation_task_for_operation
+    internal class Create_activation_task
     {
         public void Process(IOperation operation)
         {

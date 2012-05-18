@@ -57,6 +57,11 @@ Take from queue according to a pattern
 Implemented/solved:
 
 
+Activation of operations upon registration. An ActivationMessage will be sent to ops with the ActiveOperation attribute. 
+This allows them to store the continuation delegate for messages they want to sent without having been triggert by another message. 
+Useful for infrastructure ops like timers, web service stubs or even GUI.
+
+
 Slow-motion (throttling)
 	slow down flow of messages
 
