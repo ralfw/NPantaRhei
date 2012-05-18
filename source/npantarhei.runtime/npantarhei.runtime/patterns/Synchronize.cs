@@ -7,7 +7,7 @@ using npantarhei.runtime.contract;
 
 namespace npantarhei.runtime.patterns
 {
-    internal class Synchronize<T>
+    internal class Synchronize<T> : ISynchronize<T>
     {
         private readonly SynchronizationContext _synchronizationContext;
 

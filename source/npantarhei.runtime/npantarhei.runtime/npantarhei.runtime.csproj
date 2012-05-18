@@ -46,6 +46,7 @@
     <Compile Include="patterns\AutoResetJoin.cs" />
     <Compile Include="patterns\AutoResetJoinOf.cs" />
     <Compile Include="patterns\AOperation.cs" />
+    <Compile Include="contract\ISynchronize.cs" />
     <Compile Include="patterns\ManualResetJoinOf.cs" />
     <Compile Include="patterns\ManualResetJoin.cs" />
     <Compile Include="patterns\operations\Gather.cs" />
