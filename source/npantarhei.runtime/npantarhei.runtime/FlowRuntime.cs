@@ -117,13 +117,14 @@ namespace npantarhei.runtime
 		private readonly Action<IStream> _addStream;
 		public void AddStream(string fromPortName, string toPortName) { AddStream(new Stream(fromPortName, toPortName));}
 		public void AddStream (IStream stream) { _addStream(stream);}
+		public void AddStreams(IEnumerable<IStream> streams) { streams.ToList().ForEach(this.AddStream); }
 	
 		private readonly Action<IOperation> _addOperation;
 		public void AddOperation (IOperation operation) { _addOperation(operation); }
 		public void AddOperations(IEnumerable<IOperation> operations) { operations.ToList().ForEach(this.AddOperation); }
 
-        public Action CreateEventProcessor(string portname) { return () => this.Process(new Message(portname, null)); }
-        public Action<T> CreateEventProcessor<T>(string portname) { return data => this.Process(new Message(portname, data)); }
+		public Action CreateEventProcessor(string portname) { return () => this.Process(new Message(portname, null)); }
+		public Action<T> CreateEventProcessor<T>(string portname) { return data => this.Process(new Message(portname, data)); }
 
 		private readonly Action<int> _throttle;
 		public void Throttle(int delayMilliseconds) { _throttle(delayMilliseconds); }

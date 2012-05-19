@@ -16,6 +16,7 @@ namespace npantarhei.runtime.contract
 		
 		void AddStream(IStream stream);
         void AddStream(string fromPortName, string toPortName);
+        void AddStreams(IEnumerable<IStream> streams);
 		void AddOperation(IOperation operation);
 		void AddOperations(IEnumerable<IOperation> operations);
 
