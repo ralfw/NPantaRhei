@@ -124,6 +124,24 @@ namespace npantarhei.runtime.tests.integration
 			Assert.AreEqual("hellox", _result.Data.ToString());
 		}
 
+	    [Test]
+	    public void Simple_zoom_in()
+	    {
+	        _sut.AddStream(".in", "f/.in");
+            _sut.AddStream("f/.in", "f/X");
+            _sut.AddStream("f/X", "f/.out");
+            _sut.AddStream("f/.out", ".out");
+
+            _sut.AddOperation(new Operation("X", (input, outputCont, _) => outputCont(new Message("X", input.Data.ToString() + "x"))));
+
+            _sut.Process(new Message(".in", "hello"));
+
+	        IMessage result = null;
+            Assert.IsTrue(_sut.WaitForResult(500, _ => result = _));
+            Assert.AreEqual(".out", result.Port.Fullname);
+            Assert.AreEqual("hellox", (string)result.Data);
+	    }
+
 		[Test]
 		public void Process_exception()
 		{

@@ -7,13 +7,18 @@ namespace npantarhei.runtime.operations
 	{
 		public void Process(IMessage message)
 		{
-			if (message.Port.IsOperationPort)
-				Continue(message);
-			else
+			if (IsResultPort(message))
 				Result(message);
+			else
+				Continue(message);
 		}
-		
-		public event Action<IMessage> Continue;
+
+	    private static bool IsResultPort(IMessage message)
+	    {
+	        return message.Port.Path == "" && !message.Port.IsOperationPort;
+	    }
+
+	    public event Action<IMessage> Continue;
 		public event Action<IMessage> Result;
 	}
 }
