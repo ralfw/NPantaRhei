@@ -11,7 +11,9 @@ namespace npantarhei.runtime.contract
         event Action<FlowRuntimeException> UnhandledException;
         event Action<IMessage> Result;
 
+        bool WaitForResult();
         bool WaitForResult(int milliseconds);
+        bool WaitForResult(Action<IMessage> processResult);
         bool WaitForResult(int milliseconds, Action<IMessage> processResult);
 		
 		void AddStream(IStream stream);

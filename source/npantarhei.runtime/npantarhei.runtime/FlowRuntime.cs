@@ -102,7 +102,9 @@ namespace npantarhei.runtime
 			remove { _result -= value; }
 		}
 
+		public bool WaitForResult() { return WaitForResult(Timeout.Infinite); }
 		public bool WaitForResult(int milliseconds) { return WaitForResult(milliseconds, _ => {}); }
+		public bool WaitForResult(Action<IMessage> processResult) { return WaitForResult(Timeout.Infinite, processResult); }
 		public bool WaitForResult(int milliseconds, Action<IMessage> processResult)
 		{
 			var are = new AutoResetEvent(false);
