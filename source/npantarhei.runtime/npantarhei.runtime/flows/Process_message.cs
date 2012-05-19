@@ -17,7 +17,6 @@ namespace npantarhei.runtime.flows
 			// Build
 			_map = new Map_message_to_input_ports();
 			var output = new Output_result();
-		    var nest = new Nest_processing();
 			_create = new Create_task();
 			var exec = new Execute_task();
 			
@@ -26,9 +25,7 @@ namespace npantarhei.runtime.flows
 		    _map.Result += _ => Message(_);
 			_map.Result += output.Process;
             output.Result += _ => Result(_);
-		    output.Continue += nest.Process;
-            nest.Continue += _create.Process;
-		    nest.Zoom += _map.Process;
+		    output.Continue +=_create.Process;
 			_create.Result += exec.Process;
 			exec.Result += _ => Continue(_);
 		    exec.HandledException += _ => Continue(_);

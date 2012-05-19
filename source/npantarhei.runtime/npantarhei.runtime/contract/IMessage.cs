@@ -7,6 +7,7 @@ namespace npantarhei.runtime.contract
 		IPort Port {get;}
 		object Data {get;}
 	    CausalityStack Causalities { get; set; }
+        FlowStack FlowStack { get; set; }
 	}
 }
 

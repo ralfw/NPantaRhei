@@ -12,26 +12,34 @@ namespace npantarhei.runtime.messagetypes
 		{
 			this.Port = port;
 			this.Data = data;
-            this.Causalities = new CausalityStack();
+			this.Causalities = new CausalityStack();
+			this.FlowStack = new FlowStack();
 		}
 
 		#region IMessage implementation
 		public IPort Port { get; private set; }
 		public object Data { get; private set; }
 
-	    private CausalityStack _causalities;
-	    public CausalityStack Causalities 
-	    {
-            get { return _causalities; }
-            set { _causalities = value.Copy(); }
-	    }
+		private CausalityStack _causalities;
+		public CausalityStack Causalities 
+		{
+			get { return _causalities; }
+			set { _causalities = value.Copy(); }
+		}
 
-	    #endregion
+		private FlowStack _flowstack;
+		public FlowStack FlowStack
+		{
+			get { return _flowstack; }
+			set { _flowstack = value.Copy(); }
+		}
 
-        public override string ToString()
-        {
-            return string.Format("Message(Port='{0}', Data='{1}')", this.Port, this.Data);
-        }
+		#endregion
+
+		public override string ToString()
+		{
+			return string.Format("Message(Port='{0}', Data='{1}', Causalities={2}, FlowStack depth={3})", this.Port, this.Data, !this.Causalities.IsEmpty, this.FlowStack.Depth);
+		}
 	}
 }
 

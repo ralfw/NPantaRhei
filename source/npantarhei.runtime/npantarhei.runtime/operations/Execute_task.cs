@@ -1,6 +1,7 @@
 using System;
 using npantarhei.runtime.contract;
 using npantarhei.runtime.messagetypes;
+using npantarhei.runtime.patterns.operations;
 
 namespace npantarhei.runtime.operations
 {
@@ -11,7 +12,7 @@ namespace npantarhei.runtime.operations
 			try
 			{
 				task.Operation.Implementation(task.Message,
-											  output => Put_output_in_same_context_as_input(task.Message, output),
+											  output => Put_output_in_same_context_as_input(task, output),
 											  ex => Handle_exception(task, ex));
 			}
 			catch (Exception ex)
@@ -22,11 +23,15 @@ namespace npantarhei.runtime.operations
 		}
 
 
-		private void Put_output_in_same_context_as_input(IMessage input, IMessage output)
+		private void Put_output_in_same_context_as_input(Task task, IMessage output)
 		{
-			if (input.Port.Path != output.Port.Path)
-				output = new Message(input.Port.Path + "/" + output.Port.Fullname, output.Data);
-			output.Causalities = input.Causalities;
+			if (!(task.Operation is Flow) && task.Message.Port.Path != output.Port.Path)
+				output = new Message((task.Message.Port.Path == "" ? "" : task.Message.Port.Path + "/") + output.Port.Fullname, output.Data);
+			output.Causalities = task.Message.Causalities;
+
+            if (!(task.Operation is Flow))
+		        output.FlowStack = task.Message.FlowStack;
+
 			Result(output);
 		}
 

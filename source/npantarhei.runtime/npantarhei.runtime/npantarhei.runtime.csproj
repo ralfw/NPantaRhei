@@ -36,7 +36,8 @@
     <Compile Include="contract\ActiveOperationAttribute.cs" />
     <Compile Include="contract\CausalityStack.cs" />
     <Compile Include="contract\FlowRuntimeException.cs" />
-    <Compile Include="operations\Nest_processing.cs" />
+    <Compile Include="contract\FlowStack.cs" />
+    <Compile Include="operations\Register_flow.cs" />
     <Compile Include="operations\Create_activation_task.cs" />
     <Compile Include="data\INotifyingResource.cs" />
     <Compile Include="data\NotifyingMultiQueue.cs" />
@@ -50,6 +51,7 @@
     <Compile Include="contract\ISynchronize.cs" />
     <Compile Include="patterns\ManualResetJoinOf.cs" />
     <Compile Include="patterns\ManualResetJoin.cs" />
+    <Compile Include="patterns\operations\Flow.cs" />
     <Compile Include="patterns\operations\Gather.cs" />
     <Compile Include="patterns\operations\Scatter.cs" />
     <Compile Include="patterns\PopCausality.cs" />
