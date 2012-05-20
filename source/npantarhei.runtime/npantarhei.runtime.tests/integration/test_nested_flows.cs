@@ -29,7 +29,7 @@ namespace npantarhei.runtime.tests.integration
                 IMessage result = null;
                 Assert.IsTrue(fr.WaitForResult(2000, _ => result = _));
                 Assert.AreEqual(".out", result.Port.Fullname);
-                Assert.AreEqual("hellox", (string)result.Data);
+                Assert.AreEqual("helloxy", (string)result.Data);
             }
         }
     }
@@ -61,35 +61,31 @@ namespace npantarhei.runtime.tests.integration
         {
             return new[]
                        {
+                           // Flow B
                            new Stream(".in", "c.in"),
-                           new Stream("c.out", ".out") 
-                       };
-        }
+                           new Stream("c.out", "d.in"), // use D within B
+                           new Stream("d.out", ".out"), 
 
-        protected override IEnumerable<IOperation> BuildOperations(FlowOperationContainer container)
-        {
-            return new[] { new C() };
-        }
-    }
-
-    class C : Flow
-    {
-        public C() : base("c") {}
-
-        protected override IEnumerable<IStream> BuildStreams()
-        {
-            return new[]
-                       {
-                           new Stream(".in", "x"),
-                           new Stream("x", ".out") 
+                           // Flow C
+                           new Stream("/c/c.in", "/c/d.in"), // use D within C
+                           new Stream("/c/d.out", "/c/c.out"), 
+ 
+                           // Flow D
+                           new Stream("/d/d.in", "/d/x"),
+                           new Stream("/d/x", "/d/d.out")                        
                        };
         }
 
         protected override IEnumerable<IOperation> BuildOperations(FlowOperationContainer container)
         {
             return container
-                    .AddFunc<string, string>("x", s => s + "x")
-                    .Operations;
+                    .AddFunc<string, string>("x", s => s + (s.EndsWith("x") ? "y" : "x"))
+                    .Operations
+                    .Concat(new[]
+                                {
+                                    new GenericFlow("c"), 
+                                    new GenericFlow("d")
+                                });
         }
     }
 }

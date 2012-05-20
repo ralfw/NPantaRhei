@@ -46,21 +46,32 @@ namespace npantarhei.runtime.patterns.operations
         }
 
 
-        public IEnumerable<IStream> Streams { get { return Map_streams_to_flow(BuildStreams()); } }
+        public IEnumerable<IStream> Streams { get { return Qualify_streams(BuildStreams()); } }
         public virtual IEnumerable<IOperation> Operations { get { return BuildOperations(new FlowOperationContainer()); } }
 
-        private IEnumerable<IStream> Map_streams_to_flow(IEnumerable<IStream> streams)
+        private IEnumerable<IStream> Qualify_streams(IEnumerable<IStream> streams)
         {
-            return streams.Select(s => new Stream(Map_port_to_flow(s.FromPort), Map_port_to_flow(s.ToPort)));
+            return streams.Select(s => new Stream(Qualify_port(s.FromPort), Qualify_port(s.ToPort)));
         }
 
-        private string Map_port_to_flow(IPort port)
+        private string Qualify_port(IPort port)
         {
-            return port.IsOperationPort ? string.Format("{0}/{1}{2}", base.Name, port.OperationName, Map_portname(port)) 
-                                        : string.Format("{0}/{0}{1}", base.Name, Map_portname(port));
+            return Is_qualified_port(port) ? port.Fullname.Substring(1) : Build_qualified_port(port);
         }
 
-        private object Map_portname(IPort port)
+        private static bool Is_qualified_port(IPort port)
+        {
+            return port.Fullname.StartsWith("/");
+        }
+
+        private string Build_qualified_port(IPort port)
+        {
+            return port.IsOperationPort
+                       ? string.Format("{0}/{1}{2}", base.Name, port.OperationName, Build_portname(port))
+                       : string.Format("{0}/{0}{1}", base.Name, Build_portname(port));
+        }
+
+        private string Build_portname(IPort port)
         {
             return port.Name == "" ? "" : "." + port.Name;
         }
