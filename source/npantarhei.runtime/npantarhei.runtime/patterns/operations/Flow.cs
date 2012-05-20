@@ -7,7 +7,7 @@ using npantarhei.runtime.messagetypes;
 
 namespace npantarhei.runtime.patterns.operations
 {
-    public abstract class Flow : AOperation
+    public abstract class Flow : AOperation, IFlow
     {
         protected Flow(string name) : base(name) {}
 

@@ -25,11 +25,11 @@ namespace npantarhei.runtime.operations
 
 		private void Put_output_in_same_context_as_input(Task task, IMessage output)
 		{
-			if (!(task.Operation is Flow) && task.Message.Port.Path != output.Port.Path)
+			if (!(task.Operation is IFlow) && task.Message.Port.Path != output.Port.Path)
 				output = new Message((task.Message.Port.Path == "" ? "" : task.Message.Port.Path + "/") + output.Port.Fullname, output.Data);
 			output.Causalities = task.Message.Causalities;
 
-            if (!(task.Operation is Flow))
+            if (!(task.Operation is IFlow))
 		        output.FlowStack = task.Message.FlowStack;
 
 			Result(output);

@@ -10,7 +10,7 @@ namespace npantarhei.runtime.operations
 	{
 		public void Process(IOperation operation)
 		{
-			var flow = operation as Flow;
+			var flow = operation as IFlow;
 			if (flow == null) return;
 
 			flow.Streams.ToList().ForEach(RegisterStream);
