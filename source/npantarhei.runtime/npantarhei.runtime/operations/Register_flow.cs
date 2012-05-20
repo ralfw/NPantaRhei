@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using npantarhei.runtime.contract;
@@ -13,8 +14,8 @@ namespace npantarhei.runtime.operations
 			var flow = operation as IFlow;
 			if (flow == null) return;
 
-			flow.Streams.ToList().ForEach(RegisterStream);
-			flow.Operations.ToList().ForEach(RegisterOperation);
+            flow.Streams.ToList().ForEach(RegisterStream);
+            flow.Operations.ToList().ForEach(RegisterOperation);
 		}
 
 

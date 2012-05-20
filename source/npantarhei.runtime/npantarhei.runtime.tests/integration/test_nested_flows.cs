@@ -80,12 +80,7 @@ namespace npantarhei.runtime.tests.integration
         {
             return container
                     .AddFunc<string, string>("x", s => s + (s.EndsWith("x") ? "y" : "x"))
-                    .Operations
-                    .Concat(new[]
-                                {
-                                    new GenericFlow("c"), 
-                                    new GenericFlow("d")
-                                });
+                    .Operations;
         }
     }
 }

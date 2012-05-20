@@ -15,7 +15,7 @@ namespace npantarhei.runtime.operations
 
 	    private static bool IsResultPort(IMessage message)
 	    {
-	        return message.Port.Path == "" && !message.Port.IsOperationPort;
+	        return message.Port.Path == "" && !message.Port.HasOperation;
 	    }
 
 	    public event Action<IMessage> Continue;

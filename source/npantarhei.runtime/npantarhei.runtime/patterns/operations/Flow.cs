@@ -7,7 +7,7 @@ using npantarhei.runtime.messagetypes;
 
 namespace npantarhei.runtime.patterns.operations
 {
-    public abstract class Flow : AOperation, IFlow
+    public class Flow : AOperation, IFlow
     {
         protected Flow(string name) : base(name) {}
 
@@ -47,7 +47,9 @@ namespace npantarhei.runtime.patterns.operations
 
 
         public IEnumerable<IStream> Streams { get { return Qualify_streams(BuildStreams()); } }
-        public virtual IEnumerable<IOperation> Operations { get { return BuildOperations(new FlowOperationContainer()); } }
+        public virtual IEnumerable<IOperation> Operations { get { return BuildOperations(new FlowOperationContainer())
+                                                                         .Concat(Nested_flow_operations()); } }
+
 
         private IEnumerable<IStream> Qualify_streams(IEnumerable<IStream> streams)
         {
@@ -56,17 +58,12 @@ namespace npantarhei.runtime.patterns.operations
 
         private string Qualify_port(IPort port)
         {
-            return Is_qualified_port(port) ? port.Fullname.Substring(1) : Build_qualified_port(port);
-        }
-
-        private static bool Is_qualified_port(IPort port)
-        {
-            return port.Fullname.StartsWith("/");
+            return port.IsQualified ? port.Fullname.Substring(1) : Build_qualified_port(port);
         }
 
         private string Build_qualified_port(IPort port)
         {
-            return port.IsOperationPort
+            return port.HasOperation
                        ? string.Format("{0}/{1}{2}", base.Name, port.OperationName, Build_portname(port))
                        : string.Format("{0}/{0}{1}", base.Name, Build_portname(port));
         }
@@ -77,7 +74,17 @@ namespace npantarhei.runtime.patterns.operations
         }
 
 
-        protected abstract IEnumerable<IStream> BuildStreams();
+        private IEnumerable<IOperation> Nested_flow_operations()
+        {
+            var flownames = BuildStreams().SelectMany(stream => new[] {stream.FromPort, stream.ToPort})
+                                          .Where(port => port.IsQualified)
+                                          .Select(port => port.Path.Substring(1))
+                                          .Distinct();
+            return flownames.Select(flowname => new Flow(flowname));
+        }
+
+
+        protected virtual IEnumerable<IStream> BuildStreams() { return new IStream[]{}; }
         protected virtual IEnumerable<IOperation> BuildOperations(FlowOperationContainer container) { return new IOperation[]{};}
     }
 }

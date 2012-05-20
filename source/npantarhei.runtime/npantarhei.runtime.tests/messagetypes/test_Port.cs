@@ -30,10 +30,10 @@ namespace npantarhei.runtime.tests
 		public void Check_for_operation_port()
 		{
 			var sut = new Port("opname.portname");
-			Assert.IsTrue(sut.IsOperationPort);
+			Assert.IsTrue(sut.HasOperation);
 			
 			sut = new Port(".portname");
-			Assert.IsFalse(sut.IsOperationPort);
+			Assert.IsFalse(sut.HasOperation);
 		}
 	}
 }

@@ -18,7 +18,8 @@ namespace npantarhei.runtime.contract
 		string OperationName {get;}
 		string Name{get;}
 		
-		bool IsOperationPort {get;}
+		bool HasOperation {get;}
+	    bool IsQualified {get;}
 	}
 }
 

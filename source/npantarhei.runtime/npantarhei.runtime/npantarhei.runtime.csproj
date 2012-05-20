@@ -52,7 +52,6 @@
     <Compile Include="contract\ISynchronize.cs" />
     <Compile Include="patterns\ManualResetJoinOf.cs" />
     <Compile Include="patterns\ManualResetJoin.cs" />
-    <Compile Include="patterns\operations\GenericFlow.cs" />
     <Compile Include="patterns\operations\Flow.cs" />
     <Compile Include="patterns\operations\Gather.cs" />
     <Compile Include="patterns\operations\Scatter.cs" />

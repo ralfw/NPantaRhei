@@ -14,6 +14,7 @@ namespace npantarhei.runtime.messagetypes
 
 		#region IPort implementation
 		public string Fullname { get; private set; }
+
 			
 		public string Path {
 			get {
@@ -36,11 +37,13 @@ namespace npantarhei.runtime.messagetypes
 		}
 		
 		
-		public bool IsOperationPort {
-			get {
-				return this.OperationName != "";
-			}
+		public bool HasOperation {
+			get { return this.OperationName != ""; }
 		}
+
+	    public bool IsQualified {
+            get { return this.Path.StartsWith("/"); }
+	    }
 		#endregion
 
 
