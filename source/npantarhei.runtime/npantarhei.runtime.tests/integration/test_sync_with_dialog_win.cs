@@ -25,7 +25,7 @@ namespace npantarhei.runtime.tests.integration
 
             var opcont = new FlowOperationContainer();
             opcont.AddFunc("gettime", () => DateTime.Now);
-            opcont.AddAction<DateTime>("showtime", _ =>
+            opcont.AddAction<DateTime>("showtime", (DateTime _) =>
                                                        {
                                                            Console.WriteLine("event handler thread: {0}",
                                                                              Thread.CurrentThread.GetHashCode());

@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tracing with Rx", "Tracing 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IOperation wrapper for EBC", "IOperation wrapper for EBC\IOperation wrapper for EBC.csproj", "{0A24C7ED-CBBB-488D-A426-C55E2E25EA61}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSV Viewer", "CSV Viewer\CSV Viewer.csproj", "{14797C21-FD6D-4E00-A5EF-2522958CFE8F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -31,6 +33,10 @@ Global
 		{0A24C7ED-CBBB-488D-A426-C55E2E25EA61}.Debug|x86.Build.0 = Debug|x86
 		{0A24C7ED-CBBB-488D-A426-C55E2E25EA61}.Release|x86.ActiveCfg = Release|x86
 		{0A24C7ED-CBBB-488D-A426-C55E2E25EA61}.Release|x86.Build.0 = Release|x86
+		{14797C21-FD6D-4E00-A5EF-2522958CFE8F}.Debug|x86.ActiveCfg = Debug|x86
+		{14797C21-FD6D-4E00-A5EF-2522958CFE8F}.Debug|x86.Build.0 = Debug|x86
+		{14797C21-FD6D-4E00-A5EF-2522958CFE8F}.Release|x86.ActiveCfg = Release|x86
+		{14797C21-FD6D-4E00-A5EF-2522958CFE8F}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

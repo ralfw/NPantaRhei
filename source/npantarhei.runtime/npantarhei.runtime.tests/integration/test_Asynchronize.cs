@@ -56,7 +56,7 @@ namespace npantarhei.runtime.tests.integration
                 sut.AddStream(new Stream(".in", "throw"));
 
                 var cont = new FlowOperationContainer();
-                cont.AddAction<string>("throw", _ => { throw new ApplicationException("xxx"); }).MakeAsync();
+                cont.AddAction<string>("throw", (string _) => { throw new ApplicationException("xxx"); }).MakeAsync();
                 sut.AddOperations(cont.Operations);
 
                 FlowRuntimeException ex = null;

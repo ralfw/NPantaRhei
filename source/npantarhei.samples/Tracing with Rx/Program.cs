@@ -23,7 +23,7 @@ namespace Tracing_with_Rx
                 fr.AddOperations(new FlowOperationContainer()
                                     .AddFunc<int,int>("A", i => i + 1)
                                     .AddFunc<int,int>("B", i => i * 2)
-                                    .AddAction<int>("C", i => Console.WriteLine("={0}", i))
+                                    .AddAction<int>("C", (int i) => Console.WriteLine("={0}", i))
                                     .Operations);
 
 
