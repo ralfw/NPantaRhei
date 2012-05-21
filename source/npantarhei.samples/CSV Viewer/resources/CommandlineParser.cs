@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using CSV_Viewer.data_model;
+﻿using CSV_Viewer.data_model;
 using npantarhei.runtime.contract;
 
-namespace CSV_Viewer.environment
+namespace CSV_Viewer.resources
 {
     class CommandlineParser
     {

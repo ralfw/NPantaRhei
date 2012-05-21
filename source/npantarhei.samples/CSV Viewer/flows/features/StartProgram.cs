@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using CSV_Viewer.buffer;
-using CSV_Viewer.environment;
+using CSV_Viewer.resources;
 using npantarhei.runtime;
 using npantarhei.runtime.contract;
 using npantarhei.runtime.messagetypes;
