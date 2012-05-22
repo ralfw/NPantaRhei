@@ -105,7 +105,7 @@ namespace npantarhei.runtime.tests.integration
 			
 			_sut.Process(new Message(".in", "hello"));
 
-			Assert.IsTrue(_are.WaitOne(1000));
+			Assert.IsTrue(_are.WaitOne(4000));
 			Assert.That(results.Select(m => m.Data.ToString()).ToArray(), Is.EquivalentTo(new[]{"hellox", "helloy"}));
 		}
 		
@@ -176,6 +176,28 @@ namespace npantarhei.runtime.tests.integration
 			Assert.IsTrue(_are.WaitOne(1000));
 			Assert.That(messages.ToArray(), Is.EquivalentTo(new[]{"A.in", "B.in", ".out"}));
 		}
+
+
+        [Test]
+        public void Multiple_instances_of_same_op_in_one_flow()
+        {
+            _sut.AddStream(new Stream(".in", "A#1"));
+            _sut.AddStream(new Stream("A#1.out", "B"));
+            _sut.AddStream(new Stream("B", "A#2"));
+            _sut.AddStream(new Stream("A#2.out", ".out"));
+
+            _sut.AddOperation(new Operation("A", (input, outputCont, _) => outputCont(new Message("A.out", input.Data.ToString() + "x"))));
+            _sut.AddOperation(new Operation("B", (input, outputCont, _) => outputCont(new Message("B", input.Data.ToString() + "y"))));
+
+            var messages = new List<IMessage>();
+            _sut.Message += messages.Add;
+
+            _sut.Process(new Message(".in", "hello"));
+
+            Assert.IsTrue(_are.WaitOne(1000));
+            Assert.That(messages.Select(m => m.Port.Fullname).ToArray(), Is.EquivalentTo(new[] { "A#1", "B", "A#2", ".out" }));
+            Assert.AreEqual("helloxyx", (string)messages.Last().Data);
+        }
 	}
 }
 

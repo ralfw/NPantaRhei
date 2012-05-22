@@ -53,10 +53,12 @@ namespace npantarhei.runtime.tests
 			sut.AddAction<string>("p", s => result = s);
 			
 			var op = sut.Operations.First();
-						
-			op.Implementation(new Message("f", "hello"), null, null);
+
+		    bool continuationCalled = false;
+			op.Implementation(new Message("f", "hello"), _ => continuationCalled = true, null);
 		
 			Assert.AreEqual("hello", result);
+            Assert.IsTrue(continuationCalled);
 		}
 		
 		

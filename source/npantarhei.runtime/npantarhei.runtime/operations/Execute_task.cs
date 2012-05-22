@@ -26,14 +26,22 @@ namespace npantarhei.runtime.operations
 		private void Put_output_in_same_context_as_input(Task task, IMessage output)
 		{
 			if (!(task.Operation is IFlow) && task.Message.Port.Path != output.Port.Path)
-				output = new Message((task.Message.Port.Path == "" ? "" : task.Message.Port.Path + "/") + output.Port.Fullname, output.Data);
-			output.Causalities = task.Message.Causalities;
+					output = new Message((task.Message.Port.Path == "" ? "" : task.Message.Port.Path + "/") + output.Port.Fullname,
+										 output.Data);
 
-            if (!(task.Operation is IFlow))
-		        output.FlowStack = task.Message.FlowStack;
+            if (task.Message.Port.InstanceNumber != "" && output.Port.InstanceNumber == "")
+                output = new Message((output.Port.Path == "" ? "" : output.Port.Path + "/")
+                                     + output.Port.OperationName
+                                     + "#" + task.Message.Port.InstanceNumber
+                                     + (output.Port.Name == "" ? "" : "." + output.Port.Name),
+                                     output.Data);
+
+            if (!(task.Operation is IFlow)) output.FlowStack = task.Message.FlowStack;
+			output.Causalities = task.Message.Causalities;
 
 			Result(output);
 		}
+
 
 		private void Handle_exception(Task task, Exception ex)
 		{
@@ -44,6 +52,7 @@ namespace npantarhei.runtime.operations
 			else
 				Catch_exception_with_causality(task, exFlow);
 		}
+
 
 		private void Catch_exception_with_causality(Task task, FlowRuntimeException ex)
 		{

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using CSV_Viewer.data_model;
 using CSV_Viewer.formatter;
-using CSV_Viewer.frontend;
+using CSV_Viewer.portals;
 using npantarhei.runtime;
 using npantarhei.runtime.contract;
 using npantarhei.runtime.messagetypes;

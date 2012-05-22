@@ -38,7 +38,7 @@ namespace npantarhei.runtime.tests
 			for(var i = 1; i<=N; i++)
 				sut.Process(i, dequeue);
 			
-			Assert.IsTrue(are.WaitOne(3000));
+			Assert.IsTrue(are.WaitOne(4000));
 			Assert.AreEqual((N*(N+1)/2), results.Sum());
 			Assert.AreEqual(N_THREADS, threads.Count);
 		}

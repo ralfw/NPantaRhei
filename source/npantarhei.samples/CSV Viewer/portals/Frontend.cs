@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
-namespace CSV_Viewer.frontend
+namespace CSV_Viewer.portals
 {
     class Frontend
     {

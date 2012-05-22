@@ -12,11 +12,18 @@ namespace npantarhei.runtime.tests
 		[Test()]
 		public void All_properties()
 		{
-			var sut = new Port("a/b/o.p");
-			Assert.AreEqual("a/b/o.p", sut.Fullname);
+			var sut = new Port("a/b/o#42.p");
+			Assert.AreEqual("a/b/o#42.p", sut.Fullname);
+            Assert.AreEqual("o#42", sut.InstanceName);
+            Assert.AreEqual("42", sut.InstanceNumber);
 			Assert.AreEqual("o", sut.OperationName);
 			Assert.AreEqual("p", sut.Name);
 			Assert.AreEqual("a/b", sut.Path);
+
+            sut = new Port("a/b/o.p");
+            Assert.AreEqual("o", sut.InstanceName);
+            Assert.AreEqual("", sut.InstanceNumber);
+            Assert.AreEqual("o", sut.OperationName);
 		}
 		
 		[Test]

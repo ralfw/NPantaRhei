@@ -15,6 +15,8 @@ namespace npantarhei.runtime.contract
 	{
 		string Fullname {get;}
 		string Path {get;}
+	    string InstanceName {get;}
+        string InstanceNumber {get;}
 		string OperationName {get;}
 		string Name{get;}
 		
