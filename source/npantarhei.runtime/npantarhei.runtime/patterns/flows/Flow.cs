@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using npantarhei.runtime.contract;
 using npantarhei.runtime.messagetypes;
 
-namespace npantarhei.runtime.patterns.operations
+namespace npantarhei.runtime.patterns.flows
 {
     public class Flow : AOperation, IFlow
     {

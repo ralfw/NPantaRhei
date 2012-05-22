@@ -5,6 +5,7 @@ using System.Text;
 using NUnit.Framework;
 using npantarhei.runtime.contract;
 using npantarhei.runtime.messagetypes;
+using npantarhei.runtime.patterns.flows;
 using npantarhei.runtime.patterns.operations;
 
 namespace npantarhei.runtime.tests.patterns
