@@ -8,6 +8,7 @@ using CSV_Viewer.portals;
 using npantarhei.runtime;
 using npantarhei.runtime.contract;
 using npantarhei.runtime.messagetypes;
+using npantarhei.runtime.patterns.flows;
 using npantarhei.runtime.patterns.operations;
 
 namespace CSV_Viewer.flows

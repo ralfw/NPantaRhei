@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using npantarhei.runtime;
+using npantarhei.runtime.patterns.flows;
 
 namespace Alarm_clock
 {
@@ -29,22 +30,11 @@ namespace Alarm_clock
              */
             using(var fr = new FlowRuntime())
             {
-                // Define flow
-                // Feature: set alarm
-                fr.AddStream(".setAlarm", "Join.in0");
-                fr.AddStream(".setAlarm", "Alarm switched on");
-                fr.AddStream(".now", "Join.in1");
-                fr.AddStream("Join", "Calc time diff");
-                fr.AddStream("Calc time diff", "Display time diff");
-
-                // Feature: stop alarm
-                fr.AddStream(".resetAlarm", "Join.reset");
-                fr.AddStream(".resetAlarm", "Alarm switched off");
-                fr.AddStream(".resetAlarm", "Stop alarm");
-
-                // Feature: sound alarm
-                fr.AddStream("Calc time diff", "Alarm time reached");
-                fr.AddStream("Alarm time reached", "Sound alarm");
+                // Register streams
+                var x = new EmbeddedResourceFlow("*", typeof (Program2), "Alarm_clock.Flow2.txt");
+                foreach(var s in x.Streams)
+                    Console.WriteLine("{0}, {1}", s.FromPort, s.ToPort);
+                fr.AddOperation(new EmbeddedResourceFlow("*", typeof(Program2), "Alarm_clock.Flow2.txt"));
 
                 // Register operations
                 var dlg = new Dialog2();

@@ -78,5 +78,13 @@ namespace npantarhei.runtime.tests.patterns
         {
             Assert.Throws<InvalidOperationException>(() => FlowLoader.LoadFromEmbeddedResource("x", this.GetType(), "xxx"));
         }
+
+        [Test]
+        public void Unqualified_portnames_will_not_be_qualified_by_flow_class()
+        {
+            var sut = new StringFlow("*", "a,b");
+            var portnames = sut.Streams.SelectMany(s => new[] { s.FromPort.Fullname, s.ToPort.Fullname });
+            Assert.That(portnames.ToArray(), Is.EqualTo(new[] { "a", "b" }));
+        }
     }
 }

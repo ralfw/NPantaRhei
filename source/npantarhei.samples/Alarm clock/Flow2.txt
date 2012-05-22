@@ -1,5 +1,4 @@
-﻿*
-.setAlarm, Join.in0
+﻿.setAlarm, Join.in0
 .setAlarm, Alarm switched on
 .now, Join.in1
 Join, Calc time diff
