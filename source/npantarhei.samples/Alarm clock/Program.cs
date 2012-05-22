@@ -9,16 +9,17 @@ namespace Alarm_clock
 {
     static class Program
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
         [STAThread]
         static void Main()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            using(var fr = new FlowRuntime())
+            /*
+             * The dialog/clock is part of the flow. 
+             * Since it fires events without prior input it is defined as an [ActiveOperation]
+             */
+            using (var fr = new FlowRuntime())
             {
                 // Define flow
                 // Feature: close application

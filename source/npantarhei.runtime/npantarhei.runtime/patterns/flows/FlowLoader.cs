@@ -70,7 +70,12 @@ namespace npantarhei.runtime.patterns.flows
         private static Port Create_qualified_port(string flowname, string portFullname)
         {
             var port = new Port(portFullname);
-            return port.IsQualified ? port : new Port(string.Format("/{0}/{1}", flowname, portFullname));
+            return port.IsQualified || Is_root_flowname(flowname)? port : new Port(string.Format("/{0}/{1}", flowname, portFullname));
+        }
+
+        private static bool Is_root_flowname(string flowname)
+        {
+            return flowname == "*";
         }
     }
 }

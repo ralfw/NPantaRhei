@@ -23,6 +23,10 @@ namespace Alarm_clock
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            /*
+             * The dialog/clock are outside the flow; they are viewed as part of the environment.
+             * They are bound to the flow as event source using CreateEventProcessor().
+             */
             using(var fr = new FlowRuntime())
             {
                 // Define flow

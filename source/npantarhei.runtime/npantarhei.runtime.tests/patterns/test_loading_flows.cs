@@ -49,10 +49,13 @@ namespace npantarhei.runtime.tests.patterns
                                         g
                                         d,e
                                         f,g
+
+                                        *
+                                        h,i
                                        ");
 
             var portnames = FlowLoader.LoadFromReader("x", tr).SelectMany(s => new[] { s.FromPort.Fullname, s.ToPort.Fullname });
-            Assert.That(portnames.ToArray(), Is.EqualTo(new[] { "/x/a", "/x/b", "/x/b", "/x/c", "/f/c", "/f/d", "/g/d", "/g/e", "/g/f", "/g/g" }));
+            Assert.That(portnames.ToArray(), Is.EqualTo(new[] { "/x/a", "/x/b", "/x/b", "/x/c", "/f/c", "/f/d", "/g/d", "/g/e", "/g/f", "/g/g", "h", "i" }));
         }
 
 

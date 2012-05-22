@@ -1,0 +1,15 @@
+﻿*
+.setAlarm, Join.in0
+.setAlarm, Alarm switched on
+.now, Join.in1
+Join, Calc time diff
+Calc time diff, Display time diff
+
+// Feature: stop alarm
+.resetAlarm, Join.reset
+.resetAlarm, Alarm switched off
+.resetAlarm, Stop alarm
+
+// Feature: sound alarm
+Calc time diff, Alarm time reached
+Alarm time reached, Sound alarm
