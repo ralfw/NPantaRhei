@@ -40,17 +40,17 @@ namespace npantarhei.runtime
 		}
 
 
-		public FlowOperationContainer AddAction(string name, Action implementation)
+		public FlowOperationContainer AddAction(string name, Action implementation, bool createContinuationSignal = false)
 		{
 			_operations.Add(new Operation(name, (input, outputCont, _) => { implementation(); 
-																			outputCont(new Message(name, null)); }));
+																			if (createContinuationSignal) outputCont(new Message(name, null)); }));
 			return this;
 		}
 		
-		public FlowOperationContainer AddAction<TInput>(string name, Action<TInput> implementation)
+		public FlowOperationContainer AddAction<TInput>(string name, Action<TInput> implementation, bool createContinuationSignal = false)
 		{
 			_operations.Add(new Operation(name, (input, outputCont, _) => { implementation((TInput)input.Data); 
-																			outputCont(new Message(name, null)); }));
+																			if (createContinuationSignal) outputCont(new Message(name, null)); }));
 			return this;
 		}
 		

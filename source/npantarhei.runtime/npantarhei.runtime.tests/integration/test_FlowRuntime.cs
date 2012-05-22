@@ -125,7 +125,7 @@ namespace npantarhei.runtime.tests.integration
 		}
 
 		[Test]
-		public void Process_exception()
+		public void Process_exception_in_operation()
 		{
 			_sut.AddStream(new Stream(".process", "ThrowEx.in"));
 			_sut.AddStream(new Stream("ThrowEx.out", ".out"));
@@ -145,6 +145,25 @@ namespace npantarhei.runtime.tests.integration
 			Assert.AreEqual("xxx", ex.InnerException.Message);
 			Assert.AreEqual("ThrowEx.in", ex.Context.Port.Fullname);
 		}
+
+        [Test]
+        public void Process_exception_in_runtime()
+        {
+            _sut.AddStream(new Stream(".process", "unknown op"));
+
+            FlowRuntimeException ex = null;
+            _sut.UnhandledException += _ =>
+                                            {
+                                                ex = _;
+                                                _are.Set();
+                                            };
+
+            _sut.Process(new Message(".process", "hello"));
+
+            Assert.IsTrue(_are.WaitOne(1000));
+            Assert.AreEqual(".process", ex.Context.Port.Fullname);
+            Assert.IsTrue(ex.InnerException.Message.IndexOf("unknown op") > 0);
+        }
 
 		[Test, Explicit]
 		// Watch for exception output in test window. It should show an exception reporting a missing exception handler.

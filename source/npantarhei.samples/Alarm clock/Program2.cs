@@ -33,8 +33,8 @@ namespace Alarm_clock
                 // Register streams
                 var x = new EmbeddedResourceFlow("*", typeof (Program2), "Alarm_clock.Flow2.txt");
                 foreach(var s in x.Streams)
-                    Console.WriteLine("{0}, {1}", s.FromPort, s.ToPort);
-                fr.AddOperation(new EmbeddedResourceFlow("*", typeof(Program2), "Alarm_clock.Flow2.txt"));
+                    Console.WriteLine(s);
+                fr.AddOperation(x);
 
                 // Register operations
                 var dlg = new Dialog2();

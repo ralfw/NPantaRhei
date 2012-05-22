@@ -50,7 +50,7 @@ namespace npantarhei.runtime.tests
 			var sut = new FlowOperationContainer();
 			
 			var result = "";
-			sut.AddAction<string>("p", s => result = s);
+			sut.AddAction<string>("p", s => result = s, true);
 			
 			var op = sut.Operations.First();
 
