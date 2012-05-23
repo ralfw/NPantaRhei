@@ -11,7 +11,7 @@ namespace CSV_Viewer.flows
     {
         private readonly Main _main;
 
-        public Root(Main main) : base("*") { _main = main; }
+        public Root(Main main) : base("/") { _main = main; }
 
         protected override IEnumerable<npantarhei.runtime.contract.IStream> BuildStreams()
         {

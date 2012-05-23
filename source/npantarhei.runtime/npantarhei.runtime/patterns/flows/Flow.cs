@@ -35,7 +35,7 @@ namespace npantarhei.runtime.patterns.flows
 
         private bool Is_root_flowname(string flowname)
         {
-            return flowname == "*";
+            return flowname == "/";
         }
 
         private string Build_portname(IPort port)

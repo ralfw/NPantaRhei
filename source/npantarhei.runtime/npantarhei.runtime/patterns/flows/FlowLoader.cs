@@ -77,7 +77,7 @@ namespace npantarhei.runtime.patterns.flows
 
         private static bool Is_root_flowname(string flowname)
         {
-            return flowname == "*";
+            return flowname == "/";
         }
     }
 }

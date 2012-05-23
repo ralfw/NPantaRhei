@@ -31,10 +31,7 @@ namespace Alarm_clock
             using(var fr = new FlowRuntime())
             {
                 // Register streams
-                var x = new EmbeddedResourceFlow("*", typeof (Program2), "Alarm_clock.Flow2.txt");
-                foreach(var s in x.Streams)
-                    Console.WriteLine(s);
-                fr.AddOperation(x);
+                fr.AddOperation(new EmbeddedResourceFlow("/", typeof (Program2), "Alarm_clock.Flow2.txt"));
 
                 // Register operations
                 var dlg = new Dialog2();
