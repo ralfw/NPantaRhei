@@ -51,7 +51,7 @@
     <Compile Include="patterns\AutoResetJoin.cs" />
     <Compile Include="patterns\AutoResetJoinOf.cs" />
     <Compile Include="patterns\AOperation.cs" />
-    <Compile Include="contract\ISynchronize.cs" />
+    <Compile Include="contract\ISynchronizeBuilder.cs" />
     <Compile Include="patterns\flows\AFlow.cs" />
     <Compile Include="patterns\flows\LoadedFlow.cs" />
     <Compile Include="patterns\flows\StringFlow.cs" />
@@ -66,7 +66,7 @@
     <Compile Include="patterns\PopCausality.cs" />
     <Compile Include="patterns\PushCausality.cs" />
     <Compile Include="patterns\ScheduledTask.cs" />
-    <Compile Include="patterns\Synchronize.cs" />
+    <Compile Include="patterns\SynchronizationContextBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="contract\IFlowRuntime.cs" />
     <Compile Include="contract\IMessage.cs" />

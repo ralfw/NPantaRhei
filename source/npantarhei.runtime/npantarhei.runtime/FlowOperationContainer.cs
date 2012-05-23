@@ -10,16 +10,16 @@ namespace npantarhei.runtime
 {
 	public class FlowOperationContainer
 	{
+		public static Func<ISynchronizationBuilder<IMessage>> SynchronizationBuilderFactory { get; set; }
+
+		static FlowOperationContainer()
+		{
+			SynchronizationBuilderFactory = () => new SynchronizationContextBuilder<IMessage>();
+		}
+
+
 		private readonly List<IOperation> _operations = new List<IOperation>();
-		private readonly Func<ISynchronize<IMessage>> _synchronizeBuilder;
 
-		public FlowOperationContainer(Func<ISynchronize<IMessage>> synchronizeBuilder) {
-			_synchronizeBuilder = synchronizeBuilder;
-		}
-
-		public FlowOperationContainer()
-			: this(() => new Synchronize<IMessage>()) {
-		}
 
 		public FlowOperationContainer AddFunc<TOutput>(string name, Func<TOutput> implementation)
 		{
@@ -127,7 +127,7 @@ namespace npantarhei.runtime
 
 		public FlowOperationContainer MakeSync()
 		{
-			var sync = _synchronizeBuilder();
+			var sync = FlowOperationContainer.SynchronizationBuilderFactory();
 			WrapLastOperation(op => new Operation(op.Name, (input, continueWith, unhandledException) => 
 																sync.Process(input,
 																			 output =>

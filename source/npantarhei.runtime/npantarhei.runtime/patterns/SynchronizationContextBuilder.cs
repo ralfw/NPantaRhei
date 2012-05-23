@@ -7,12 +7,12 @@ using npantarhei.runtime.contract;
 
 namespace npantarhei.runtime.patterns
 {
-    internal class Synchronize<T> : ISynchronize<T>
+    internal class SynchronizationContextBuilder<T> : ISynchronizationBuilder<T>
     {
         private readonly SynchronizationContext _synchronizationContext;
 
-        public Synchronize() : this(SynchronizationContext.Current ?? new SynchronizationContext()) {}
-        public Synchronize(SynchronizationContext synchronizationContext) { _synchronizationContext = synchronizationContext; }
+        public SynchronizationContextBuilder() : this(SynchronizationContext.Current ?? new SynchronizationContext()) {}
+        public SynchronizationContextBuilder(SynchronizationContext synchronizationContext) { _synchronizationContext = synchronizationContext; }
 
         public void Process(T t, Action<T> continueWith)
         {
