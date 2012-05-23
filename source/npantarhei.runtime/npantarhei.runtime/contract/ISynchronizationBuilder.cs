@@ -2,8 +2,8 @@ using System;
 
 namespace npantarhei.runtime.contract
 {
-    public interface ISynchronizationBuilder<T>
+    public interface ISynchronizationBuilder
     {
-        void Process(T t, Action<T> continueWith);
+        void Process(IMessage t, Action<IMessage> continueWith);
     }
 }

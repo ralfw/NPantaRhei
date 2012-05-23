@@ -10,22 +10,18 @@ namespace npantarhei.runtime
 {
 	public class FlowOperationContainer
 	{
-		public static Func<ISynchronizationBuilder<IMessage>> SynchronizationBuilderFactory { get; set; }
+		public static Func<ISynchronizationBuilder> SynchronizationBuilderFactory { get; set; }
 
 		static FlowOperationContainer()
 		{
-			SynchronizationBuilderFactory = () => new SynchronizationContextBuilder<IMessage>();
+			SynchronizationBuilderFactory = () => new SynchronizationContextBuilder();
 		}
 
 
 		private readonly List<IOperation> _operations = new List<IOperation>();
 
 
-		public FlowOperationContainer Add(IOperation operation)
-		{
-			_operations.Add(operation);
-			return this;
-		}
+		public FlowOperationContainer Add(IOperation operation) { _operations.Add(operation); return this; }
 
 		public FlowOperationContainer AddFunc<TOutput>(string name, Func<TOutput> implementation)
 		{
