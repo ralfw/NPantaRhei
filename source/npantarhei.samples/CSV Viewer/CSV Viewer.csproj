@@ -49,6 +49,7 @@
     <Compile Include="buffer\LineBuffer.cs" />
     <Compile Include="data_model\Page.cs" />
     <Compile Include="data_model\PageBuffer.cs" />
+    <Compile Include="flows\Root.cs" />
     <Compile Include="resources\CommandlineParser.cs" />
     <Compile Include="resources\TextFileAdapter.cs" />
     <Compile Include="flows\features\TurnPage.cs" />

@@ -13,6 +13,7 @@ namespace npantarhei.runtime.patterns.flows
 
         public override IEnumerable<IStream> Streams { get { return Qualify_streams(BuildStreams()); } }
 
+
         private IEnumerable<IStream> Qualify_streams(IEnumerable<IStream> streams)
         {
             return streams.Select(s => new Stream(Qualify_port(s.FromPort), Qualify_port(s.ToPort)));
@@ -25,9 +26,16 @@ namespace npantarhei.runtime.patterns.flows
 
         private string Build_qualified_port(IPort port)
         {
+            if (Is_root_flowname(base.Name)) return port.Fullname;
+
             return port.HasOperation
                        ? string.Format("{0}/{1}{2}", base.Name, port.OperationName, Build_portname(port))
                        : string.Format("{0}/{0}{1}", base.Name, Build_portname(port));
+        }
+
+        private bool Is_root_flowname(string flowname)
+        {
+            return flowname == "*";
         }
 
         private string Build_portname(IPort port)

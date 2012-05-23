@@ -51,7 +51,7 @@
     <Compile Include="patterns\AutoResetJoin.cs" />
     <Compile Include="patterns\AutoResetJoinOf.cs" />
     <Compile Include="patterns\AOperation.cs" />
-    <Compile Include="contract\ISynchronizeBuilder.cs" />
+    <Compile Include="contract\ISynchronizationBuilder.cs" />
     <Compile Include="patterns\flows\AFlow.cs" />
     <Compile Include="patterns\flows\LoadedFlow.cs" />
     <Compile Include="patterns\flows\StringFlow.cs" />

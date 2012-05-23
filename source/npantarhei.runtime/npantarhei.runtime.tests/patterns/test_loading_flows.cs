@@ -18,7 +18,7 @@ namespace npantarhei.runtime.tests.patterns
             var tr = new StringReader("a,b\nb,c\nc,d");
 
             var portnames = FlowLoader.LoadFromReader("x", tr).SelectMany(s => new[] {s.FromPort.Fullname, s.ToPort.Fullname});
-            Assert.That(portnames.ToArray(), Is.EqualTo(new[]{"/x/a", "/x/b", "/x/b", "/x/c", "/x/c", "/x/d"}));
+            Assert.That(portnames.ToArray(), Is.EqualTo(new[]{"x/a", "x/b", "x/b", "x/c", "x/c", "x/d"}));
         }
 
 
@@ -33,7 +33,7 @@ namespace npantarhei.runtime.tests.patterns
                                        ");
 
             var portnames = FlowLoader.LoadFromReader("x", tr).SelectMany(s => new[] { s.FromPort.Fullname, s.ToPort.Fullname });
-            Assert.That(portnames.ToArray(), Is.EqualTo(new[] { "/x/a", "/x/b", "/x/b", "/x/c", "/x/c", "/x/d" }));
+            Assert.That(portnames.ToArray(), Is.EqualTo(new[] { "x/a", "x/b", "x/b", "x/c", "x/c", "x/d" }));
         }
 
         [Test]
@@ -55,7 +55,7 @@ namespace npantarhei.runtime.tests.patterns
                                        ");
 
             var portnames = FlowLoader.LoadFromReader("x", tr).SelectMany(s => new[] { s.FromPort.Fullname, s.ToPort.Fullname });
-            Assert.That(portnames.ToArray(), Is.EqualTo(new[] { "/x/a", "/x/b", "/x/b", "/x/c", "/f/c", "/f/d", "/g/d", "/g/e", "/g/f", "/g/g", "h", "i" }));
+            Assert.That(portnames.ToArray(), Is.EqualTo(new[] { "x/a", "x/b", "x/b", "x/c", "f/c", "f/d", "g/d", "g/e", "g/f", "g/g", "h", "i" }));
         }
 
 
@@ -63,14 +63,14 @@ namespace npantarhei.runtime.tests.patterns
         public void From_file()
         {
             var portnames = FlowLoader.LoadFromFile("x", "flowFile.txt").SelectMany(s => new[] { s.FromPort.Fullname, s.ToPort.Fullname });
-            Assert.That(portnames.ToArray(), Is.EqualTo(new[] { "/x/a", "/x/b", "/f/b", "/f/c" }));
+            Assert.That(portnames.ToArray(), Is.EqualTo(new[] { "x/a", "x/b", "f/b", "f/c" }));
         }
 
         [Test]
         public void From_embedded_resource()
         {
             var portnames = FlowLoader.LoadFromEmbeddedResource("x", this.GetType(), "npantarhei.runtime.tests.flowEmbeddedResource.txt").SelectMany(s => new[] { s.FromPort.Fullname, s.ToPort.Fullname });
-            Assert.That(portnames.ToArray(), Is.EqualTo(new[] { "/x/a", "/x/b", "/g/b", "/g/c" }));
+            Assert.That(portnames.ToArray(), Is.EqualTo(new[] { "x/a", "x/b", "g/b", "g/c" }));
         }
 
         [Test]

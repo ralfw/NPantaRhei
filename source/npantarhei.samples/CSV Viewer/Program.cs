@@ -26,27 +26,22 @@ namespace CSV_Viewer
 
                 var frontend = new Frontend();
 
-                var main = new Main(new StartProgram(
-                                        new CommandlineParser(pageBufferContainer),
-                                        new TextFileAdapter(),
-                                        new LineBuffer(pageBufferContainer)),
-                                    new GetFirstPage(
-                                        new Pager(pageBufferContainer)),
-                                    new GetLastPage(
-                                        new Pager(pageBufferContainer)),
-                                    new TurnPage(
-                                        new Pager(pageBufferContainer)), 
-                                    new Formatter(),
-                                    frontend);
+                var root = new Root(
+                                new Main(new StartProgram(
+                                                    new CommandlineParser(pageBufferContainer),
+                                                    new TextFileAdapter(),
+                                                    new LineBuffer(pageBufferContainer)),
+                                                new GetFirstPage(
+                                                    new Pager(pageBufferContainer)),
+                                                new GetLastPage(
+                                                    new Pager(pageBufferContainer)),
+                                                new TurnPage(
+                                                    new Pager(pageBufferContainer)), 
+                                                new Formatter(),
+                                                frontend)
+                                    );
 
-                fr.AddOperation(main);
-
-                fr.AddStream(".run", "main.run");
-                fr.AddStream("main.exit", ".exit");
-                fr.AddStream(".displayFirstPage", "main.displayFirstPage");
-                fr.AddStream(".displayLastPage", "main.displayLastPage");
-                fr.AddStream(".displayNextPage", "main.displayNextPage");
-                fr.AddStream(".displayPrevPage", "main.displayPrevPage");
+                fr.AddOperation(root);
 
                 frontend.displayFirstPage += fr.CreateEventProcessor(".displayFirstPage");
                 frontend.displayLastPage += fr.CreateEventProcessor(".displayLastPage");

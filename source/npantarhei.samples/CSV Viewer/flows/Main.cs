@@ -67,7 +67,7 @@ namespace CSV_Viewer.flows
             return container
                 .AddFunc<Page,IEnumerable<string>>("format", _formatter.Format)
                 .AddAction<int>("menu", _frontend.Menu)
-                .AddAction<IEnumerable<string>>("output", _frontend.Output)
+                .AddAction<IEnumerable<string>>("output", _frontend.Output, true)
                 .Operations
                 .Concat(new[] {_startProgram, _getFirstPage, _getLastPage, _turnPage});
         }
