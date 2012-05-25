@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace npantarhei.runtime.contract
 {
@@ -19,8 +20,14 @@ namespace npantarhei.runtime.contract
 		void AddStream(IStream stream);
         void AddStream(string fromPortName, string toPortName);
         void AddStreams(IEnumerable<IStream> streams);
+        void AddStreamsFrom(string resourceName, Assembly resourceAssembly);
+        void AddStreamsFrom(IEnumerable<string> lines);
+        void AddStreamsFrom(string text);
+
 		void AddOperation(IOperation operation);
 		void AddOperations(IEnumerable<IOperation> operations);
+
+        void AddFlow(IFlow flow);
 
         Action CreateEventProcessor(string portname);
         Action<T> CreateEventProcessor<T>(string portname);

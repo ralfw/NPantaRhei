@@ -19,13 +19,15 @@ namespace npantarhei.runtime.operations
 		{
 		    var normalizedOpName = message.Port.OperationName.ToLower();
 
-            if (!_operations.ContainsKey(normalizedOpName)) throw new InvalidOperationException(string.Format("No task can be created for unknown operation '{0}'!", normalizedOpName));
-
-            var operation = _operations[normalizedOpName];
-			Result(new Task(message, operation));
+		    IOperation operation;
+            if (_operations.TryGetValue(normalizedOpName, out operation))
+                Result(new Task(message, operation));
+            else
+                UnknownOperation(message);
 		}
 		
 		public event Action<Task> Result;
+	    public event Action<IMessage> UnknownOperation;
 	}
 }
 

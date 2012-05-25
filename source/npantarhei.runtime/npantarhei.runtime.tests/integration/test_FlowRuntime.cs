@@ -146,24 +146,24 @@ namespace npantarhei.runtime.tests.integration
 			Assert.AreEqual("ThrowEx.in", ex.Context.Port.Fullname);
 		}
 
-        [Test]
-        public void Process_exception_in_runtime()
-        {
-            _sut.AddStream(new Stream(".process", "unknown op"));
+		[Test]
+		public void Process_exception_in_runtime()
+		{
+			_sut.AddStream(new Stream(".process", "unknown op"));
 
-            FlowRuntimeException ex = null;
-            _sut.UnhandledException += _ =>
-                                            {
-                                                ex = _;
-                                                _are.Set();
-                                            };
+			FlowRuntimeException ex = null;
+			_sut.UnhandledException += _ =>
+											{
+												ex = _;
+												_are.Set();
+											};
 
-            _sut.Process(new Message(".process", "hello"));
+			_sut.Process(new Message(".process", "hello"));
 
-            Assert.IsTrue(_are.WaitOne(1000));
-            Assert.AreEqual(".process", ex.Context.Port.Fullname);
-            Assert.IsTrue(ex.InnerException.Message.IndexOf("unknown op") > 0);
-        }
+			Assert.IsTrue(_are.WaitOne(1000));
+			Assert.AreEqual(".process", ex.Context.Port.Fullname);
+			Assert.IsTrue(ex.InnerException.Message.IndexOf("unknown op") > 0);
+		}
 
 		[Test, Explicit]
 		// Watch for exception output in test window. It should show an exception reporting a missing exception handler.
@@ -197,26 +197,53 @@ namespace npantarhei.runtime.tests.integration
 		}
 
 
-        [Test]
-        public void Multiple_instances_of_same_op_in_one_flow()
-        {
-            _sut.AddStream(new Stream(".in", "A#1"));
-            _sut.AddStream(new Stream("A#1.out", "B"));
-            _sut.AddStream(new Stream("B", "A#2"));
-            _sut.AddStream(new Stream("A#2.out", ".out"));
+		[Test]
+		public void Multiple_instances_of_same_op_in_one_flow()
+		{
+			_sut.AddStream(new Stream(".in", "A#1"));
+			_sut.AddStream(new Stream("A#1.out", "B"));
+			_sut.AddStream(new Stream("B", "A#2"));
+			_sut.AddStream(new Stream("A#2.out", ".out"));
 
-            _sut.AddOperation(new Operation("A", (input, outputCont, _) => outputCont(new Message("A.out", input.Data.ToString() + "x"))));
-            _sut.AddOperation(new Operation("B", (input, outputCont, _) => outputCont(new Message("B", input.Data.ToString() + "y"))));
+			_sut.AddOperation(new Operation("A", (input, outputCont, _) => outputCont(new Message("A.out", input.Data.ToString() + "x"))));
+			_sut.AddOperation(new Operation("B", (input, outputCont, _) => outputCont(new Message("B", input.Data.ToString() + "y"))));
 
-            var messages = new List<IMessage>();
-            _sut.Message += messages.Add;
+			var messages = new List<IMessage>();
+			_sut.Message += messages.Add;
 
-            _sut.Process(new Message(".in", "hello"));
+			_sut.Process(new Message(".in", "hello"));
 
-            Assert.IsTrue(_are.WaitOne(1000));
-            Assert.That(messages.Select(m => m.Port.Fullname).ToArray(), Is.EquivalentTo(new[] { "A#1", "B", "A#2", ".out" }));
-            Assert.AreEqual("helloxyx", (string)messages.Last().Data);
-        }
+			Assert.IsTrue(_are.WaitOne(1000));
+			Assert.That(messages.Select(m => m.Port.Fullname).ToArray(), Is.EquivalentTo(new[] { "A#1", "B", "A#2", ".out" }));
+			Assert.AreEqual("helloxyx", (string)messages.Last().Data);
+		}
+
+		[Test]
+		public void Nested_flows()
+		{
+			_sut.AddStreamsFrom(@"
+								.in, f.in // flow with explicit ports
+								f.out, .out
+
+								f
+								.in, g // flow without explicit ports
+								g, .out
+
+								g
+								., a // port without a name
+								a, .
+								");
+
+			_sut.AddOperation(new Operation("a", (input, outputCont, _) => outputCont(new Message("a", input.Data.ToString() + "x"))));
+
+		    _sut.Message += Console.WriteLine;
+
+			_sut.Process(new Message(".in", "hello"));
+
+			IMessage result = null;
+			Assert.IsTrue(_sut.WaitForResult(500, _ => result = _));
+			Assert.AreEqual("hellox", (string)result.Data);
+		}
 	}
 }
 

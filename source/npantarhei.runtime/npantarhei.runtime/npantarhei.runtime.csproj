@@ -40,7 +40,6 @@
     <Compile Include="contract\FlowStack.cs" />
     <Compile Include="contract\IFlow.cs" />
     <Compile Include="operations\Handle_exception.cs" />
-    <Compile Include="operations\Register_flow.cs" />
     <Compile Include="operations\Create_activation_task.cs" />
     <Compile Include="data\INotifyingResource.cs" />
     <Compile Include="data\NotifyingMultiQueue.cs" />
@@ -52,17 +51,12 @@
     <Compile Include="patterns\AutoResetJoinOf.cs" />
     <Compile Include="patterns\AOperation.cs" />
     <Compile Include="contract\ISynchronizationBuilder.cs" />
-    <Compile Include="patterns\flows\AFlow.cs" />
-    <Compile Include="patterns\flows\LoadedFlow.cs" />
-    <Compile Include="patterns\flows\StringFlow.cs" />
     <Compile Include="patterns\ManualResetJoinOf.cs" />
     <Compile Include="patterns\ManualResetJoin.cs" />
-    <Compile Include="patterns\flows\EmbeddedResourceFlow.cs" />
-    <Compile Include="patterns\flows\FileFlow.cs" />
-    <Compile Include="patterns\flows\Flow.cs" />
+    <Compile Include="patterns\operations\Clock.cs" />
     <Compile Include="patterns\operations\Gather.cs" />
     <Compile Include="patterns\operations\Scatter.cs" />
-    <Compile Include="patterns\flows\FlowLoader.cs" />
+    <Compile Include="FlowLoader.cs" />
     <Compile Include="patterns\PopCausality.cs" />
     <Compile Include="patterns\PushCausality.cs" />
     <Compile Include="patterns\ScheduledTask.cs" />

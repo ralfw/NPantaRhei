@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using npantarhei.runtime;
+using npantarhei.runtime.patterns.operations;
 
 namespace Alarm_clock
 {
@@ -43,7 +44,7 @@ namespace Alarm_clock
 
                 // Register operations
                 var dlg = new Dialog();
-                var clock = new Clock();
+                var clock = new npantarhei.runtime.patterns.operations.Clock();
                 var player = new Soundplayer();
 
                 fr.AddOperation(dlg);

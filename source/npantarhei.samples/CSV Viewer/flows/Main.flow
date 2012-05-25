@@ -1,0 +1,31 @@
+﻿.run, main.run
+main.exit, .exit
+.displayFirstPage, main.displayFirstPage
+.displayLastPage, main.displayLastPage
+.displayNextPage, main.displayNextPage
+.displayPrevPage, main.displayPrevPage
+
+
+main
+.run, start_program.in
+start_program.out, get_first_page.in
+display, menu
+menu, .exit
+ 
+.displayFirstPage, get_first_page.in
+get_first_page.out, display
+
+.displayLastPage, get_last_page.in
+get_last_page.out, display
+
+.displayNextPage, get_next_page.in
+get_next_page.out, display
+ 
+.displayPrevPage, get_prev_page.in
+get_prev_page.out, display
+
+
+display
+.,  format
+format, output
+output, .

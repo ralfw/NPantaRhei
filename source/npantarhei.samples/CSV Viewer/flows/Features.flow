@@ -1,0 +1,25 @@
+﻿start_program
+.in, parse
+parse, load_lines
+load_lines, buffer_lines
+buffer_lines, .out
+
+
+get_first_page
+.in, goto_first_page
+goto_first_page, .out
+
+
+get_last_page
+.in, goto_last_page
+goto_last_page, .out
+
+
+get_next_page
+.in, goto_next_page
+goto_next_page, .out
+
+
+get_prev_page
+.in, goto_prev_page
+goto_prev_page, .out

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using npantarhei.runtime;
-using npantarhei.runtime.patterns.flows;
 
 namespace Alarm_clock
 {
@@ -31,7 +30,7 @@ namespace Alarm_clock
             using(var fr = new FlowRuntime())
             {
                 // Register streams
-                fr.AddOperation(new EmbeddedResourceFlow("/", typeof (Program2), "Alarm_clock.Flow2.txt"));
+                fr.AddStreamsFrom("Alarm_clock.Flow2.txt", typeof(Program2).Assembly);
 
                 // Register operations
                 var dlg = new Dialog2();

@@ -5,7 +5,6 @@ using System.Text;
 using CSV_Viewer.buffer;
 using CSV_Viewer.data_model;
 using CSV_Viewer.flows;
-using CSV_Viewer.flows.features;
 using CSV_Viewer.formatter;
 using CSV_Viewer.pager;
 using CSV_Viewer.portals;
@@ -26,22 +25,12 @@ namespace CSV_Viewer
 
                 var frontend = new Frontend();
 
-                var root = new Root(
-                                new Main(new StartProgram(
-                                                    new CommandlineParser(pageBufferContainer),
-                                                    new TextFileAdapter(),
-                                                    new LineBuffer(pageBufferContainer)),
-                                                new GetFirstPage(
-                                                    new Pager(pageBufferContainer)),
-                                                new GetLastPage(
-                                                    new Pager(pageBufferContainer)),
-                                                new TurnPage(
-                                                    new Pager(pageBufferContainer)), 
-                                                new Formatter(),
-                                                frontend)
-                                    );
-
-                fr.AddOperation(root);
+                fr.AddFlow(new Main(new Formatter(), 
+                                    frontend));
+                fr.AddFlow(new Features(new CommandlineParser(pageBufferContainer), 
+                                        new TextFileAdapter(), 
+                                        new LineBuffer(pageBufferContainer), 
+                                        new Pager(pageBufferContainer)));
 
                 frontend.displayFirstPage += fr.CreateEventProcessor(".displayFirstPage");
                 frontend.displayLastPage += fr.CreateEventProcessor(".displayLastPage");

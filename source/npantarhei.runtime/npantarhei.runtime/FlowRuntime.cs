@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using npantarhei.runtime.contract;
 using npantarhei.runtime.messagetypes;
 using npantarhei.runtime.operations;
 using npantarhei.runtime.flows;
+using Stream = npantarhei.runtime.messagetypes.Stream;
 
 namespace npantarhei.runtime
 {
@@ -17,7 +20,6 @@ namespace npantarhei.runtime
 			// Build
 			var regStream = new Register_stream();
 			var regOp = new Register_operation();
-		    var regFlow = new Register_flow();
 			var configOp = new Create_activation_task();
 			
 			var flow = new Flow_asynchronously();
@@ -27,10 +29,6 @@ namespace npantarhei.runtime
 			// Bind
 			_addStream += regStream.Process;
 			_addOperation += regOp.Process;
-		    _addOperation += regFlow.Process;
-		    regFlow.RegisterStream += regStream.Process;
-		    regFlow.RegisterOperation += regOp.Process;
-		    regFlow.RegisterOperation += regFlow.Process;
 
 			_addOperation += configOp.Process;
 			configOp.Result += flow.Execute;
@@ -126,10 +124,20 @@ namespace npantarhei.runtime
 		public void AddStream(string fromPortName, string toPortName) { AddStream(new Stream(fromPortName, toPortName));}
 		public void AddStream (IStream stream) { _addStream(stream);}
 		public void AddStreams(IEnumerable<IStream> streams) { streams.ToList().ForEach(this.AddStream); }
+
+        public void AddStreamsFrom(string resourceName, Assembly resourceAssembly) { this.AddStreams(FlowLoader.LoadFromEmbeddedResource(FlowLoader.ROOT_FLOW_NAME, resourceAssembly, resourceName)); }
+        public void AddStreamsFrom(IEnumerable<string> lines) { this.AddStreams(FlowLoader.LoadFromLines(FlowLoader.ROOT_FLOW_NAME, lines)); }
+        public void AddStreamsFrom(string text) { this.AddStreams(FlowLoader.LoadFromReader(FlowLoader.ROOT_FLOW_NAME, new StringReader(text))); }
 	
 		private readonly Action<IOperation> _addOperation;
 		public void AddOperation (IOperation operation) { _addOperation(operation); }
 		public void AddOperations(IEnumerable<IOperation> operations) { operations.ToList().ForEach(this.AddOperation); }
+
+        public void AddFlow(IFlow flow)
+        {
+            this.AddStreams(flow.Streams);
+            this.AddOperations(flow.Operations);
+        }
 
 		public Action CreateEventProcessor(string portname) { return () => this.Process(new Message(portname, null)); }
 		public Action<T> CreateEventProcessor<T>(string portname) { return data => this.Process(new Message(portname, data)); }

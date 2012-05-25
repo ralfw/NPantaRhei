@@ -21,7 +21,7 @@ namespace npantarhei.runtime.contract
 		string Name{get;}
 		
 		bool HasOperation {get;}
-	    bool IsQualified {get;}
+	    bool IsRooted {get;}
 	}
 }
 
