@@ -40,7 +40,7 @@ namespace CSV_Viewer.flows
                                 .AddFunc<Page>("goto_first_page", _pager.LoadFirst)
                                 .AddFunc<Page>("goto_last_page", _pager.LoadLast)
                                 .AddFunc<Page>("goto_next_page", _pager.LoadNext)
-                                .AddFunc<Page>("goto_prev_page", _pager.LoadPrev)
+                                .AddFunc<Page>("get_prev_page", _pager.LoadPrev) // function replacing former flow
                                 .AddFunc<string, IEnumerable<string>>("load_lines", _adapter.Read_all_lines)
                                 .AddFunc<string[], string>("parse", _parser.Parse)
                                 .Operations;

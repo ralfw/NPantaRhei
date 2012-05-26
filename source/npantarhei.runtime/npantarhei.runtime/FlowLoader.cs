@@ -47,8 +47,7 @@ namespace npantarhei.runtime
         {
             var streams = new List<IStream>();
 
-            var listOfPortnames = lines.Select(l => l.Trim())
-                                       .Select(Remove_comment)
+            var listOfPortnames = lines.Select(Remove_comment)
                                        .Where(l => l != "")
                                        .Select(l => l.Split(','));
 
@@ -73,7 +72,7 @@ namespace npantarhei.runtime
         {
             var index = line.IndexOf("//");
             if (index >= 0) line = line.Substring(0, index);
-            return line;
+            return line.Trim();
         }
 
         private static bool Line_defines_flowname(string[] portnames)

@@ -8,21 +8,21 @@ main.exit, .exit
 
 main
 .run, start_program.in
-start_program.out, get_first_page.in
+start_program.out, get_first_page // use a flow to do paging
 display, menu
 menu, .exit
  
-.displayFirstPage, get_first_page.in
-get_first_page.out, display
+.displayFirstPage, get_first_page
+get_first_page, display
 
-.displayLastPage, get_last_page.in
-get_last_page.out, display
+.displayLastPage, get_last_page
+get_last_page, display
 
-.displayNextPage, get_next_page.in
-get_next_page.out, display
+.displayNextPage, get_next_page
+get_next_page, display
  
-.displayPrevPage, get_prev_page.in
-get_prev_page.out, display
+.displayPrevPage, get_prev_page // use an operation to do paging
+get_prev_page, display
 
 
 display

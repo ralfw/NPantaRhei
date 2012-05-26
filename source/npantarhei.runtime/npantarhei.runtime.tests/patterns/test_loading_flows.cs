@@ -45,7 +45,7 @@ namespace npantarhei.runtime.tests.patterns
                                         f
                                         c,   d
 
-                                        g
+                                        g // comment
                                         d,e
                                         f,g
 
