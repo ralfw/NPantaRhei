@@ -13,23 +13,25 @@ namespace npantarhei.runtime.patterns.operations
         private const string DEFAULT_NAME = "Clock";
         private const int DEFAULT_PERIOD = 1000;
 
-        private readonly int _periodMilliseconds;
+        private System.Threading.Timer _timer;
 
         public Clock() : this(DEFAULT_PERIOD) { }
         public Clock(int period) : this(DEFAULT_NAME, period) { }
         public Clock(string name) : this(name, DEFAULT_PERIOD) { }
-        public Clock(string name, int periodMilliseconds) : base(name) { _periodMilliseconds = periodMilliseconds; }
+        public Clock(string name, int periodMilliseconds) : base(name)
+        {
+            _timer = new System.Threading.Timer(_ => Now(DateTime.Now), null, 0, periodMilliseconds);
+        }
 
-        private Action<IMessage> _continueWith;
-        private System.Threading.Timer _timer;
 
         protected override void Process(IMessage input, Action<IMessage> continueWith, Action<FlowRuntimeException> unhandledException)
         {
             if (!(input is ActivationMessage)) return;
 
-            _continueWith = continueWith;
-            _timer = new System.Threading.Timer(_ => _continueWith(new Message(this.Name + ".now", DateTime.Now)),
-                                                null, 0, _periodMilliseconds);
+            Now += _ => continueWith(new Message(this.Name + ".now", _));
         }
+
+
+        public event Action<DateTime> Now = _ => { };
     }
 }
