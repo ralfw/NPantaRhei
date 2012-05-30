@@ -83,6 +83,7 @@ namespace npantarhei.interviz
         {
             Remember_filename(flow.Item1);
             txtSource.Text = flow.Item2;
+            Redraw(new Tuple<string[], int>(txtSource.Lines, 0));
         }
 
         private void Remember_filename(string filename)

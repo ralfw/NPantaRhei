@@ -28,12 +28,13 @@ namespace npantarhei.interviz
             return line_index;
         }
 
-        private static int Find_end_of_flow(string[] source, int line_index)
+        private static int Find_end_of_flow(string[] source, int initial_line_index)
         {
+            var line_index = initial_line_index;
             while(line_index < source.Length)
             {
                 var line = Normalize_line(source[line_index]);
-                if (line != "" && line.IndexOf(",") < 0) break;
+                if (line != "" && line.IndexOf(",") < 0 && line_index > initial_line_index) break;
                 line_index++;
             }
             return line_index - 1;
