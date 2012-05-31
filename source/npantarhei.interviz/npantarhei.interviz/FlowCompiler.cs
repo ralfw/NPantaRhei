@@ -83,16 +83,13 @@ namespace npantarhei.interviz
                 .ForEach(p =>
                              {
                                  var fromPortname = p[0].Trim();
-                                 var toPortname = p[1].Trim();
                                  var fromPortId = Map_portname_to_id(portnames, fromPortname);
+                                 var toPortname = p[1].Trim();
                                  var toPortId = Map_portname_to_id(portnames, toPortname);
 
-                                 var description = "";
-                                 if (fromPortname.IndexOf(".") > 0) description = fromPortname.Substring(fromPortname.IndexOf("."));
-                                 if (toPortname.IndexOf(".") > 0) description = description + " / " + toPortname.Substring(toPortname.IndexOf("."));
-                                 else if (description != "") description += " /";
-
-                                 dotSource.WriteLine("{0}->{1} [label=\"   {2}\", fontsize=8];", fromPortId, toPortId, description);
+                                 dotSource.WriteLine("{0}->{1} [taillabel=\"{2}\", headlabel=\"{3}\", arrowsize=0.5, fontsize=8];",
+                                                     fromPortId, toPortId, 
+                                                     Get_socketname_from_portname(fromPortname), Get_socketname_from_portname(toPortname));
                              });
         }
 
@@ -101,7 +98,7 @@ namespace npantarhei.interviz
             foreach (var portname in portnames)
             {
                 if (portname.Key.StartsWith("."))
-                    dotSource.WriteLine("{0} [shape=circle, fontsize=8, label=\"{1}\"]", portname.Value, portname.Key);
+                    dotSource.WriteLine("{0} [shape=point, fontsize=8, label=\"{1}\"]", portname.Value, portname.Key);
                 else
                     dotSource.WriteLine("{0} [shape=box, fontsize=10, label=\"{1}\"]", portname.Value, portname.Key);
             }
@@ -119,6 +116,11 @@ namespace npantarhei.interviz
                 portnames.Add(portname, portid);
             }
             return portid;
+        }
+
+        private static string Get_socketname_from_portname(string fromPortname)
+        {
+            return fromPortname.IndexOf(".") >= 0 ? fromPortname.Substring(fromPortname.IndexOf(".")) : "";
         }
 
         private static string Normalize_line(string line)
