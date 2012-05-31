@@ -35,11 +35,14 @@ namespace npantarhei.interviz
                                         .AddFunc<string, Image>("compile_dot_source_to_image", GraphVizAdapter.Compile_graph_to_image)
                                         .AddFunc<string[],string>("compile_flow_to_dot_source", FlowCompiler.Compile_to_dot_source)
                                         .AddFunc<string[], string>("extract_filename_from_commandline", _ => _[0])
+                                        .AddFunc<Tuple<string[], int>, Tuple<string[], Tuple<string[], int>>>("extract_flownames", FlowCompiler.Extract_flownames)
                                         .AddAction<Tuple<string,string>>("display_flow", win.Display_flow).MakeSync()
+                                        .AddAction<Tuple<string[], int>>("display_flownames", win.Display_flownames).MakeSync()
                                         .AddAction<Image>("display_graph", win.Display_graph).MakeSync()
                                         .AddFunc<string,Tuple<string,string>>("load_flow_from_file", filename => new Tuple<string, string>(filename, File.ReadAllText(filename)))
                                         .AddAction<Tuple<string,string>>("save_flow", _ => File.WriteAllText(_.Item1, _.Item2))
                                         .AddFunc<Tuple<string[],int>,string[]>("select_current_flow", FlowCompiler.Select_flow_by_line)
+                                        .AddFunc<Tuple<string[], Tuple<string[], int>>, Tuple<string[], int>>("select_flowname", FlowCompiler.Select_flowname)
                                         .AddFunc<object,object>("throttle_redrawings", _ => _)
                                         .Operations);
 

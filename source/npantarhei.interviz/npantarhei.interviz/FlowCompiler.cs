@@ -9,6 +9,38 @@ namespace npantarhei.interviz
 {
     class FlowCompiler
     {
+        public static Tuple<string[], Tuple<string[], int>> Extract_flownames(Tuple<string[], int> source)
+        {
+            var flownames = source.Item1
+                                  .Select(Normalize_line)
+                                  .Where(l => l != "")
+                                  .Select(l => l.Split(','))
+                                  .Where(p => p.Length == 1 && p[0] != "")
+                                  .Select(p => p[0]);
+
+            return new Tuple<string[], Tuple<string[],int>>(flownames.ToArray(), source);
+        } 
+
+
+
+
+        public static Tuple<string[], int> Select_flowname(Tuple<string[], Tuple<string[],int>> flownames_and_source)
+        {
+            var flowname_index = -1;
+
+            var flowname_line_index = Find_start_of_flow(flownames_and_source.Item2.Item1, flownames_and_source.Item2.Item2);
+            if (flowname_line_index >= 0)
+            {
+                var flowname = flownames_and_source.Item2.Item1[flowname_line_index];
+                flowname_index = flownames_and_source.Item1.TakeWhile(_ => _ != flowname).Count();
+            }
+
+            return new Tuple<string[], int>(flownames_and_source.Item1, flowname_index);
+        }
+
+
+
+
         public static string[] Select_flow_by_line(Tuple<string[],int> source)
         {
             var index_of_first_line = Find_start_of_flow(source.Item1, source.Item2);

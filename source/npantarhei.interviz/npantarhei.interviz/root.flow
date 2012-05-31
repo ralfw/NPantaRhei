@@ -1,9 +1,10 @@
-﻿/
+/
 .run, extract_filename_from_commandline
 extract_filename_from_commandline, Load_flow
 
 .redraw, Redraw.source
 Redraw.image, display_graph
+Redraw.flownames, display_flownames
 
 .load, Load_flow
 
@@ -16,6 +17,10 @@ throttle_redrawings, select_current_flow
 select_current_flow, compile_flow_to_dot_source
 compile_flow_to_dot_source, compile_dot_source_to_image
 compile_dot_source_to_image, .image
+
+throttle_redrawings, extract_flownames
+extract_flownames, select_flowname
+select_flowname, .flownames
 
 
 Load_flow

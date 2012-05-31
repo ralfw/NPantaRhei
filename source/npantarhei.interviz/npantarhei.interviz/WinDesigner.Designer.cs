@@ -30,6 +30,7 @@
         {
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
@@ -43,7 +44,7 @@
             this.picGraph = new System.Windows.Forms.PictureBox();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
+            this.cboFlows = new System.Windows.Forms.ComboBox();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -76,36 +77,43 @@
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "&File";
             // 
+            // toolStripMenuItem5
+            // 
+            this.toolStripMenuItem5.Name = "toolStripMenuItem5";
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(147, 22);
+            this.toolStripMenuItem5.Text = "New";
+            this.toolStripMenuItem5.Click += new System.EventHandler(this.menuNew_Click);
+            // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(147, 22);
             this.toolStripMenuItem1.Text = "&Load flow...";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.menuLoad_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(147, 22);
             this.toolStripMenuItem2.Text = "&Save flow...";
             this.toolStripMenuItem2.Click += new System.EventHandler(this.menuSave_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(147, 22);
             this.toolStripMenuItem3.Text = "Save flow as...";
             this.toolStripMenuItem3.Click += new System.EventHandler(this.menuSaveAs_Click);
             // 
             // toolStripMenuItem4
             // 
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(149, 6);
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(144, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -140,6 +148,7 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.cboFlows);
             this.splitContainer1.Panel1.Controls.Add(this.txtSource);
             // 
             // splitContainer1.Panel2
@@ -151,11 +160,13 @@
             // 
             // txtSource
             // 
-            this.txtSource.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtSource.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtSource.Font = new System.Drawing.Font("Courier New", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtSource.Location = new System.Drawing.Point(0, 0);
+            this.txtSource.Location = new System.Drawing.Point(0, 24);
             this.txtSource.Name = "txtSource";
-            this.txtSource.Size = new System.Drawing.Size(401, 405);
+            this.txtSource.Size = new System.Drawing.Size(401, 378);
             this.txtSource.TabIndex = 0;
             this.txtSource.Text = "";
             this.txtSource.WordWrap = false;
@@ -182,12 +193,15 @@
             this.saveFileDialog1.Filter = "Flow *.flow|*.flow|Text *.txt|*.txt";
             this.saveFileDialog1.Title = "Save flow";
             // 
-            // toolStripMenuItem5
+            // cboFlows
             // 
-            this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-            this.toolStripMenuItem5.Size = new System.Drawing.Size(152, 22);
-            this.toolStripMenuItem5.Text = "New";
-            this.toolStripMenuItem5.Click += new System.EventHandler(this.menuNew_Click);
+            this.cboFlows.Dock = System.Windows.Forms.DockStyle.Top;
+            this.cboFlows.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboFlows.FormattingEnabled = true;
+            this.cboFlows.Location = new System.Drawing.Point(0, 0);
+            this.cboFlows.Name = "cboFlows";
+            this.cboFlows.Size = new System.Drawing.Size(401, 21);
+            this.cboFlows.TabIndex = 1;
             // 
             // WinDesigner
             // 
@@ -230,6 +244,7 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem5;
+        private System.Windows.Forms.ComboBox cboFlows;
 
     }
 }

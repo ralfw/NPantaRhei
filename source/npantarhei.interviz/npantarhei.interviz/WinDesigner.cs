@@ -98,6 +98,13 @@ namespace npantarhei.interviz
             picGraph.Image = graph;
         }
 
+        public void Display_flownames(Tuple<string[], int> flownames)
+        {
+            cboFlows.Items.Clear();
+            cboFlows.Items.AddRange(flownames.Item1);
+            cboFlows.SelectedIndex = flownames.Item2;
+        }
+
 
         public event Action<Tuple<string[], int>> Redraw;
         public event Action<string> Load_flow;
