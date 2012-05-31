@@ -55,32 +55,49 @@ namespace npantarhei.interviz
 
         public static string Compile_to_dot_source(string[] source)
         {
-            var portnames = new Dictionary<string, string>();
+            return Create_graph(dotSource =>
+                             {
+                                 var portnames = new Dictionary<string, string>();
+                                 Create_edges(dotSource, source, portnames);
+                                 Create_nodes(dotSource, portnames);
+                             });
 
+        }
+
+        private static string Create_graph(Action<StringWriter> create_nodes_and_edges)
+        {
             var dotSource = new StringWriter();
             dotSource.WriteLine("digraph G {");
+                create_nodes_and_edges(dotSource);
+            dotSource.WriteLine("}");
+            return dotSource.ToString();   
+        }
 
+        private static void Create_edges(StringWriter dotSource, string[] source, Dictionary<string, string> portnames)
+        {
             source.Select(Normalize_line)
-                  .Where(l => l != "")
-                  .Select(l => l.Split(','))
-                  .Where(p => p.Length == 2)
-                  .ToList()
-                  .ForEach(p =>
-                               {
-                                   var fromPortname = p[0].Trim();
-                                   var toPortname = p[1].Trim();
-                                   var fromPortId = Map_portname_to_id(portnames, fromPortname);
-                                   var toPortId = Map_portname_to_id(portnames, toPortname);
+                .Where(l => l != "")
+                .Select(l => l.Split(','))
+                .Where(p => p.Length == 2)
+                .ToList()
+                .ForEach(p =>
+                             {
+                                 var fromPortname = p[0].Trim();
+                                 var toPortname = p[1].Trim();
+                                 var fromPortId = Map_portname_to_id(portnames, fromPortname);
+                                 var toPortId = Map_portname_to_id(portnames, toPortname);
 
-                                   var description = "";
-                                   if (fromPortname.IndexOf(".") > 0) description = fromPortname.Substring(fromPortname.IndexOf("."));
-                                   if (toPortname.IndexOf(".") > 0)
-                                       description = description + " / " + toPortname.Substring(toPortname.IndexOf("."));
-                                   else if (description != "") description += " /";
-                                   
-                                   dotSource.WriteLine("{0}->{1} [label=\"   {2}\", fontsize=8];", fromPortId, toPortId, description);
-                                });
+                                 var description = "";
+                                 if (fromPortname.IndexOf(".") > 0) description = fromPortname.Substring(fromPortname.IndexOf("."));
+                                 if (toPortname.IndexOf(".") > 0) description = description + " / " + toPortname.Substring(toPortname.IndexOf("."));
+                                 else if (description != "") description += " /";
 
+                                 dotSource.WriteLine("{0}->{1} [label=\"   {2}\", fontsize=8];", fromPortId, toPortId, description);
+                             });
+        }
+
+        private static void Create_nodes(StringWriter dotSource, Dictionary<string, string> portnames)
+        {
             foreach (var portname in portnames)
             {
                 if (portname.Key.StartsWith("."))
@@ -88,14 +105,7 @@ namespace npantarhei.interviz
                 else
                     dotSource.WriteLine("{0} [shape=box, fontsize=10, label=\"{1}\"]", portname.Value, portname.Key);
             }
-
-            dotSource.WriteLine("}");
-
-            Console.WriteLine(dotSource.ToString());
-
-            return dotSource.ToString();
         }
-
 
         private static string Map_portname_to_id(Dictionary<string, string> portnames, string portname)
         {
@@ -110,7 +120,6 @@ namespace npantarhei.interviz
             }
             return portid;
         }
-
 
         private static string Normalize_line(string line)
         {
