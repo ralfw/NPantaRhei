@@ -62,6 +62,11 @@ namespace npantarhei.interviz
             this.Close();
         }
 
+        private void cboFlows_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cboFlows.IsAccessible) Jump_to_flow(new Tuple<string[], string>(txtSource.Lines, cboFlows.Text));
+        }
+
         private void refreshGraphToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Request_redraw();
@@ -100,16 +105,41 @@ namespace npantarhei.interviz
 
         public void Display_flownames(Tuple<string[], int> flownames)
         {
+            cboFlows.IsAccessible = false;
             cboFlows.Items.Clear();
             cboFlows.Items.AddRange(flownames.Item1);
             cboFlows.SelectedIndex = flownames.Item2;
+            cboFlows.IsAccessible = true;
+        }
+
+        public void Move_cursor_to_flow_header(int linenumber)
+        {
+            if (linenumber == 0)
+                txtSource.SelectionStart = 0;
+            else
+            {
+                var charCount = 0;
+                var row = 0;
+                foreach (var line in txtSource.Lines)
+                {
+                    charCount += line.Length + 1; row++;
+                    if (row == linenumber) 
+                    { 
+                        Console.WriteLine(line.Length);
+                        txtSource.SelectionStart = charCount;
+                        txtSource.SelectionLength = txtSource.Lines[linenumber].Length; 
+                        break; 
+                    }
+                }
+            }
+            txtSource.ScrollToCaret();
+            txtSource.Focus();
         }
 
 
         public event Action<Tuple<string[], int>> Redraw;
         public event Action<string> Load_flow;
         public event Action<Tuple<string, string>> Save_flow;
-
-
+        public event Action<Tuple<string[], string>> Jump_to_flow;
     }
 }

@@ -6,6 +6,9 @@ extract_filename_from_commandline, Load_flow
 Redraw.image, display_graph
 Redraw.flownames, display_flownames
 
+.jump_to_flow, find_flow_headline
+find_flow_headline, move_cursor_to_flow_header
+
 .load, Load_flow
 
 .save, save_flow

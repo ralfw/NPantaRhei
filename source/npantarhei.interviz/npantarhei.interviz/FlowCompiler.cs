@@ -9,6 +9,19 @@ namespace npantarhei.interviz
 {
     class FlowCompiler
     {
+        public static int Find_flow_headline(Tuple<string[],string> source)
+        {
+            for (var i = 0; i < source.Item1.Length; i++)
+            {
+                var l = Normalize_line(source.Item1[i]);
+                if (l == source.Item2) return i;
+            }
+            return -1;
+        }
+
+
+
+
         public static Tuple<string[], Tuple<string[], int>> Extract_flownames(Tuple<string[], int> source)
         {
             var flownames = source.Item1

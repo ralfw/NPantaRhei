@@ -202,6 +202,7 @@
             this.cboFlows.Name = "cboFlows";
             this.cboFlows.Size = new System.Drawing.Size(401, 21);
             this.cboFlows.TabIndex = 1;
+            this.cboFlows.SelectedIndexChanged += new System.EventHandler(this.cboFlows_SelectedIndexChanged);
             // 
             // WinDesigner
             // 
