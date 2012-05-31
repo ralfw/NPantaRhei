@@ -40,11 +40,11 @@
             this.refreshGraphToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.cboFlows = new System.Windows.Forms.ComboBox();
             this.txtSource = new System.Windows.Forms.RichTextBox();
-            this.picGraph = new System.Windows.Forms.PictureBox();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.cboFlows = new System.Windows.Forms.ComboBox();
+            this.picGraph = new System.Windows.Forms.PictureBox();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -153,10 +153,22 @@
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.AutoScroll = true;
             this.splitContainer1.Panel2.Controls.Add(this.picGraph);
             this.splitContainer1.Size = new System.Drawing.Size(997, 405);
             this.splitContainer1.SplitterDistance = 401;
             this.splitContainer1.TabIndex = 2;
+            // 
+            // cboFlows
+            // 
+            this.cboFlows.Dock = System.Windows.Forms.DockStyle.Top;
+            this.cboFlows.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboFlows.FormattingEnabled = true;
+            this.cboFlows.Location = new System.Drawing.Point(0, 0);
+            this.cboFlows.Name = "cboFlows";
+            this.cboFlows.Size = new System.Drawing.Size(401, 21);
+            this.cboFlows.TabIndex = 1;
+            this.cboFlows.SelectedIndexChanged += new System.EventHandler(this.cboFlows_SelectedIndexChanged);
             // 
             // txtSource
             // 
@@ -172,15 +184,6 @@
             this.txtSource.WordWrap = false;
             this.txtSource.SelectionChanged += new System.EventHandler(this.txtSource_SelectionChanged);
             // 
-            // picGraph
-            // 
-            this.picGraph.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.picGraph.Location = new System.Drawing.Point(0, 0);
-            this.picGraph.Name = "picGraph";
-            this.picGraph.Size = new System.Drawing.Size(592, 405);
-            this.picGraph.TabIndex = 0;
-            this.picGraph.TabStop = false;
-            // 
             // openFileDialog1
             // 
             this.openFileDialog1.DefaultExt = "FLOW";
@@ -193,16 +196,14 @@
             this.saveFileDialog1.Filter = "Flow *.flow|*.flow|Text *.txt|*.txt";
             this.saveFileDialog1.Title = "Save flow";
             // 
-            // cboFlows
+            // picGraph
             // 
-            this.cboFlows.Dock = System.Windows.Forms.DockStyle.Top;
-            this.cboFlows.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboFlows.FormattingEnabled = true;
-            this.cboFlows.Location = new System.Drawing.Point(0, 0);
-            this.cboFlows.Name = "cboFlows";
-            this.cboFlows.Size = new System.Drawing.Size(401, 21);
-            this.cboFlows.TabIndex = 1;
-            this.cboFlows.SelectedIndexChanged += new System.EventHandler(this.cboFlows_SelectedIndexChanged);
+            this.picGraph.Location = new System.Drawing.Point(8, 8);
+            this.picGraph.Name = "picGraph";
+            this.picGraph.Size = new System.Drawing.Size(592, 405);
+            this.picGraph.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.picGraph.TabIndex = 1;
+            this.picGraph.TabStop = false;
             // 
             // WinDesigner
             // 
@@ -219,6 +220,7 @@
             this.menuStrip1.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
+            this.splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.picGraph)).EndInit();
@@ -236,7 +238,6 @@
         private System.Windows.Forms.ToolStripMenuItem refreshGraphToolStripMenuItem;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.PictureBox picGraph;
         private System.Windows.Forms.RichTextBox txtSource;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
@@ -246,6 +247,7 @@
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem5;
         private System.Windows.Forms.ComboBox cboFlows;
+        private System.Windows.Forms.PictureBox picGraph;
 
     }
 }
