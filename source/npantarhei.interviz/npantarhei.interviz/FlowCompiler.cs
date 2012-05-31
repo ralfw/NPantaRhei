@@ -142,11 +142,16 @@ namespace npantarhei.interviz
         {
             foreach (var portname in portnames)
             {
-                if (portname.Key.StartsWith("."))
+                if (Is_flow_port(portname))
                     dotSource.WriteLine("{0} [shape=point, fontsize=8, label=\"{1}\"]", portname.Value, portname.Key);
                 else
                     dotSource.WriteLine("{0} [shape=box, fontsize=10, label=\"{1}\"]", portname.Value, portname.Key);
             }
+        }
+
+        private static bool Is_flow_port(KeyValuePair<string, string> portname)
+        {
+            return portname.Key.StartsWith(".");
         }
 
         private static string Map_portname_to_id(Dictionary<string, string> portnames, string portname)
