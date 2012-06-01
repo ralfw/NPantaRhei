@@ -6,7 +6,7 @@ namespace npantarhei.runtime.messagetypes
 {
 	public class Message : IMessage
 	{
-		public Message(object data) : this("", data) {}
+		public Message(string portname) : this(portname, null) {}
 		public Message(string portname, object data) : this(new Port(portname), data) {}
 		public Message(IPort port, object data)
 		{

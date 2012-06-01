@@ -91,6 +91,8 @@ namespace npantarhei.runtime
 
 		#region IFlowRuntime implementation
 		private readonly Action<IMessage> _process;
+		public void Process(string portname) { Process(portname, null); }
+		public void Process(string portname, object data) { Process(new Message(portname, data)); }
 		public void Process(IMessage message) { _process(message); }
 
 		public event Action<IMessage> Message = _ => { };
@@ -125,19 +127,19 @@ namespace npantarhei.runtime
 		public void AddStream (IStream stream) { _addStream(stream);}
 		public void AddStreams(IEnumerable<IStream> streams) { streams.ToList().ForEach(this.AddStream); }
 
-        public void AddStreamsFrom(string resourceName, Assembly resourceAssembly) { this.AddStreams(FlowLoader.LoadFromEmbeddedResource(FlowLoader.ROOT_FLOW_NAME, resourceAssembly, resourceName)); }
-        public void AddStreamsFrom(IEnumerable<string> lines) { this.AddStreams(FlowLoader.LoadFromLines(FlowLoader.ROOT_FLOW_NAME, lines)); }
-        public void AddStreamsFrom(string text) { this.AddStreams(FlowLoader.LoadFromReader(FlowLoader.ROOT_FLOW_NAME, new StringReader(text))); }
+		public void AddStreamsFrom(string resourceName, Assembly resourceAssembly) { this.AddStreams(FlowLoader.LoadFromEmbeddedResource(FlowLoader.ROOT_FLOW_NAME, resourceAssembly, resourceName)); }
+		public void AddStreamsFrom(IEnumerable<string> lines) { this.AddStreams(FlowLoader.LoadFromLines(FlowLoader.ROOT_FLOW_NAME, lines)); }
+		public void AddStreamsFrom(string text) { this.AddStreams(FlowLoader.LoadFromReader(FlowLoader.ROOT_FLOW_NAME, new StringReader(text))); }
 	
 		private readonly Action<IOperation> _addOperation;
 		public void AddOperation (IOperation operation) { _addOperation(operation); }
 		public void AddOperations(IEnumerable<IOperation> operations) { operations.ToList().ForEach(this.AddOperation); }
 
-        public void AddFlow(IFlow flow)
-        {
-            this.AddStreams(flow.Streams);
-            this.AddOperations(flow.Operations);
-        }
+		public void AddFlow(IFlow flow)
+		{
+			this.AddStreams(flow.Streams);
+			this.AddOperations(flow.Operations);
+		}
 
 		public Action CreateEventProcessor(string portname) { return () => this.Process(new Message(portname, null)); }
 		public Action<T> CreateEventProcessor<T>(string portname) { return data => this.Process(new Message(portname, data)); }
