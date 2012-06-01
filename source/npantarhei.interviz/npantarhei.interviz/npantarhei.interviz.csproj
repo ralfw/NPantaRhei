@@ -80,6 +80,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <EmbeddedResource Include="root.flow" />
+    <None Include="test.flow" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\npantarhei.interviz.graphviz.adapter\npantarhei.interviz.graphviz.adapter.csproj">

@@ -42,9 +42,9 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.cboFlows = new System.Windows.Forms.ComboBox();
             this.txtSource = new System.Windows.Forms.RichTextBox();
+            this.picGraph = new System.Windows.Forms.PictureBox();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.picGraph = new System.Windows.Forms.PictureBox();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -80,40 +80,43 @@
             // toolStripMenuItem5
             // 
             this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-            this.toolStripMenuItem5.Size = new System.Drawing.Size(147, 22);
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(152, 22);
             this.toolStripMenuItem5.Text = "New";
             this.toolStripMenuItem5.Click += new System.EventHandler(this.menuNew_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(147, 22);
+            this.toolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(178, 22);
             this.toolStripMenuItem1.Text = "&Load flow...";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.menuLoad_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(147, 22);
-            this.toolStripMenuItem2.Text = "&Save flow...";
+            this.toolStripMenuItem2.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(178, 22);
+            this.toolStripMenuItem2.Text = "&Save flow";
             this.toolStripMenuItem2.Click += new System.EventHandler(this.menuSave_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(147, 22);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(152, 22);
             this.toolStripMenuItem3.Text = "Save flow as...";
             this.toolStripMenuItem3.Click += new System.EventHandler(this.menuSaveAs_Click);
             // 
             // toolStripMenuItem4
             // 
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(144, 6);
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(149, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -128,7 +131,8 @@
             // refreshGraphToolStripMenuItem
             // 
             this.refreshGraphToolStripMenuItem.Name = "refreshGraphToolStripMenuItem";
-            this.refreshGraphToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.refreshGraphToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
+            this.refreshGraphToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.refreshGraphToolStripMenuItem.Text = "&Refresh graph";
             this.refreshGraphToolStripMenuItem.Click += new System.EventHandler(this.refreshGraphToolStripMenuItem_Click);
             // 
@@ -184,6 +188,15 @@
             this.txtSource.WordWrap = false;
             this.txtSource.SelectionChanged += new System.EventHandler(this.txtSource_SelectionChanged);
             // 
+            // picGraph
+            // 
+            this.picGraph.Location = new System.Drawing.Point(8, 8);
+            this.picGraph.Name = "picGraph";
+            this.picGraph.Size = new System.Drawing.Size(592, 405);
+            this.picGraph.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.picGraph.TabIndex = 1;
+            this.picGraph.TabStop = false;
+            // 
             // openFileDialog1
             // 
             this.openFileDialog1.DefaultExt = "FLOW";
@@ -195,15 +208,6 @@
             this.saveFileDialog1.DefaultExt = "FLOW";
             this.saveFileDialog1.Filter = "Flow *.flow|*.flow|Text *.txt|*.txt";
             this.saveFileDialog1.Title = "Save flow";
-            // 
-            // picGraph
-            // 
-            this.picGraph.Location = new System.Drawing.Point(8, 8);
-            this.picGraph.Name = "picGraph";
-            this.picGraph.Size = new System.Drawing.Size(592, 405);
-            this.picGraph.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.picGraph.TabIndex = 1;
-            this.picGraph.TabStop = false;
             // 
             // WinDesigner
             // 

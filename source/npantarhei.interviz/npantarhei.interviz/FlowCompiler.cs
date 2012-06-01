@@ -39,6 +39,8 @@ namespace npantarhei.interviz
 
         public static Tuple<string[], int> Select_flowname(Tuple<string[], Tuple<string[],int>> flownames_and_source)
         {
+            if (flownames_and_source.Item2.Item1.Length == 0) return new Tuple<string[], int>(flownames_and_source.Item1, -1);
+
             var flowname_index = -1;
 
             var flowname_line_index = Find_start_of_flow(flownames_and_source.Item2.Item1, flownames_and_source.Item2.Item2);
@@ -64,6 +66,8 @@ namespace npantarhei.interviz
 
         private static int Find_start_of_flow(string[] source, int line_index)
         {
+            if (source.Length == 0) return -1;
+
             while(line_index >= 0)
             {
                 var line = Normalize_line(source[line_index]);
