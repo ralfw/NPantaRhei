@@ -25,7 +25,7 @@ namespace CSV_Viewer.flows
 
         public IEnumerable<IStream> Streams
         {
-            get { return FlowLoader.LoadFromEmbeddedResource("/", this.GetType().Assembly, "CSV_Viewer.flows.Main"); }
+            get { return FlowLoader.LoadFromEmbeddedResource("/", this.GetType().Assembly, "CSV_Viewer.flows.Main.flow"); }
         }
 
         public IEnumerable<IOperation> Operations

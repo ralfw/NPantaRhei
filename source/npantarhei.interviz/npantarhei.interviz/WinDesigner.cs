@@ -19,7 +19,7 @@ namespace npantarhei.interviz
         {
             InitializeComponent();
 
-            openFileDialog1.InitialDirectory = Environment.CurrentDirectory;
+            openTextfileDialog.InitialDirectory = Environment.CurrentDirectory;
         }
 
         private void menuNew_Click(object sender, EventArgs e)
@@ -30,12 +30,20 @@ namespace npantarhei.interviz
 
         private void menuLoad_Click(object sender, EventArgs e)
         {
-            openFileDialog1.FileName = Path.GetFileName(_flow_filename);
+            openTextfileDialog.FileName = Path.GetFileName(_flow_filename);
 
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            if (openTextfileDialog.ShowDialog() == DialogResult.OK)
             {
-                openFileDialog1.InitialDirectory = Path.GetDirectoryName(openFileDialog1.FileName);
-                Load_flow(openFileDialog1.FileName);
+                openTextfileDialog.InitialDirectory = Path.GetDirectoryName(openTextfileDialog.FileName);
+                Load_flow_from_textfile(openTextfileDialog.FileName);
+            }
+        }
+
+        private void menuLoadFromAssembly_Click(object sender, EventArgs e)
+        {
+            if (openAssemblyDialog.ShowDialog() == DialogResult.OK)
+            {
+                Load_flow_from_assembly(openAssemblyDialog.FileName);
             }
         }
 
@@ -138,7 +146,8 @@ namespace npantarhei.interviz
 
 
         public event Action<Tuple<string[], int>> Redraw;
-        public event Action<string> Load_flow;
+        public event Action<string> Load_flow_from_textfile;
+        public event Action<string> Load_flow_from_assembly;
         public event Action<Tuple<string, string>> Save_flow;
         public event Action<Tuple<string[], string>> Jump_to_flow;
     }

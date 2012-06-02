@@ -46,7 +46,7 @@ namespace npantarhei.interviz
             var flowname_line_index = Find_start_of_flow(flownames_and_source.Item2.Item1, flownames_and_source.Item2.Item2);
             if (flowname_line_index >= 0)
             {
-                var flowname = flownames_and_source.Item2.Item1[flowname_line_index];
+                var flowname = Normalize_line(flownames_and_source.Item2.Item1[flowname_line_index]);
                 flowname_index = flownames_and_source.Item1.TakeWhile(_ => _ != flowname).Count();
             }
 

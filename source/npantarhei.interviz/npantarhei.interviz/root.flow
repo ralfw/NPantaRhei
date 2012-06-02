@@ -1,6 +1,6 @@
 /
 .run, extract_filename_from_commandline
-extract_filename_from_commandline, Load_flow
+extract_filename_from_commandline, Load_flow.textfile
 
 .redraw, Redraw.source
 Redraw.image, display_graph
@@ -9,7 +9,8 @@ Redraw.flownames, display_flownames
 .jump_to_flow, find_flow_headline
 find_flow_headline, move_cursor_to_flow_header
 
-.load, Load_flow
+.loadFromTextfile, Load_flow.textfile
+.loadFromAssembly, Load_flow.assembly
 
 .save, save_flow
 
@@ -27,5 +28,10 @@ select_flowname, .flownames
 
 
 Load_flow
-., load_flow_from_file
+.textfile, load_flow_from_file
 load_flow_from_file, display_flow
+
+.assembly, find_flow_resources
+find_flow_resources, load_sources_from_resources
+load_sources_from_resources, combine_sources
+combine_sources, display_flow

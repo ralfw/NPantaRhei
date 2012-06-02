@@ -32,6 +32,7 @@ namespace npantarhei.interviz
                 var win = new WinDesigner();
 
                 fr.AddOperations(new FlowOperationContainer()
+                                        .AddFunc<Tuple<string,string>[],Tuple<string,string>>("combine_sources", AssemblyResourceAdapter.Combine_sources)
                                         .AddFunc<string, Image>("compile_dot_source_to_image", GraphVizAdapter.Compile_graph_to_image)
                                         .AddFunc<string[],string>("compile_flow_to_dot_source", FlowCompiler.Compile_to_dot_source)
                                         .AddAction<Tuple<string,string>>("display_flow", win.Display_flow).MakeSync()
@@ -40,7 +41,9 @@ namespace npantarhei.interviz
                                         .AddFunc<string[], string>("extract_filename_from_commandline", _ => _[0])
                                         .AddFunc<Tuple<string[], int>, Tuple<string[], Tuple<string[], int>>>("extract_flownames", FlowCompiler.Extract_flownames)
                                         .AddFunc<Tuple<string[],string>,int>("find_flow_headline", FlowCompiler.Find_flow_headline)
+                                        .AddFunc<string,Tuple<Assembly, string[]>>("find_flow_resources", AssemblyResourceAdapter.Find_flow_resources)
                                         .AddFunc<string,Tuple<string,string>>("load_flow_from_file", filename => new Tuple<string, string>(filename, File.ReadAllText(filename)))
+                                        .AddFunc<Tuple<Assembly,string[]>,Tuple<string,string>[]>("load_sources_from_resources", AssemblyResourceAdapter.Load_soures_from_resources)
                                         .AddAction<int>("move_cursor_to_flow_header", win.Move_cursor_to_flow_header).MakeSync()
                                         .AddAction<Tuple<string,string>>("save_flow", _ => File.WriteAllText(_.Item1, _.Item2))
                                         .AddFunc<Tuple<string[],int>,string[]>("select_current_flow", FlowCompiler.Select_flow_by_line)
@@ -49,7 +52,8 @@ namespace npantarhei.interviz
                                         .Operations);
 
                 win.Redraw += fr.CreateEventProcessor<Tuple<string[], int>>(".redraw");
-                win.Load_flow += fr.CreateEventProcessor<string>(".load");
+                win.Load_flow_from_textfile += fr.CreateEventProcessor<string>(".loadFromTextfile");
+                win.Load_flow_from_assembly += fr.CreateEventProcessor<string>(".loadFromAssembly");
                 win.Save_flow += fr.CreateEventProcessor<Tuple<string, string>>(".save");
                 win.Jump_to_flow += fr.CreateEventProcessor<Tuple<string[], string>>(".jump_to_flow");
 

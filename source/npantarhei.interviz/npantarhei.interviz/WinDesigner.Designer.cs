@@ -32,6 +32,7 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
@@ -43,8 +44,9 @@
             this.cboFlows = new System.Windows.Forms.ComboBox();
             this.txtSource = new System.Windows.Forms.RichTextBox();
             this.picGraph = new System.Windows.Forms.PictureBox();
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.openTextfileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.openAssemblyDialog = new System.Windows.Forms.OpenFileDialog();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -69,6 +71,7 @@
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem5,
             this.toolStripMenuItem1,
+            this.toolStripMenuItem6,
             this.toolStripMenuItem2,
             this.toolStripMenuItem3,
             this.toolStripMenuItem4,
@@ -80,7 +83,7 @@
             // toolStripMenuItem5
             // 
             this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-            this.toolStripMenuItem5.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(245, 22);
             this.toolStripMenuItem5.Text = "New";
             this.toolStripMenuItem5.Click += new System.EventHandler(this.menuNew_Click);
             // 
@@ -88,35 +91,42 @@
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(178, 22);
-            this.toolStripMenuItem1.Text = "&Load flow...";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(245, 22);
+            this.toolStripMenuItem1.Text = "&Load flow from textfile...";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.menuLoad_Click);
+            // 
+            // toolStripMenuItem6
+            // 
+            this.toolStripMenuItem6.Name = "toolStripMenuItem6";
+            this.toolStripMenuItem6.Size = new System.Drawing.Size(245, 22);
+            this.toolStripMenuItem6.Text = "Load flows from assembly...";
+            this.toolStripMenuItem6.Click += new System.EventHandler(this.menuLoadFromAssembly_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
             this.toolStripMenuItem2.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(178, 22);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(245, 22);
             this.toolStripMenuItem2.Text = "&Save flow";
             this.toolStripMenuItem2.Click += new System.EventHandler(this.menuSave_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(245, 22);
             this.toolStripMenuItem3.Text = "Save flow as...";
             this.toolStripMenuItem3.Click += new System.EventHandler(this.menuSaveAs_Click);
             // 
             // toolStripMenuItem4
             // 
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(149, 6);
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(242, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(245, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -197,17 +207,25 @@
             this.picGraph.TabIndex = 1;
             this.picGraph.TabStop = false;
             // 
-            // openFileDialog1
+            // openTextfileDialog
             // 
-            this.openFileDialog1.DefaultExt = "FLOW";
-            this.openFileDialog1.Filter = "Flow *.flow|*.flow|Text *.txt|*.txt";
-            this.openFileDialog1.Title = "Load flow";
+            this.openTextfileDialog.DefaultExt = "FLOW";
+            this.openTextfileDialog.Filter = "Flow *.flow|*.flow|Text *.txt|*.txt";
+            this.openTextfileDialog.RestoreDirectory = true;
+            this.openTextfileDialog.Title = "Load flow from textfile";
             // 
             // saveFileDialog1
             // 
             this.saveFileDialog1.DefaultExt = "FLOW";
             this.saveFileDialog1.Filter = "Flow *.flow|*.flow|Text *.txt|*.txt";
             this.saveFileDialog1.Title = "Save flow";
+            // 
+            // openAssemblyDialog
+            // 
+            this.openAssemblyDialog.DefaultExt = "DLL";
+            this.openAssemblyDialog.Filter = "Assembly *.dll|*.dll|Executable *.exe|*.exe";
+            this.openAssemblyDialog.RestoreDirectory = true;
+            this.openAssemblyDialog.Title = "Load flows from assembly";
             // 
             // WinDesigner
             // 
@@ -247,11 +265,13 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
-        private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.OpenFileDialog openTextfileDialog;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem5;
         private System.Windows.Forms.ComboBox cboFlows;
         private System.Windows.Forms.PictureBox picGraph;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem6;
+        private System.Windows.Forms.OpenFileDialog openAssemblyDialog;
 
     }
 }

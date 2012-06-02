@@ -65,12 +65,8 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="flows\Features.flow">
-      <DependentUpon>Features.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="flows\Main.flow">
-      <DependentUpon>Main.cs</DependentUpon>
-    </EmbeddedResource>
+    <EmbeddedResource Include="flows\Features.flow" />
+    <EmbeddedResource Include="flows\Main.flow" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

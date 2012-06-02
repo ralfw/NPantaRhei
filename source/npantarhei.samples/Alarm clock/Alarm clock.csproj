@@ -96,7 +96,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Flow2.txt" />
+    <None Include="Flow2.flow" />
     <Content Include="tada.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
