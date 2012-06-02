@@ -3,7 +3,7 @@
 extract_filename_from_commandline, Load_flow.textfile
 
 .redraw, Redraw.source
-Redraw.image, display_graph
+Redraw.graph, display_graph
 Redraw.flownames, display_flownames
 
 .jump_to_flow, find_flow_headline
@@ -19,8 +19,8 @@ Redraw
 .source, throttle_redrawings
 throttle_redrawings, select_current_flow
 select_current_flow, compile_flow_to_dot_source
-compile_flow_to_dot_source, compile_dot_source_to_image
-compile_dot_source_to_image, .image
+compile_flow_to_dot_source, compile_dot_source
+compile_dot_source, .graph
 
 throttle_redrawings, extract_flownames
 extract_flownames, select_flowname

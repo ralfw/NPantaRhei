@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using npantarhei.interviz.graphviz.adapter;
 
 namespace npantarhei.interviz
 {
@@ -106,9 +107,9 @@ namespace npantarhei.interviz
         }
 
 
-        public void Display_graph(Image graph)
+        public void Display_graph(Tuple<Image,NodeMap> graph)
         {
-            picGraph.Image = graph;
+            picGraph.Image = graph.Item1;
         }
 
         public void Display_flownames(Tuple<string[], int> flownames)

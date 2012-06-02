@@ -33,11 +33,11 @@ namespace npantarhei.interviz
 
                 fr.AddOperations(new FlowOperationContainer()
                                         .AddFunc<Tuple<string,string>[],Tuple<string,string>>("combine_sources", AssemblyResourceAdapter.Combine_sources)
-                                        .AddFunc<string, Image>("compile_dot_source_to_image", GraphVizAdapter.Compile_graph_to_image)
+                                        .AddFunc<string, Tuple<Image, NodeMap>>("compile_dot_source", GraphVizAdapter.Compile_graph)
                                         .AddFunc<string[],string>("compile_flow_to_dot_source", FlowCompiler.Compile_to_dot_source)
                                         .AddAction<Tuple<string,string>>("display_flow", win.Display_flow).MakeSync()
                                         .AddAction<Tuple<string[], int>>("display_flownames", win.Display_flownames).MakeSync()
-                                        .AddAction<Image>("display_graph", win.Display_graph).MakeSync()
+                                        .AddAction<Tuple<Image, NodeMap>>("display_graph", win.Display_graph).MakeSync()
                                         .AddFunc<string[], string>("extract_filename_from_commandline", _ => _[0])
                                         .AddFunc<Tuple<string[], int>, Tuple<string[], Tuple<string[], int>>>("extract_flownames", FlowCompiler.Extract_flownames)
                                         .AddFunc<Tuple<string[],string>,int>("find_flow_headline", FlowCompiler.Find_flow_headline)
