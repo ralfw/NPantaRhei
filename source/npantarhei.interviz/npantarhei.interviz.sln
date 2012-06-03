@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		backlog.txt = backlog.txt
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "npantarhei.interviz.tests", "npantarhei.interviz.tests\npantarhei.interviz.tests.csproj", "{4F7D2CC1-49D5-4A06-9FDC-2786268D264E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,16 @@ Global
 		{9FB4046B-0691-4F0C-A4FC-735CC29E1EAF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{9FB4046B-0691-4F0C-A4FC-735CC29E1EAF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{9FB4046B-0691-4F0C-A4FC-735CC29E1EAF}.Release|x86.ActiveCfg = Release|Any CPU
+		{4F7D2CC1-49D5-4A06-9FDC-2786268D264E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F7D2CC1-49D5-4A06-9FDC-2786268D264E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F7D2CC1-49D5-4A06-9FDC-2786268D264E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{4F7D2CC1-49D5-4A06-9FDC-2786268D264E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{4F7D2CC1-49D5-4A06-9FDC-2786268D264E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4F7D2CC1-49D5-4A06-9FDC-2786268D264E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F7D2CC1-49D5-4A06-9FDC-2786268D264E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F7D2CC1-49D5-4A06-9FDC-2786268D264E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4F7D2CC1-49D5-4A06-9FDC-2786268D264E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{4F7D2CC1-49D5-4A06-9FDC-2786268D264E}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

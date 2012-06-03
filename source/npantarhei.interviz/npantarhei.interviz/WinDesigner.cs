@@ -36,12 +36,10 @@ namespace npantarhei.interviz
         private void menuLoad_Click(object sender, EventArgs e)
         {
             openTextfileDialog.FileName = Path.GetFileName(_flow_filename);
+            if (openTextfileDialog.ShowDialog() != DialogResult.OK) return;
 
-            if (openTextfileDialog.ShowDialog() == DialogResult.OK)
-            {
-                openTextfileDialog.InitialDirectory = Path.GetDirectoryName(openTextfileDialog.FileName);
-                Load_flow_from_textfile(openTextfileDialog.FileName);
-            }
+            openTextfileDialog.InitialDirectory = Path.GetDirectoryName(openTextfileDialog.FileName);
+            Load_flow_from_textfile(openTextfileDialog.FileName);
         }
 
         private void menuLoadFromAssembly_Click(object sender, EventArgs e)
@@ -63,16 +61,25 @@ namespace npantarhei.interviz
         private void menuSaveAs_Click(object sender, EventArgs e)
         {
             saveFileDialog1.FileName = Path.GetFileName(_flow_filename);
-            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                Remember_filename(saveFileDialog1.FileName);
-                Save_flow(new Tuple<string, string>(saveFileDialog1.FileName, txtSource.Text));
-            }
+            if (saveFileDialog1.ShowDialog() != DialogResult.OK) return;
+
+            Remember_filename(saveFileDialog1.FileName);
+            Save_flow(new Tuple<string, string>(saveFileDialog1.FileName, txtSource.Text));
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void btnNavigateBack_Click(object sender, EventArgs e)
+        {
+            Navigate_backward(txtSource.Lines);
+        }
+
+        private void btnNavigateForward_Click(object sender, EventArgs e)
+        {
+            Navigate_forward(txtSource.Lines);
         }
 
         private void cboFlows_SelectedIndexChanged(object sender, EventArgs e)
@@ -97,22 +104,20 @@ namespace npantarhei.interviz
         }
 
 
+        private void picGraph_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (_nodeMap == null) return;
+
+            var mr = new Rectangle(e.X, e.Y, 1, 1);
+            _currentNode = _nodeMap.NodeAreas.FirstOrDefault(a => !a.Name.StartsWith(".") && 
+                                                                  _flownames.Contains(a.Name) &&
+                                                                  a.Rectangle.IntersectsWith(mr));
+            this.Cursor = _currentNode == null ? Cursors.Arrow : Cursors.Hand;
+        }
+
         private void picGraph_MouseClick(object sender, MouseEventArgs e)
         {
             if (_currentNode != null) Jump_to_flow(new Tuple<string[], string>(txtSource.Lines, _currentNode.Name));
-        }
-
-
-        private void picGraph_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (_nodeMap != null)
-            {
-                var mr = new Rectangle(e.X, e.Y, 1, 1);
-                _currentNode = _nodeMap.NodeAreas.FirstOrDefault(a => !a.Name.StartsWith(".") && 
-                                                                      _flownames.Contains(a.Name) &&
-                                                                      a.Rectangle.IntersectsWith(mr));
-                this.Cursor = _currentNode == null ? Cursors.Arrow : Cursors.Hand;
-            }
         }
 
 
@@ -166,7 +171,6 @@ namespace npantarhei.interviz
                     charCount += line.Length + 1; row++;
                     if (row == linenumber) 
                     { 
-                        Console.WriteLine(line.Length);
                         txtSource.SelectionStart = charCount;
                         txtSource.SelectionLength = txtSource.Lines[linenumber].Length; 
                         break; 
@@ -183,5 +187,7 @@ namespace npantarhei.interviz
         public event Action<string> Load_flow_from_assembly;
         public event Action<Tuple<string, string>> Save_flow;
         public event Action<Tuple<string[], string>> Jump_to_flow;
+        public event Action<string[]> Navigate_backward;
+        public event Action<string[]> Navigate_forward;
     }
 }

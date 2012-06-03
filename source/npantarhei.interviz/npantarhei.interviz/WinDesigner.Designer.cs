@@ -41,6 +41,8 @@
             this.refreshGraphToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.btnNavigateForward = new System.Windows.Forms.Button();
+            this.btnNavigateBack = new System.Windows.Forms.Button();
             this.cboFlows = new System.Windows.Forms.ComboBox();
             this.txtSource = new System.Windows.Forms.RichTextBox();
             this.picGraph = new System.Windows.Forms.PictureBox();
@@ -125,7 +127,6 @@
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(245, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
@@ -162,6 +163,8 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.btnNavigateForward);
+            this.splitContainer1.Panel1.Controls.Add(this.btnNavigateBack);
             this.splitContainer1.Panel1.Controls.Add(this.cboFlows);
             this.splitContainer1.Panel1.Controls.Add(this.txtSource);
             // 
@@ -173,14 +176,35 @@
             this.splitContainer1.SplitterDistance = 401;
             this.splitContainer1.TabIndex = 2;
             // 
+            // btnNavigateForward
+            // 
+            this.btnNavigateForward.Location = new System.Drawing.Point(43, 1);
+            this.btnNavigateForward.Name = "btnNavigateForward";
+            this.btnNavigateForward.Size = new System.Drawing.Size(42, 23);
+            this.btnNavigateForward.TabIndex = 3;
+            this.btnNavigateForward.Text = ">";
+            this.btnNavigateForward.UseVisualStyleBackColor = true;
+            this.btnNavigateForward.Click += new System.EventHandler(this.btnNavigateForward_Click);
+            // 
+            // btnNavigateBack
+            // 
+            this.btnNavigateBack.Location = new System.Drawing.Point(1, 1);
+            this.btnNavigateBack.Name = "btnNavigateBack";
+            this.btnNavigateBack.Size = new System.Drawing.Size(43, 23);
+            this.btnNavigateBack.TabIndex = 2;
+            this.btnNavigateBack.Text = "<";
+            this.btnNavigateBack.UseVisualStyleBackColor = true;
+            this.btnNavigateBack.Click += new System.EventHandler(this.btnNavigateBack_Click);
+            // 
             // cboFlows
             // 
-            this.cboFlows.Dock = System.Windows.Forms.DockStyle.Top;
+            this.cboFlows.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.cboFlows.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboFlows.FormattingEnabled = true;
-            this.cboFlows.Location = new System.Drawing.Point(0, 0);
+            this.cboFlows.Location = new System.Drawing.Point(85, 2);
             this.cboFlows.Name = "cboFlows";
-            this.cboFlows.Size = new System.Drawing.Size(401, 21);
+            this.cboFlows.Size = new System.Drawing.Size(314, 21);
             this.cboFlows.TabIndex = 1;
             this.cboFlows.SelectedIndexChanged += new System.EventHandler(this.cboFlows_SelectedIndexChanged);
             // 
@@ -274,6 +298,8 @@
         private System.Windows.Forms.PictureBox picGraph;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem6;
         private System.Windows.Forms.OpenFileDialog openAssemblyDialog;
+        private System.Windows.Forms.Button btnNavigateForward;
+        private System.Windows.Forms.Button btnNavigateBack;
 
     }
 }

@@ -6,13 +6,24 @@ extract_filename_from_commandline, Load_flow.textfile
 Redraw.graph, display_graph
 Redraw.flownames, display_flownames
 
-.jump_to_flow, find_flow_headline
-find_flow_headline, move_cursor_to_flow_header
+.jump_to_flow, Move_to_flow
+.jump_to_flow, extend_history
+
+.navigate_backward, navigate_backward_in_flow
+navigate_backward_in_flow, Move_to_flow
+
+.navigate_forward, navigate_forward_in_flow
+navigate_forward_in_flow, Move_to_flow
 
 .loadFromTextfile, Load_flow.textfile
 .loadFromAssembly, Load_flow.assembly
 
 .save, save_flow
+
+
+Move_to_flow
+., find_flow_headline
+find_flow_headline, move_cursor_to_flow_header
 
 
 Redraw

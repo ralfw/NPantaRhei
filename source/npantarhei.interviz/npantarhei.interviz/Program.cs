@@ -30,6 +30,7 @@ namespace npantarhei.interviz
                 fr.AddStreamsFrom("npantarhei.interviz.root.flow", Assembly.GetExecutingAssembly());
 
                 var win = new WinDesigner();
+                var nav = new Navigator();
 
                 fr.AddOperations(new FlowOperationContainer()
                                         .AddFunc<Tuple<string,string>[],Tuple<string,string>>("combine_sources", AssemblyResourceAdapter.Combine_sources)
@@ -40,11 +41,14 @@ namespace npantarhei.interviz
                                         .AddAction<Tuple<Image, NodeMap>>("display_graph", win.Display_graph).MakeSync()
                                         .AddFunc<string[], string>("extract_filename_from_commandline", _ => _[0])
                                         .AddFunc<Tuple<string[], int>, Tuple<string[], Tuple<string[], int>>>("extract_flownames", FlowCompiler.Extract_flownames)
+                                        .AddAction<Tuple<string[],string>>("extend_history", nav.Extend_history)
                                         .AddFunc<Tuple<string[],string>,int>("find_flow_headline", FlowCompiler.Find_flow_headline)
                                         .AddFunc<string,Tuple<Assembly, string[]>>("find_flow_resources", AssemblyResourceAdapter.Find_flow_resources)
                                         .AddFunc<string,Tuple<string,string>>("load_flow_from_file", filename => new Tuple<string, string>(filename, File.ReadAllText(filename)))
                                         .AddFunc<Tuple<Assembly,string[]>,Tuple<string,string>[]>("load_sources_from_resources", AssemblyResourceAdapter.Load_soures_from_resources)
                                         .AddAction<int>("move_cursor_to_flow_header", win.Move_cursor_to_flow_header).MakeSync()
+                                        .AddAction<string[], Tuple<string[],string>>("navigate_backward_in_flow", nav.Navigate_backward)
+                                        .AddAction<string[], Tuple<string[],string>>("navigate_forward_in_flow", nav.Navigate_forward)
                                         .AddAction<Tuple<string,string>>("save_flow", _ => File.WriteAllText(_.Item1, _.Item2))
                                         .AddFunc<Tuple<string[],int>,string[]>("select_current_flow", FlowCompiler.Select_flow_by_line)
                                         .AddFunc<Tuple<string[], Tuple<string[], int>>, Tuple<string[], int>>("select_flowname", FlowCompiler.Select_flowname)
@@ -56,6 +60,8 @@ namespace npantarhei.interviz
                 win.Load_flow_from_assembly += fr.CreateEventProcessor<string>(".loadFromAssembly");
                 win.Save_flow += fr.CreateEventProcessor<Tuple<string, string>>(".save");
                 win.Jump_to_flow += fr.CreateEventProcessor<Tuple<string[], string>>(".jump_to_flow");
+                win.Navigate_backward += fr.CreateEventProcessor<string[]>(".navigate_backward");
+                win.Navigate_forward += fr.CreateEventProcessor<string[]>(".navigate_forward");
 
                 fr.Process(new npantarhei.runtime.messagetypes.Message(".run", args));
 

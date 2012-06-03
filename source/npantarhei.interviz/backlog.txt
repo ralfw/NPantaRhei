@@ -1,15 +1,3 @@
-::Add backward/forward navigation thru jumps to flows via the combo box
--provide a list of nodes navigated to; maybe via a menu item?
-
-
-::Provide navigation to flows by clicking on flow nodes in graph
--see GraphViz "plain" output format for information on node positions
--integrate graphical navigation with backward/forward navigation
-
-
-::Load flow from assembly resources
-
-
 ::Display comments in graph. But only comments in the same line as a flow name or stream, e.g.
 
 // dont display this comment
