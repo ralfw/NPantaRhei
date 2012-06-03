@@ -206,6 +206,8 @@
             this.picGraph.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.picGraph.TabIndex = 1;
             this.picGraph.TabStop = false;
+            this.picGraph.MouseClick += new System.Windows.Forms.MouseEventHandler(this.picGraph_MouseClick);
+            this.picGraph.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picGraph_MouseMove);
             // 
             // openTextfileDialog
             // 

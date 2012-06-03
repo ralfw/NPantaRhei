@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,9 @@ namespace npantarhei.interviz
     public partial class WinDesigner : Form
     {
         private string _flow_filename;
+        private IEnumerable<string> _flownames = new string[0];
+        private NodeMap _nodeMap;
+        private NodeMap.NodeArea _currentNode;
 
 
         public WinDesigner()
@@ -93,6 +97,25 @@ namespace npantarhei.interviz
         }
 
 
+        private void picGraph_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (_currentNode != null) Jump_to_flow(new Tuple<string[], string>(txtSource.Lines, _currentNode.Name));
+        }
+
+
+        private void picGraph_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (_nodeMap != null)
+            {
+                var mr = new Rectangle(e.X, e.Y, 1, 1);
+                _currentNode = _nodeMap.NodeAreas.FirstOrDefault(a => !a.Name.StartsWith(".") && 
+                                                                      _flownames.Contains(a.Name) &&
+                                                                      a.Rectangle.IntersectsWith(mr));
+                this.Cursor = _currentNode == null ? Cursors.Arrow : Cursors.Hand;
+            }
+        }
+
+
         public void Display_flow(Tuple<string, string> flow)
         {
             Remember_filename(flow.Item1);
@@ -110,10 +133,19 @@ namespace npantarhei.interviz
         public void Display_graph(Tuple<Image,NodeMap> graph)
         {
             picGraph.Image = graph.Item1;
+            _nodeMap = graph.Item2;
+
+            //using (var g = Graphics.FromImage(picGraph.Image))
+            //{
+            //    foreach (var a in graph.Item2.NodeAreas)
+            //        g.DrawRectangle(Pens.Red, a.Rectangle);
+            //}
         }
 
         public void Display_flownames(Tuple<string[], int> flownames)
         {
+            _flownames = flownames.Item1;
+
             cboFlows.IsAccessible = false;
             cboFlows.Items.Clear();
             cboFlows.Items.AddRange(flownames.Item1);
