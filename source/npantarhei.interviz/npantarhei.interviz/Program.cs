@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using npantarhei.interviz.graphviz.adapter;
 using npantarhei.runtime;
 using npantarhei.runtime.messagetypes;
+using todo.logik.patterns;
 
 namespace npantarhei.interviz
 {
@@ -52,7 +53,7 @@ namespace npantarhei.interviz
                                         .AddAction<Tuple<string,string>>("save_flow", _ => File.WriteAllText(_.Item1, _.Item2))
                                         .AddFunc<Tuple<string[],int>,string[]>("select_current_flow", FlowCompiler.Select_flow_by_line)
                                         .AddFunc<Tuple<string[], Tuple<string[], int>>, Tuple<string[], int>>("select_flowname", FlowCompiler.Select_flowname)
-                                        .AddFunc<object,object>("throttle_redrawings", _ => _)
+                                        .Add(new Throttle("throttle_redrawings"))
                                         .Operations);
 
                 win.Redraw += fr.CreateEventProcessor<Tuple<string[], int>>(".redraw");

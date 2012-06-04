@@ -53,6 +53,7 @@
     <Compile Include="FlowCompiler.cs" />
     <Compile Include="data\NavigationHistory.cs" />
     <Compile Include="Navigator.cs" />
+    <Compile Include="patterns\Throttle.cs" />
     <Compile Include="WinDesigner.cs">
       <SubType>Form</SubType>
     </Compile>
