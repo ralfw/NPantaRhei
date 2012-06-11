@@ -29,24 +29,25 @@ namespace Alarm_clock
              */
             using(var fr = new FlowRuntime())
             {
+                var frc = new FlowRuntimeConfiguration();
+
                 // Register streams
-                fr.AddStreamsFrom("Alarm_clock.Flow2.txt", typeof(Program2).Assembly);
+                frc.AddStreamsFrom("Alarm_clock.Flow2.flow", typeof(Program2).Assembly);
 
                 // Register operations
                 var dlg = new Dialog2();
                 var clock = new Clock2();
                 var player = new Soundplayer();
 
-                fr.AddOperations(new FlowOperationContainer()
-                                     .AddAction("Alarm switched off", dlg.Alarm_switched_off).MakeSync()
-                                     .AddAction("Alarm switched on", dlg.Alarm_switched_on).MakeSync()
-                                     .AddAction<TimeSpan>("Alarm time reached", Alarm_time_reached)
-                                     .AddFunc<Tuple<DateTime,DateTime>,TimeSpan>("Calc time diff", Calc_time_diff)
-                                     .AddAction<TimeSpan>("Display time diff", dlg.Display_time_diff).MakeSync()
-                                     .AddManualResetJoin<DateTime, DateTime>("Join")
-                                     .AddAction("Sound alarm", player.Start_playing)
-                                     .AddAction("Stop alarm", player.Stop_playing)
-                                     .Operations);
+                frc.AddAction("Alarm switched off", dlg.Alarm_switched_off).MakeSync()
+                   .AddAction("Alarm switched on", dlg.Alarm_switched_on).MakeSync()
+                   .AddAction<TimeSpan>("Alarm time reached", Alarm_time_reached)
+                   .AddFunc<Tuple<DateTime, DateTime>, TimeSpan>("Calc time diff", Calc_time_diff)
+                   .AddAction<TimeSpan>("Display time diff", dlg.Display_time_diff).MakeSync()
+                   .AddManualResetJoin<DateTime, DateTime>("Join")
+                   .AddAction("Sound alarm", player.Start_playing)
+                   .AddAction("Stop alarm", player.Stop_playing);
+                fr.Configure(frc);
 
                 // Wire-up event sources
                 dlg.SetAlarm += fr.CreateEventProcessor<DateTime>(".setAlarm");

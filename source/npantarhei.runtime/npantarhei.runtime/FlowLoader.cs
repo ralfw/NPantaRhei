@@ -8,7 +8,7 @@ using npantarhei.runtime.messagetypes;
 
 namespace npantarhei.runtime
 {
-    internal class FlowLoader
+    public class FlowLoader
     {
         public const string ROOT_FLOW_NAME = "/";
 

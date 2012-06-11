@@ -19,21 +19,16 @@ namespace ToDictionary
 				/*
 				 * (.in) -> (Split) -> (Map) -> (Build) -> (.out)
 				 */
-				fr.AddStream(new Stream(".in", "Split"));
-				fr.AddStream(new Stream("Split", "Map"));
-				fr.AddStream(new Stream("Map", "Build"));
-				fr.AddStream(new Stream("Build", ".out"));
+				var frc = new FlowRuntimeConfiguration();
+				frc.AddStream(new Stream(".in", "Split"));
+				frc.AddStream(new Stream("Split", "Map"));
+				frc.AddStream(new Stream("Map", "Build"));
+				frc.AddStream(new Stream("Build", ".out"));
 
-				var foc = new FlowOperationContainer();
-				foc.AddFunc<string, IEnumerable<string>>("Split",
-																  configuration =>
-																  configuration.Split(new[] {';'},
-																					  StringSplitOptions.
-																						  RemoveEmptyEntries));
-				foc.AddAction<IEnumerable<string>, IEnumerable<KeyValuePair<string, string>>>("Map", Map);
-				foc.AddFunc<IEnumerable<KeyValuePair<string, string>>, Dictionary<string, string>>("Build",
-																											Build);
-				fr.AddOperations(foc.Operations);
+				frc.AddFunc<string, IEnumerable<string>>("Split", configuration => configuration.Split(new[] {';'}, StringSplitOptions.RemoveEmptyEntries));
+				frc.AddAction<IEnumerable<string>, IEnumerable<KeyValuePair<string, string>>>("Map", Map);
+				frc.AddFunc<IEnumerable<KeyValuePair<string, string>>, Dictionary<string, string>>("Build", Build);
+				fr.Configure(frc);
 
 				Dictionary<string, string> dict = null;
 				var are = new AutoResetEvent(false);
@@ -64,21 +59,16 @@ namespace ToDictionary
 				 * 		(.in) -> (Split) -> (Map) -> (Build) -> (.out)
 				 * }
 				 */
-				fr.AddStream(new Stream(".in", "ToDict/Split"));
-				fr.AddStream(new Stream("ToDict/Split", "ToDict/Map"));
-				fr.AddStream(new Stream("ToDict/Map", "ToDict/Build"));
-				fr.AddStream(new Stream("ToDict/Build", ".out"));
+				var frc = new FlowRuntimeConfiguration();
+				frc.AddStream(new Stream(".in", "ToDict/Split"));
+				frc.AddStream(new Stream("ToDict/Split", "ToDict/Map"));
+				frc.AddStream(new Stream("ToDict/Map", "ToDict/Build"));
+				frc.AddStream(new Stream("ToDict/Build", ".out"));
 
-				var foc = new FlowOperationContainer();
-				foc.AddFunc<string, IEnumerable<string>>("Split",
-																  configuration =>
-																  configuration.Split(new[] {';'},
-																					  StringSplitOptions.
-																						  RemoveEmptyEntries));
-				foc.AddAction<IEnumerable<string>, IEnumerable<KeyValuePair<string, string>>>("Map", Map);
-				foc.AddFunc<IEnumerable<KeyValuePair<string, string>>, Dictionary<string, string>>("Build",
-																											Build);
-				fr.AddOperations(foc.Operations);
+				frc.AddFunc<string, IEnumerable<string>>("Split", configuration => configuration.Split(new[] {';'}, StringSplitOptions.RemoveEmptyEntries));
+				frc.AddAction<IEnumerable<string>, IEnumerable<KeyValuePair<string, string>>>("Map", Map);
+				frc.AddFunc<IEnumerable<KeyValuePair<string, string>>, Dictionary<string, string>>("Build", Build);
+				fr.Configure(frc);
 
 				Dictionary<string, string> dict = null;
 				var are = new AutoResetEvent(false);

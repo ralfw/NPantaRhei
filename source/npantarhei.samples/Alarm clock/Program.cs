@@ -22,43 +22,46 @@ namespace Alarm_clock
              */
             using (var fr = new FlowRuntime())
             {
+                var frc = new FlowRuntimeConfiguration();
+
                 // Define flow
                 // Feature: close application
-                fr.AddStream("Dialog.closed", ".stop");
+                frc.AddStream("Dialog.closed", ".stop");
 
                 // Feature: set alarm
-                fr.AddStream("Dialog.setAlarm", "Join.in0");
-                fr.AddStream("Dialog.setAlarm", "Alarm switched on");
-                fr.AddStream("Clock.now", "Join.in1");
-                fr.AddStream("Join", "Calc time diff");
-                fr.AddStream("Calc time diff", "Display time diff");
+                frc.AddStream("Dialog.setAlarm", "Join.in0");
+                frc.AddStream("Dialog.setAlarm", "Alarm switched on");
+                frc.AddStream("Clock.now", "Join.in1");
+                frc.AddStream("Join", "Calc time diff");
+                frc.AddStream("Calc time diff", "Display time diff");
 
                 // Feature: stop alarm
-                fr.AddStream("Dialog.stopAlarm", "Join.reset");
-                fr.AddStream("Dialog.stopAlarm", "Alarm switched off");
-                fr.AddStream("Dialog.stopAlarm", "Stop alarm");
+                frc.AddStream("Dialog.stopAlarm", "Join.reset");
+                frc.AddStream("Dialog.stopAlarm", "Alarm switched off");
+                frc.AddStream("Dialog.stopAlarm", "Stop alarm");
 
                 // Feature: sound alarm
-                fr.AddStream("Calc time diff", "Alarm time reached");
-                fr.AddStream("Alarm time reached", "Sound alarm");
+                frc.AddStream("Calc time diff", "Alarm time reached");
+                frc.AddStream("Alarm time reached", "Sound alarm");
+
+                fr.Configure(frc);
 
                 // Register operations
                 var dlg = new Dialog();
                 var clock = new npantarhei.runtime.patterns.operations.Clock();
                 var player = new Soundplayer();
 
-                fr.AddOperation(dlg);
-                fr.AddOperation(clock);
-                fr.AddOperations(new FlowOperationContainer()
-                                     .AddAction("Alarm switched off", dlg.Alarm_switched_off).MakeSync()
-                                     .AddAction("Alarm switched on", dlg.Alarm_switched_on).MakeSync()
-                                     .AddAction<TimeSpan>("Alarm time reached", Alarm_time_reached)
-                                     .AddFunc<Tuple<DateTime,DateTime>,TimeSpan>("Calc time diff", Calc_time_diff)
-                                     .AddAction<TimeSpan>("Display time diff", dlg.Display_time_diff).MakeSync()
-                                     .AddManualResetJoin<DateTime, DateTime>("Join")
-                                     .AddAction("Sound alarm", player.Start_playing)
-                                     .AddAction("Stop alarm", player.Stop_playing)
-                                     .Operations);
+                frc.AddOperation(dlg)
+                   .AddOperation(clock)
+                   .AddAction("Alarm switched off", dlg.Alarm_switched_off).MakeSync()
+                   .AddAction("Alarm switched on", dlg.Alarm_switched_on).MakeSync()
+                   .AddAction<TimeSpan>("Alarm time reached", Alarm_time_reached)
+                   .AddFunc<Tuple<DateTime,DateTime>,TimeSpan>("Calc time diff", Calc_time_diff)
+                   .AddAction<TimeSpan>("Display time diff", dlg.Display_time_diff).MakeSync()
+                   .AddManualResetJoin<DateTime, DateTime>("Join")
+                   .AddAction("Sound alarm", player.Start_playing)
+                   .AddAction("Stop alarm", player.Stop_playing);
+                fr.Configure(frc);
 
                 fr.Message += Console.WriteLine; 
                 fr.UnhandledException += Console.WriteLine;

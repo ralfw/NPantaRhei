@@ -32,7 +32,7 @@ namespace CSV_Viewer.flows
         {
             get
             {
-                return new FlowOperationContainer()
+                return new FlowRuntimeConfiguration()
                     .AddFunc<Page, IEnumerable<string>>("format", _formatter.Format)
                     .AddAction<int>("menu", _frontend.Menu)
                     .AddAction<IEnumerable<string>>("output", _frontend.Output, true)

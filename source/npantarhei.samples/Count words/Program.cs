@@ -22,22 +22,22 @@ namespace Count_words
         {
             using (var fr = new FlowRuntime())
             {
-                fr.AddStream(".in", "Pushc");
-                fr.AddStream("Pushc", "Find Files");
-                fr.AddStream("Pushc.exception", "Handle Exception");
-                fr.AddStream("Find Files", "Count Words");
-                fr.AddStream("Count Words", "popc");
-                fr.AddStream("Popc", "Total");
-                fr.AddStream("Total", ".out");
+                var frc = new FlowRuntimeConfiguration();
+                frc.AddStream(".in", "Pushc");
+                frc.AddStream("Pushc", "Find Files");
+                frc.AddStream("Pushc.exception", "Handle Exception");
+                frc.AddStream("Find Files", "Count Words");
+                frc.AddStream("Count Words", "popc");
+                frc.AddStream("Popc", "Total");
+                frc.AddStream("Total", ".out");
 
-                var foc = new FlowOperationContainer()
-                    .AddFunc<IEnumerable<string>, IEnumerable<int>>("Count Words", Count_words3)
-                    .AddFunc<string, IEnumerable<String>>("Find Files", Find_files)
-                    .AddAction<FlowRuntimeException>("Handle Exception", Handle_exception)
-                    .AddPopCausality("Popc")
-                    .AddPushCausality("Pushc")
-                    .AddFunc<IEnumerable<int>, Tuple<int, int>>("Total", Total);
-                fr.AddOperations(foc.Operations);
+                frc.AddFunc<IEnumerable<string>, IEnumerable<int>>("Count Words", Count_words3)
+                   .AddFunc<string, IEnumerable<String>>("Find Files", Find_files)
+                   .AddAction<FlowRuntimeException>("Handle Exception", Handle_exception)
+                   .AddPopCausality("Popc")
+                   .AddPushCausality("Pushc")
+                   .AddFunc<IEnumerable<int>, Tuple<int, int>>("Total", Total);
+                fr.Configure(frc);
 
                 fr.Process(new Message(".in", "x"));
 
@@ -64,16 +64,16 @@ namespace Count_words
         {
             using (var fr = new FlowRuntime())
             {
-                fr.AddStream(".in", "Find files");
-                fr.AddStream("Find files", "Count words");
-                fr.AddStream("Count words", "Total");
-                fr.AddStream("Total", ".out");
+                var frc = new FlowRuntimeConfiguration();
+                frc.AddStream(".in", "Find files");
+                frc.AddStream("Find files", "Count words");
+                frc.AddStream("Count words", "Total");
+                frc.AddStream("Total", ".out");
 
-                var foc = new FlowOperationContainer()
-                    .AddFunc<string, IEnumerable<String>>("Find files", Find_files)
-                    .AddFunc<IEnumerable<string>, IEnumerable<int>>("Count words", Count_words2)
-                    .AddFunc<IEnumerable<int>, Tuple<int, int>>("Total", Total);
-                fr.AddOperations(foc.Operations);
+                frc.AddFunc<string, IEnumerable<String>>("Find files", Find_files)
+                   .AddFunc<IEnumerable<string>, IEnumerable<int>>("Count words", Count_words2)
+                   .AddFunc<IEnumerable<int>, Tuple<int, int>>("Total", Total);
+                fr.Configure(frc);
 
                 var start = DateTime.Now;
                 fr.Process(new Message(".in", "x"));
@@ -91,22 +91,22 @@ namespace Count_words
         {
             using(var fr = new FlowRuntime())
             {
-                fr.AddStream(".in", "Find_files");
-                fr.AddStream("Find_files", "scatter");
-                fr.AddStream("scatter.stream", "Count_words");
-                fr.AddStream("scatter.count", "gather.count");
-                fr.AddStream("Count_words", "gather.stream");
-                fr.AddStream("gather", "Total");
-                fr.AddStream("Total", ".out");
+                var frc = new FlowRuntimeConfiguration();
+                frc.AddStream(".in", "Find_files");
+                frc.AddStream("Find_files", "scatter");
+                frc.AddStream("scatter.stream", "Count_words");
+                frc.AddStream("scatter.count", "gather.count");
+                frc.AddStream("Count_words", "gather.stream");
+                frc.AddStream("gather", "Total");
+                frc.AddStream("Total", ".out");
 
-                var foc = new FlowOperationContainer()
-                    .AddFunc<string, IEnumerable<String>>("Find_files", Find_files).MakeAsync()
-                    .AddFunc<string,int>("Count_words", Count_words).MakeParallel()
-                    .AddFunc<IEnumerable<int>, Tuple<int,int>>("Total", Total);
-                fr.AddOperations(foc.Operations);
+                frc.AddFunc<string, IEnumerable<String>>("Find_files", Find_files).MakeAsync()
+                   .AddFunc<string,int>("Count_words", Count_words).MakeParallel()
+                   .AddFunc<IEnumerable<int>, Tuple<int,int>>("Total", Total)
+                   .AddOperation(new Scatter<string>("scatter"))
+                   .AddOperation(new Gather<int>("gather"));
 
-                fr.AddOperation(new Scatter<string>("scatter"));
-                fr.AddOperation(new Gather<int>("gather"));
+                fr.Configure(frc);
 
                 var start = DateTime.Now;
                 fr.Process(new Message(".in", "x"));

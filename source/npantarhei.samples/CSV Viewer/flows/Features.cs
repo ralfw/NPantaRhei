@@ -35,7 +35,7 @@ namespace CSV_Viewer.flows
         {
             get
             {
-                return new FlowOperationContainer()
+                return new FlowRuntimeConfiguration()
                                 .AddAction<IEnumerable<string>>("buffer_lines", _buffer.Buffer_lines)
                                 .AddFunc<Page>("goto_first_page", _pager.LoadFirst)
                                 .AddFunc<Page>("goto_last_page", _pager.LoadLast)

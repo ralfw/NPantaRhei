@@ -21,16 +21,19 @@ namespace CSV_Viewer
         {
             using(var fr = new FlowRuntime())
             {
+                var frc = new FlowRuntimeConfiguration();
+
                 var pageBufferContainer = new DataContainer<PageBuffer>();
 
                 var frontend = new Frontend();
 
-                fr.AddFlow(new Main(new Formatter(), 
+                frc.AddFlow(new Main(new Formatter(), 
                                     frontend));
-                fr.AddFlow(new Features(new CommandlineParser(pageBufferContainer), 
+                frc.AddFlow(new Features(new CommandlineParser(pageBufferContainer), 
                                         new TextFileAdapter(), 
                                         new LineBuffer(pageBufferContainer), 
                                         new Pager(pageBufferContainer)));
+                fr.Configure(frc);
 
                 frontend.displayFirstPage += fr.CreateEventProcessor(".displayFirstPage");
                 frontend.displayLastPage += fr.CreateEventProcessor(".displayLastPage");

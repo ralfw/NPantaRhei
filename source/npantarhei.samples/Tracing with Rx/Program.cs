@@ -16,16 +16,15 @@ namespace Tracing_with_Rx
         {
             using(var fr = new FlowRuntime())
             {
-                fr.AddStream(".in", "A");
-                fr.AddStream("A", "B");
-                fr.AddStream("B", "C");
+                var frc = new FlowRuntimeConfiguration();
+                frc.AddStream(".in", "A");
+                frc.AddStream("A", "B");
+                frc.AddStream("B", "C");
 
-                fr.AddOperations(new FlowOperationContainer()
-                                    .AddFunc<int,int>("A", i => i + 1)
-                                    .AddFunc<int,int>("B", i => i * 2)
-                                    .AddAction<int>("C", (int i) => Console.WriteLine("={0}", i))
-                                    .Operations);
-
+                frc.AddFunc<int, int>("A", i => i + 1)
+                   .AddFunc<int, int>("B", i => i * 2)
+                   .AddAction<int>("C", (int i) => Console.WriteLine("={0}", i));
+                fr.Configure(frc);
 
                 // Trace messages selectively using Rx
                 var tracer = new Subject<IMessage>();
