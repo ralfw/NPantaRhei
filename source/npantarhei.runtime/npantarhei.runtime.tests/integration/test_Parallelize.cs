@@ -15,27 +15,28 @@ namespace npantarhei.runtime.tests.integration
         [Test]
         public void Run_on_separate_thread()
         {
-            using (var sut = new FlowRuntime())
+            var frc = new FlowRuntimeConfiguration();
+            frc.AddStream(new Stream(".in", "parNop"));
+            frc.AddStream(new Stream("parNop", ".out"));
+
+            var cont = new FlowRuntimeConfiguration();
+
+            var asyncThreadIds = new List<long>();
+            cont.AddFunc<string, string>("parNop", _ =>
+                                                    {
+                                                        lock (asyncThreadIds)
+                                                        {
+                                                            Console.WriteLine("{0} on {1}", _, Thread.CurrentThread.GetHashCode());
+                                                            asyncThreadIds.Add(Thread.CurrentThread.GetHashCode());
+                                                        }
+                                                        Thread.Sleep((DateTime.Now.Millisecond % 100 + 1) * 50);
+                                                        return _;
+                                                    }).MakeParallel();
+            frc.AddOperations(cont.Operations);
+
+
+            using (var sut = new FlowRuntime(frc))
             {
-                sut.AddStream(new Stream(".in", "parNop"));
-                sut.AddStream(new Stream("parNop", ".out"));
-
-                var cont = new FlowOperationContainer();
-
-                var asyncThreadIds = new List<long>();
-                cont.AddFunc<string, string>("parNop", _ =>
-                                                            {
-                                                                lock (asyncThreadIds)
-                                                                {
-                                                                    Console.WriteLine("{0} on {1}", _, Thread.CurrentThread.GetHashCode());
-                                                                    asyncThreadIds.Add(Thread.CurrentThread.GetHashCode());
-                                                                }
-                                                                Thread.Sleep((DateTime.Now.Millisecond % 100 + 1) * 50);
-                                                                return _;
-                                                            }).MakeParallel();
-
-                sut.AddOperations(cont.Operations);
-
                 const int N = 5;
                 var results = new List<IMessage>();
                 long runtimeThreadId = 0;

@@ -15,16 +15,15 @@ namespace npantarhei.runtime.tests.integration
         [Test]
         public void Two_input_join()
         {
-            using(var fr = new FlowRuntime())
+            var frc = new FlowRuntimeConfiguration()
+                            .AddStream(new Stream(".inString", "arj.in0"))
+                            .AddStream(new Stream(".inInt", "arj.in1"))
+                            .AddStream(new Stream("arj", ".out"))
+
+                            .AddAutoResetJoin<string, int>("arj");
+
+            using(var fr = new FlowRuntime(frc))
             {
-                var foc = new FlowOperationContainer();
-                foc.AddAutoResetJoin<string, int>("arj");
-                fr.AddOperations(foc.Operations);
-
-                fr.AddStream(new Stream(".inString", "arj.in0"));
-                fr.AddStream(new Stream(".inInt", "arj.in1"));
-                fr.AddStream(new Stream("arj", ".out"));
-
                 fr.Message += _ => Console.WriteLine(_.Port);
 
                 IMessage result = null;

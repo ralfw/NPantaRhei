@@ -6,9 +6,9 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using npantarhei.interviz.graphviz.adapter;
+using npantarhei.interviz.patterns;
 using npantarhei.runtime;
 using npantarhei.runtime.messagetypes;
-using todo.logik.patterns;
 
 namespace npantarhei.interviz
 {

@@ -1,6 +1,10 @@
 Topics to address in future increments
 ------------
 
+Add a correlation ID to IMessage that gets copied with port and data.
+
+Make copying IMessage/Message easier.
+
 
 Make it easier to implement multi-port operations with custom port names. (No code generation must be used, to avoid incompatibility with
 MonoTouch and like platforms.)

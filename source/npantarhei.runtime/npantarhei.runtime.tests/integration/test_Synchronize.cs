@@ -15,15 +15,14 @@ namespace npantarhei.runtime.tests.integration
         [Test]
         public void Implicit_sync_context()
         {
-            using (var sut = new FlowRuntime())
+            var frc = new FlowRuntimeConfiguration()
+                .AddStream(new Stream(".in", "syncNop"))
+                .AddStream(new Stream("syncNop", ".out"))
+
+                .AddFunc<string, string>("syncNop", _ => _).MakeSync();
+
+            using (var sut = new FlowRuntime(frc))
             {
-                sut.AddStream(new Stream(".in", "syncNop"));
-                sut.AddStream(new Stream("syncNop", ".out"));
-
-                var cont = new FlowOperationContainer();
-                cont.AddFunc<string, string>("syncNop", _ => _).MakeSync();
-                sut.AddOperations(cont.Operations);
-
                 IMessage result = null;
                 var are = new AutoResetEvent(false);
                 sut.Result += _ => { result = _; are.Set(); };

@@ -19,54 +19,52 @@ namespace npantarhei.runtime.tests
 		{
 			Console.WriteLine("test thread: {0}", Thread.CurrentThread.GetHashCode());
 
-            using (var sut = new FlowRuntime())
-            {
-                sut.AddStream(new Stream(".in", "doParallel**"));
-                sut.AddStream(new Stream("doParallel", ".out"));
+			var frc = new FlowRuntimeConfiguration();
+			frc.AddStream(new Stream(".in", "doParallel**"));
+			frc.AddStream(new Stream("doParallel", ".out"));
 
-                var container = new FlowOperationContainer();
+			var threads = new Dictionary<long, int>();
+			frc.AddFunc<int, int>("doParallel",
+												 x =>
+												 {
+													 lock (threads)
+													 {
+														 if (
+															 threads.ContainsKey(
+																 Thread.CurrentThread.GetHashCode()))
+															 threads[Thread.CurrentThread.GetHashCode()] += 1;
+														 else
+															 threads.Add(Thread.CurrentThread.GetHashCode(), 1);
+													 }
+													 Console.WriteLine("thread {0}: {1}.",
+																	   Thread.CurrentThread.GetHashCode(), x);
+													 Thread.Sleep((DateTime.Now.Millisecond % 100 + 1) * 50);
+													 return x;
+												 });
 
-                var threads = new Dictionary<long, int>();
-                container.AddFunc<int, int>("doParallel",
-                                                     x =>
-                                                         {
-                                                             lock (threads)
-                                                             {
-                                                                 if (
-                                                                     threads.ContainsKey(
-                                                                         Thread.CurrentThread.GetHashCode()))
-                                                                     threads[Thread.CurrentThread.GetHashCode()] += 1;
-                                                                 else
-                                                                     threads.Add(Thread.CurrentThread.GetHashCode(), 1);
-                                                             }
-                                                             Console.WriteLine("thread {0}: {1}.",
-                                                                               Thread.CurrentThread.GetHashCode(), x);
-                                                             Thread.Sleep((DateTime.Now.Millisecond%100 + 1)*50);
-                                                             return x;
-                                                         });
-                sut.AddOperations(container.Operations);
+			using (var sut = new FlowRuntime(frc))
+			{
+				var are = new AutoResetEvent(false);
+				var results = new List<int>();
+				sut.Result += _ =>
+								{
+									Console.WriteLine("result: {0}.", _.Data);
+									lock (results)
+									{
+										results.Add((int) _.Data);
+										if (results.Count == 5) are.Set();
+									}
+								};
 
-                var are = new AutoResetEvent(false);
-                var results = new List<int>();
-                sut.Result += _ =>
-                                {
-                                    Console.WriteLine("result: {0}.", _.Data);
-                                    lock (results)
-                                    {
-                                        results.Add((int) _.Data);
-                                        if (results.Count == 5) are.Set();
-                                    }
-                                };
+				sut.Process(new Message(".in", 1));
+				sut.Process(new Message(".in", 2));
+				sut.Process(new Message(".in", 3));
+				sut.Process(new Message(".in", 4));
+				sut.Process(new Message(".in", 5));
 
-                sut.Process(new Message(".in", 1));
-                sut.Process(new Message(".in", 2));
-                sut.Process(new Message(".in", 3));
-                sut.Process(new Message(".in", 4));
-                sut.Process(new Message(".in", 5));
-
-                Assert.IsTrue(are.WaitOne(10000), "Processing took too long; not enough numbers received");
-                Assert.AreEqual(15, results.Sum(), "Wrong sum; some number got processed twice");
-            }
+				Assert.IsTrue(are.WaitOne(10000), "Processing took too long; not enough numbers received");
+				Assert.AreEqual(15, results.Sum(), "Wrong sum; some number got processed twice");
+			}
 		}
 	}
 }

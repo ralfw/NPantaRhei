@@ -76,7 +76,7 @@
     <Compile Include="operations\Create_task.cs" />
     <Compile Include="messagetypes\Task.cs" />
     <Compile Include="operations\Execute_task.cs" />
-    <Compile Include="FlowOperationContainer.cs" />
+    <Compile Include="FlowRuntimeConfiguration.cs" />
     <Compile Include="contract\IPort.cs" />
     <Compile Include="messagetypes\Port.cs" />
     <Compile Include="operations\Enqueue_message_for_processing.cs" />

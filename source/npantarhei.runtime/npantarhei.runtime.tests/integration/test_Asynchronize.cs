@@ -15,21 +15,22 @@ namespace npantarhei.runtime.tests.integration
         [Test]
         public void Run_on_separate_thread()
         {
-            using (var sut = new FlowRuntime())
+            var frc = new FlowRuntimeConfiguration();
+            frc.AddStream(new Stream(".in", "asyncNop"));
+            frc.AddStream(new Stream("asyncNop", ".out"));
+
+            var cont = new FlowRuntimeConfiguration();
+
+            long asyncThreadId = 0;
+            cont.AddFunc<string, string>("asyncNop", _ =>
+                                                    {
+                                                        asyncThreadId = Thread.CurrentThread.GetHashCode();
+                                                        return _;
+                                                    }).MakeAsync();
+            frc.AddOperations(cont.Operations);
+
+            using (var sut = new FlowRuntime(frc))
             {
-                sut.AddStream(new Stream(".in", "asyncNop"));
-                sut.AddStream(new Stream("asyncNop", ".out"));
-
-                var cont = new FlowOperationContainer();
-
-                long asyncThreadId = 0;
-                cont.AddFunc<string, string>("asyncNop", _ =>
-                                                             {
-                                                                 asyncThreadId = Thread.CurrentThread.GetHashCode();
-                                                                 return _;
-                                                             }).MakeAsync();
-                sut.AddOperations(cont.Operations);
-
                 IMessage result = null;
                 long runtimeThreadId = 0;
                 var are = new AutoResetEvent(false);
@@ -51,14 +52,12 @@ namespace npantarhei.runtime.tests.integration
         [Test]
         public void Catch_exception_from_background()
         {
-            using (var sut = new FlowRuntime())
+            var frc = new FlowRuntimeConfiguration()
+                            .AddStream(new Stream(".in", "throw"))
+                            .AddAction<string>("throw", (string _) => { throw new ApplicationException("xxx"); }).MakeAsync();
+
+            using (var sut = new FlowRuntime(frc))
             {
-                sut.AddStream(new Stream(".in", "throw"));
-
-                var cont = new FlowOperationContainer();
-                cont.AddAction<string>("throw", (string _) => { throw new ApplicationException("xxx"); }).MakeAsync();
-                sut.AddOperations(cont.Operations);
-
                 FlowRuntimeException ex = null;
                 var are = new AutoResetEvent(false);
                 sut.UnhandledException += _ =>

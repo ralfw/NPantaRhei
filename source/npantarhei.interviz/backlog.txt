@@ -1,9 +1,18 @@
+::Build runtime and interviz on a flow DSL compiler producing an AST.
+Besides the AST there should be some structure to put AST elements in relation to the source.
+So maybe it´s a "structured source tree.
+	-runtime: loading of flows and creating streams with qualified ports
+			  how can configuration be separated in general?
+				FlowRuntime
+				FlowRuntimeConfiguration
+	-interviz: displaying graphs, navigation
+
 ::Display comments in graph. But only comments in the same line as a flow name or stream, e.g.
 
 // dont display this comment
-F // but display this
+F // but display this next to node
 .in, A
-A, B // and display this
+A, B // and display this next to edge
 B, .out
 
 Where should flow name comments go in the graph? In the box or next to the box?

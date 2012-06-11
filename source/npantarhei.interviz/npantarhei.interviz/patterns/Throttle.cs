@@ -3,7 +3,7 @@ using System.Timers;
 using npantarhei.runtime.contract;
 using npantarhei.runtime.patterns;
 
-namespace todo.logik.patterns
+namespace npantarhei.interviz.patterns
 {
     public class Throttle : AOperation
     {

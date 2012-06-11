@@ -14,16 +14,17 @@ namespace npantarhei.runtime.tests.integration
 {
     public partial class test_sync_with_dialog_win : Form
     {
-        readonly IFlowRuntime _fr = new FlowRuntime();
+        private readonly IFlowRuntime _fr;
 
         public test_sync_with_dialog_win()
         {
             InitializeComponent();
 
-            _fr.AddStream(new Stream(".in", "gettime"));
-            _fr.AddStream(new Stream("gettime", "showtime"));
+            var frc = new FlowRuntimeConfiguration();
+            frc.AddStream(new Stream(".in", "gettime"));
+            frc.AddStream(new Stream("gettime", "showtime"));
 
-            var opcont = new FlowOperationContainer();
+            var opcont = new FlowRuntimeConfiguration();
             opcont.AddFunc("gettime", () => DateTime.Now);
             opcont.AddAction<DateTime>("showtime", (DateTime _) =>
                                                        {
@@ -34,7 +35,9 @@ namespace npantarhei.runtime.tests.integration
                                                        })
                   .MakeSync();
 
-            _fr.AddOperations(opcont.Operations);
+            frc.AddOperations(opcont.Operations);
+
+            _fr = new FlowRuntime(frc);
         }
 
 

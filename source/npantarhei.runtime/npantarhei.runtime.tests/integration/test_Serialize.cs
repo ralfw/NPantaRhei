@@ -15,38 +15,35 @@ namespace npantarhei.runtime.tests.integration
         [Test]
         public void Run_on_separate_thread()
         {
-            using (var sut = new FlowRuntime())
+            var frc = new FlowRuntimeConfiguration()
+                            .AddStream(new Stream(".in", "serNop0"))
+                            .AddStream(new Stream("serNop0", "serNop1"))
+                            .AddStream(new Stream("serNop1", ".out"));
+            var asyncThreadIds0 = new List<long>();
+
+            frc.AddFunc<string, string>("serNop0", _ =>
+                                                    {
+                                                        lock (asyncThreadIds0)
+                                                        {
+                                                            Console.WriteLine("serNop0: {0} on {1}", _, Thread.CurrentThread.GetHashCode());
+                                                            asyncThreadIds0.Add(Thread.CurrentThread.GetHashCode());
+                                                        }
+                                                        return _;
+                                                    }).MakeSerial();
+
+            var asyncThreadIds1 = new List<long>();
+            frc.AddFunc<string, string>("serNop1", _ =>
+                                                    {
+                                                        lock (asyncThreadIds1)
+                                                        {
+                                                            Console.WriteLine("serNop1: {0} on {1}", _, Thread.CurrentThread.GetHashCode());
+                                                            asyncThreadIds1.Add(Thread.CurrentThread.GetHashCode());
+                                                        }
+                                                        return _;
+                                                    }).MakeSerial();
+
+            using (var sut = new FlowRuntime(frc))
             {
-                sut.AddStream(new Stream(".in", "serNop0"));
-                sut.AddStream(new Stream("serNop0", "serNop1"));
-                sut.AddStream(new Stream("serNop1", ".out"));
-
-                var cont = new FlowOperationContainer();
-
-                var asyncThreadIds0 = new List<long>();
-                cont.AddFunc<string, string>("serNop0", _ =>
-                                                            {
-                                                                lock (asyncThreadIds0)
-                                                                {
-                                                                    Console.WriteLine("serNop0: {0} on {1}", _, Thread.CurrentThread.GetHashCode());
-                                                                    asyncThreadIds0.Add(Thread.CurrentThread.GetHashCode());
-                                                                }
-                                                                return _;
-                                                            }).MakeSerial();
-
-                var asyncThreadIds1 = new List<long>();
-                cont.AddFunc<string, string>("serNop1", _ =>
-                                                            {
-                                                                lock (asyncThreadIds1)
-                                                                {
-                                                                    Console.WriteLine("serNop1: {0} on {1}", _, Thread.CurrentThread.GetHashCode());
-                                                                    asyncThreadIds1.Add(Thread.CurrentThread.GetHashCode());
-                                                                }
-                                                                return _;
-                                                            }).MakeSerial();
-
-                sut.AddOperations(cont.Operations);
-
                 const int N = 5;
                 var results = new List<IMessage>();
                 long runtimeThreadId = 0;

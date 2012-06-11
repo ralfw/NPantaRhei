@@ -6,6 +6,8 @@ namespace npantarhei.runtime.contract
 {
 	public interface IFlowRuntime : IDisposable
 	{
+	    void Configure(FlowRuntimeConfiguration config);
+
 		void Process(string portname);
 		void Process(string portname, object data);
 		void Process(IMessage message);
@@ -18,18 +20,6 @@ namespace npantarhei.runtime.contract
 		bool WaitForResult(int milliseconds);
 		bool WaitForResult(Action<IMessage> processResult);
 		bool WaitForResult(int milliseconds, Action<IMessage> processResult);
-		
-		void AddStream(IStream stream);
-		void AddStream(string fromPortName, string toPortName);
-		void AddStreams(IEnumerable<IStream> streams);
-		void AddStreamsFrom(string resourceName, Assembly resourceAssembly);
-		void AddStreamsFrom(IEnumerable<string> lines);
-		void AddStreamsFrom(string text);
-
-		void AddOperation(IOperation operation);
-		void AddOperations(IEnumerable<IOperation> operations);
-
-		void AddFlow(IFlow flow);
 
 		Action CreateEventProcessor(string portname);
 		Action<T> CreateEventProcessor<T>(string portname);

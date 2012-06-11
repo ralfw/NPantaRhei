@@ -14,12 +14,10 @@ namespace npantarhei.runtime.tests.integration
         [Test]
         public void No_activation_if_attribute_not_present()
         {
-            using (var fr = new FlowRuntime())
+            var op = new InactiveOp();
+
+            using (var fr = new FlowRuntime(new FlowRuntimeConfiguration().AddOperation(op)))
             {
-                var op = new InactiveOp();
-
-                fr.AddOperation(op);
-
                 Assert.AreEqual(0, op.messages.Count);
             }   
         }
@@ -27,12 +25,9 @@ namespace npantarhei.runtime.tests.integration
         [Test]
         public void Activation_if_attribute_present()
         {
-            using (var fr = new FlowRuntime())
+            var op = new ActiveOp();
+            using (var fr = new FlowRuntime(new FlowRuntimeConfiguration().AddOperation(op)))
             {
-                var op = new ActiveOp();
-
-                fr.AddOperation(op);
-
                 Assert.AreEqual(1, op.messages.Count);
                 Assert.IsInstanceOf<ActivationMessage>(op.messages[0]);
             }

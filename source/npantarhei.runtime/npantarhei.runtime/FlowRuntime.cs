@@ -15,7 +15,8 @@ namespace npantarhei.runtime
 {
 	public class FlowRuntime : IFlowRuntime
 	{		
-		public FlowRuntime()
+        public FlowRuntime() : this(new FlowRuntimeConfiguration()) {}
+		public FlowRuntime(FlowRuntimeConfiguration config)
 		{
 			// Build
 			var regStream = new Register_stream();
@@ -62,6 +63,9 @@ namespace npantarhei.runtime
 			opStart.Inject(operations);
 			opStop.Inject(operations);
 
+			// Config
+			Configure(config);
+
 			// Run
 			Start();
 		}
@@ -90,6 +94,12 @@ namespace npantarhei.runtime
 
 
 		#region IFlowRuntime implementation
+        public void Configure(FlowRuntimeConfiguration config)
+        {
+            this.AddStreams(config.Streams);
+            this.AddOperations(config.Operations);
+        }
+
 		private readonly Action<IMessage> _process;
 		public void Process(string portname) { Process(portname, null); }
 		public void Process(string portname, object data) { Process(new Message(portname, data)); }
@@ -122,25 +132,6 @@ namespace npantarhei.runtime
 			return are.WaitOne(milliseconds);
 		}
 		
-		private readonly Action<IStream> _addStream;
-		public void AddStream(string fromPortName, string toPortName) { AddStream(new Stream(fromPortName, toPortName));}
-		public void AddStream (IStream stream) { _addStream(stream);}
-		public void AddStreams(IEnumerable<IStream> streams) { streams.ToList().ForEach(this.AddStream); }
-
-		public void AddStreamsFrom(string resourceName, Assembly resourceAssembly) { this.AddStreams(FlowLoader.LoadFromEmbeddedResource(FlowLoader.ROOT_FLOW_NAME, resourceAssembly, resourceName)); }
-		public void AddStreamsFrom(IEnumerable<string> lines) { this.AddStreams(FlowLoader.LoadFromLines(FlowLoader.ROOT_FLOW_NAME, lines)); }
-		public void AddStreamsFrom(string text) { this.AddStreams(FlowLoader.LoadFromReader(FlowLoader.ROOT_FLOW_NAME, new StringReader(text))); }
-	
-		private readonly Action<IOperation> _addOperation;
-		public void AddOperation (IOperation operation) { _addOperation(operation); }
-		public void AddOperations(IEnumerable<IOperation> operations) { operations.ToList().ForEach(this.AddOperation); }
-
-		public void AddFlow(IFlow flow)
-		{
-			this.AddStreams(flow.Streams);
-			this.AddOperations(flow.Operations);
-		}
-
 		public Action CreateEventProcessor(string portname) { return () => this.Process(new Message(portname, null)); }
 		public Action<T> CreateEventProcessor<T>(string portname) { return data => this.Process(new Message(portname, data)); }
 
@@ -156,6 +147,13 @@ namespace npantarhei.runtime
 		private void Stop() { _stop(); }
 		
 		public void Dispose() { Stop(); }
+
+
+		private readonly Action<IStream> _addStream;
+		private void AddStreams(IEnumerable<IStream> streams) { streams.ToList().ForEach(_addStream); }
+
+		private readonly Action<IOperation> _addOperation;
+		private void AddOperations(IEnumerable<IOperation> operations) { operations.ToList().ForEach(_addOperation); }
 	}
 }
 

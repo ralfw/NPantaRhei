@@ -15,7 +15,7 @@ namespace npantarhei.runtime.tests
 		[Test()]
 		public void Register_func()
 		{
-			var sut = new FlowOperationContainer();
+			var sut = new FlowRuntimeConfiguration();
 			
 			sut.AddFunc<string, int>("f", s => s.Length);
 			
@@ -30,7 +30,7 @@ namespace npantarhei.runtime.tests
 		[Test]
 		public void Func_op_adapter_ignores_input_port_and_uses_opname_as_output_port()
 		{
-			var sut = new FlowOperationContainer();
+			var sut = new FlowRuntimeConfiguration();
 			
 			sut.AddFunc<string, string>("opname", s => s);
 			
@@ -47,7 +47,7 @@ namespace npantarhei.runtime.tests
 		[Test()]
 		public void Register_procedure()
 		{
-			var sut = new FlowOperationContainer();
+			var sut = new FlowRuntimeConfiguration();
 			
 			var result = "";
 			sut.AddAction<string>("p", s => result = s, true);
@@ -65,7 +65,7 @@ namespace npantarhei.runtime.tests
 		[Test()]
 		public void Register_continuation_procedure()
 		{
-			var sut = new FlowOperationContainer();
+			var sut = new FlowRuntimeConfiguration();
 			
 			sut.AddAction<string, int>("p", Process_with_continuation);
 			
@@ -82,7 +82,7 @@ namespace npantarhei.runtime.tests
 		[Test]
 		public void Continuation_proc_adapter_ignores_input_port_and_uses_opname_as_output_port()
 		{
-			var sut = new FlowOperationContainer();
+			var sut = new FlowRuntimeConfiguration();
 			
 			sut.AddAction<string, int>("opname", Process_with_continuation);
 			
@@ -98,7 +98,7 @@ namespace npantarhei.runtime.tests
 	    [Test]
 	    public void Procedure_with_2_continuations()
 	    {
-	        var sut = new FlowOperationContainer();
+	        var sut = new FlowRuntimeConfiguration();
 
 	        sut.AddAction<int, string, bool>("opname", Bifurcate);
 

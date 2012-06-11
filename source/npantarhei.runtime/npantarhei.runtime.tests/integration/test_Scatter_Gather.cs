@@ -16,25 +16,24 @@ namespace npantarhei.runtime.tests.integration
         [Test]
         public void Scatter_gather()
         {
-            using(var fr = new FlowRuntime())
-            {
-                var foc = new FlowOperationContainer();
-                foc.AddFunc<int, int>("sleep", _ =>
-                                                     {
-                                                         Console.WriteLine("sleep {0} on {1}", _, Thread.CurrentThread.GetHashCode());
-                                                         Thread.Sleep(_);
-                                                         return _;
-                                                     }).MakeParallel();
-                
-                fr.AddOperations(foc.Operations);
-                fr.AddOperation(new Scatter<int>("scatter"));
-                fr.AddOperation(new Gather<int>("gather"));
+            var frc = new FlowRuntimeConfiguration();
+            frc.AddStream(new Stream(".in", "scatter"));
+            frc.AddStream(new Stream("scatter.stream", "sleep"));
+            frc.AddStream(new Stream("scatter.count", "gather.count"));
+            frc.AddStream(new Stream("sleep", "gather.stream"));
+            frc.AddStream(new Stream("gather", ".out"));
 
-                fr.AddStream(new Stream(".in", "scatter"));
-                fr.AddStream(new Stream("scatter.stream", "sleep"));
-                fr.AddStream(new Stream("scatter.count", "gather.count"));
-                fr.AddStream(new Stream("sleep", "gather.stream"));
-                fr.AddStream(new Stream("gather", ".out"));
+            frc.AddFunc<int, int>("sleep", _ =>
+                                            {
+                                                Console.WriteLine("sleep {0} on {1}", _, Thread.CurrentThread.GetHashCode());
+                                                Thread.Sleep(_);
+                                                return _;
+                                            }).MakeParallel();
+            frc.AddOperation(new Scatter<int>("scatter"));
+            frc.AddOperation(new Gather<int>("gather"));
+
+            using(var fr = new FlowRuntime(frc))
+            {
 
                 var list = new[] {10, 200, 100, 30, 200, 70};
                 fr.Process(new Message(".in", list));

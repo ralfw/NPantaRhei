@@ -16,25 +16,24 @@ namespace npantarhei.runtime.tests.integration
         [Test]
         public void Throttle()
         {
-            using (var fr = new FlowRuntime())
+            var frc = new FlowRuntimeConfiguration();
+            frc.AddFunc<int, int>("nop1", _ =>
+                                            {
+                                                Console.WriteLine("nop1: {0}", _);
+                                                return _;
+                                            });
+            frc.AddFunc<int, int>("nop2", _ =>
+                                            {
+                                                Console.WriteLine("nop2: {0}", _);
+                                                return _;
+                                            });
+
+            frc.AddStream(new Stream(".in", "nop1"));
+            frc.AddStream(new Stream("nop1", "nop2"));
+            frc.AddStream(new Stream("nop2", ".out"));
+
+            using (var fr = new FlowRuntime(frc))
             {
-                var foc = new FlowOperationContainer();
-                foc.AddFunc<int, int>("nop1", _ =>
-                                                      {
-                                                          Console.WriteLine("nop1: {0}", _);
-                                                          return _;
-                                                      });
-                foc.AddFunc<int, int>("nop2", _ =>
-                                                    {
-                                                        Console.WriteLine("nop2: {0}", _);
-                                                        return _;
-                                                    });
-                fr.AddOperations(foc.Operations);
-
-                fr.AddStream(new Stream(".in", "nop1"));
-                fr.AddStream(new Stream("nop1", "nop2"));
-                fr.AddStream(new Stream("nop2", ".out"));
-
                 var are = new AutoResetEvent(false);
                 fr.Result += _ => { if ((int)_.Data == -1) are.Set(); };
 
