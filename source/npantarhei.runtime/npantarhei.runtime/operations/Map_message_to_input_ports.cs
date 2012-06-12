@@ -27,7 +27,7 @@ namespace npantarhei.runtime.operations
 				throw new InvalidOperationException(string.Format("Unknown output port: '{0}'!", outputMessage.Port.Fullname));
 			
 			foreach(var port in inputPorts)
-				Result(new Message(port, outputMessage.Data){Causalities = outputMessage.Causalities, FlowStack = outputMessage.FlowStack});	
+				Result(new Message(port, outputMessage.Data, outputMessage.CorrelationId){Causalities = outputMessage.Causalities, FlowStack = outputMessage.FlowStack});	
 		}
 		
 		

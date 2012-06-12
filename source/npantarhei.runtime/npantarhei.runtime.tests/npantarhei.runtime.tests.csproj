@@ -60,6 +60,7 @@
     <Compile Include="integration\test_Synchronize.cs" />
     <Compile Include="integration\test_Throttling.cs" />
     <Compile Include="messagetypes\test_AsyncWrapperOperation.cs" />
+    <Compile Include="patterns\test_Gather.cs" />
     <Compile Include="patterns\test_ManualResetJoin.cs" />
     <Compile Include="patterns\test_AutoResetJoin.cs" />
     <Compile Include="patterns\test_causality_operations.cs" />
@@ -69,7 +70,7 @@
     <Compile Include="operations\test_Create_task.cs" />
     <Compile Include="operations\test_Execute_task.cs" />
     <Compile Include="operations\test_Map_message_to_input_ports.cs" />
-    <Compile Include="integration\test_FlowOperationContainer.cs" />
+    <Compile Include="integration\test_FlowRuntimeConfiguration.cs" />
     <Compile Include="messagetypes\test_Port.cs" />
     <Compile Include="data\test_NotifyingSingleQueue.cs" />
     <Compile Include="patterns\test_Wait_for_work.cs" />

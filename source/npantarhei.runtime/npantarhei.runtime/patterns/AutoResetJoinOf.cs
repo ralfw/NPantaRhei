@@ -52,7 +52,7 @@ namespace npantarhei.runtime.patterns
                                       
                                       var inputIndex = int.Parse(input.Port.Name.Substring(input.Port.Name.Length - 1));
                                       _arj.Process(inputIndex, input.Data, 
-                                                   joinList => continueWith(new Message(_name, createJoinTuple(joinList))));
+                                                   joinList => continueWith(new Message(_name, createJoinTuple(joinList), input.CorrelationId)));
                                   };
         }
 

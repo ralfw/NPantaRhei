@@ -14,25 +14,39 @@ namespace npantarhei.runtime.patterns.operations
      */
     public class Gather<T> : AOperation
     {
-        private List<T> _items; 
-        private int? _numberOfItemsToExcept;
+        private class GatherBucket
+        {
+            public readonly List<T> Items = new List<T>();
+            public int? NumberOfItemsToExpect;
+
+            public bool IsFull { get { return NumberOfItemsToExpect != null && Items.Count >= NumberOfItemsToExpect; }}
+        }
+
+        private readonly Dictionary<Guid, GatherBucket> _buckets = new Dictionary<Guid, GatherBucket>(); 
+
 
         public Gather(string name) : base(name) {}
 
 
         protected override void Process(IMessage input, Action<IMessage> continueWith, Action<FlowRuntimeException> unhandledException)
         {
+            GatherBucket bucket;
+            if (!_buckets.TryGetValue(input.CorrelationId, out bucket))
+            {
+                bucket = new GatherBucket();
+                _buckets.Add(input.CorrelationId, bucket);
+            }
+
             switch(input.Port.Name.ToLower())
             {
                 case "stream":
-                    if (_items == null) _items = new List<T>();
-                    _items.Add((T)input.Data);
-                    Complete_gathering(continueWith);
+                    bucket.Items.Add((T)input.Data);
+                    Complete_gathering(input.CorrelationId, continueWith);
                     break;
 
                 case "count":
-                    _numberOfItemsToExcept = (int) input.Data;
-                    Complete_gathering(continueWith);
+                    bucket.NumberOfItemsToExpect = (int)input.Data;
+                    Complete_gathering(input.CorrelationId, continueWith);
                     break;
 
                 default:
@@ -41,12 +55,14 @@ namespace npantarhei.runtime.patterns.operations
         }
 
 
-        private void Complete_gathering(Action<IMessage> continueWith)
+        private void Complete_gathering(Guid correlationId, Action<IMessage> continueWith)
         {
-            if (_numberOfItemsToExcept == null || _items == null || _items.Count != _numberOfItemsToExcept) return;
+            var bucket = _buckets[correlationId];
+            if (!bucket.IsFull) return;
 
-            continueWith(new Message(base.Name, _items));
-            _items = null;
+            continueWith(new Message(base.Name, bucket.Items.Take((int)bucket.NumberOfItemsToExpect).ToArray(), correlationId));
+            bucket.Items.RemoveRange(0, (int)bucket.NumberOfItemsToExpect);
+            if (bucket.Items.Count == 0) _buckets.Remove(correlationId);
         }
     }
 }

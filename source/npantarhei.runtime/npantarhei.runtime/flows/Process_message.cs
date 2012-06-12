@@ -62,7 +62,7 @@ namespace npantarhei.runtime.flows
 			if (IsFlowInputMessage(message))
 			{
 				// parent/flow.port => flow/.port
-				var output = new Message(Port.Build(message.Port.OperationName, "", message.Port.Name), message.Data)
+				var output = new Message(Port.Build(message.Port.OperationName, "", message.Port.Name), message.Data, message.CorrelationId)
 				{
 					Causalities = message.Causalities,
 					FlowStack = message.FlowStack
@@ -78,7 +78,7 @@ namespace npantarhei.runtime.flows
 				var parentFlowname = "";
 				if (!message.FlowStack.IsEmpty) parentFlowname = message.FlowStack.Pop();
 
-                var output = new Message(Port.Build(parentFlowname, Create_operation_name(message), message.Port.Name), message.Data)
+                var output = new Message(Port.Build(parentFlowname, Create_operation_name(message), message.Port.Name), message.Data, message.CorrelationId)
 				{
 					Causalities = message.Causalities,
 					FlowStack = message.FlowStack

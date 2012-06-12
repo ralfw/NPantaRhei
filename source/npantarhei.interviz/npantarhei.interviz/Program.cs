@@ -19,39 +19,35 @@ namespace npantarhei.interviz
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            using (var fr = new FlowRuntime()) {
+            var win = new WinDesigner();
+            var nav = new Navigator();
+
+            var frc = new FlowRuntimeConfiguration()
+                            .AddStreamsFrom("npantarhei.interviz.root.flow", Assembly.GetExecutingAssembly())
+                            .AddFunc<Tuple<string, string>[], Tuple<string, string>>("combine_sources", AssemblyResourceAdapter.Combine_sources)
+                            .AddFunc<string, Tuple<Image, NodeMap>>("compile_dot_source", GraphVizAdapter.Compile_graph)
+                            .AddFunc<string[], string>("compile_flow_to_dot_source", FlowCompiler.Compile_to_dot_source)
+                            .AddAction<Tuple<string, string>>("display_flow", win.Display_flow).MakeSync()
+                            .AddAction<Tuple<string[], int>>("display_flownames", win.Display_flownames).MakeSync()
+                            .AddAction<Tuple<Image, NodeMap>>("display_graph", win.Display_graph).MakeSync()
+                            .AddFunc<string[], string>("extract_filename_from_commandline", _ => _[0])
+                            .AddFunc<Tuple<string[], int>, Tuple<string[], Tuple<string[], int>>>("extract_flownames", FlowCompiler.Extract_flownames)
+                            .AddAction<Tuple<string[], string>>("extend_history", nav.Extend_history)
+                            .AddFunc<Tuple<string[], string>, int>("find_flow_headline", FlowCompiler.Find_flow_headline)
+                            .AddFunc<string, Tuple<Assembly, string[]>>("find_flow_resources", AssemblyResourceAdapter.Find_flow_resources)
+                            .AddFunc<string, Tuple<string, string>>("load_flow_from_file", filename => new Tuple<string, string>(filename, File.ReadAllText(filename)))
+                            .AddFunc<Tuple<Assembly, string[]>, Tuple<string, string>[]>("load_sources_from_resources", AssemblyResourceAdapter.Load_soures_from_resources)
+                            .AddAction<int>("move_cursor_to_flow_header", win.Move_cursor_to_flow_header).MakeSync()
+                            .AddAction<string[], Tuple<string[], string>>("navigate_backward_in_flow", nav.Navigate_backward)
+                            .AddAction<string[], Tuple<string[], string>>("navigate_forward_in_flow", nav.Navigate_forward)
+                            .AddAction<Tuple<string, string>>("save_flow", _ => File.WriteAllText(_.Item1, _.Item2))
+                            .AddFunc<Tuple<string[], int>, string[]>("select_current_flow", FlowCompiler.Select_flow_by_line)
+                            .AddFunc<Tuple<string[], Tuple<string[], int>>, Tuple<string[], int>>("select_flowname", FlowCompiler.Select_flowname)
+                            .AddOperation(new Throttle("throttle_redrawings"));
+
+            using (var fr = new FlowRuntime(frc)) {
                 fr.Message += Console.WriteLine;
                 fr.UnhandledException += ex => MessageBox.Show(ex.ToString());
-
-                var frc = new FlowRuntimeConfiguration();
-
-                frc.AddStreamsFrom("npantarhei.interviz.root.flow", Assembly.GetExecutingAssembly());
-
-                var win = new WinDesigner();
-                var nav = new Navigator();
-
-                frc.AddFunc<Tuple<string, string>[], Tuple<string, string>>("combine_sources", AssemblyResourceAdapter.Combine_sources)
-                    .AddFunc<string, Tuple<Image, NodeMap>>("compile_dot_source", GraphVizAdapter.Compile_graph)
-                    .AddFunc<string[], string>("compile_flow_to_dot_source", FlowCompiler.Compile_to_dot_source)
-                    .AddAction<Tuple<string, string>>("display_flow", win.Display_flow).MakeSync()
-                    .AddAction<Tuple<string[], int>>("display_flownames", win.Display_flownames).MakeSync()
-                    .AddAction<Tuple<Image, NodeMap>>("display_graph", win.Display_graph).MakeSync()
-                    .AddFunc<string[], string>("extract_filename_from_commandline", _ => _[0])
-                    .AddFunc<Tuple<string[], int>, Tuple<string[], Tuple<string[], int>>>("extract_flownames", FlowCompiler.Extract_flownames)
-                    .AddAction<Tuple<string[], string>>("extend_history", nav.Extend_history)
-                    .AddFunc<Tuple<string[], string>, int>("find_flow_headline", FlowCompiler.Find_flow_headline)
-                    .AddFunc<string, Tuple<Assembly, string[]>>("find_flow_resources", AssemblyResourceAdapter.Find_flow_resources)
-                    .AddFunc<string, Tuple<string, string>>("load_flow_from_file", filename => new Tuple<string, string>(filename, File.ReadAllText(filename)))
-                    .AddFunc<Tuple<Assembly, string[]>, Tuple<string, string>[]>("load_sources_from_resources",
-                        AssemblyResourceAdapter.Load_soures_from_resources)
-                    .AddAction<int>("move_cursor_to_flow_header", win.Move_cursor_to_flow_header).MakeSync()
-                    .AddAction<string[], Tuple<string[], string>>("navigate_backward_in_flow", nav.Navigate_backward)
-                    .AddAction<string[], Tuple<string[], string>>("navigate_forward_in_flow", nav.Navigate_forward)
-                    .AddAction<Tuple<string, string>>("save_flow", _ => File.WriteAllText(_.Item1, _.Item2))
-                    .AddFunc<Tuple<string[], int>, string[]>("select_current_flow", FlowCompiler.Select_flow_by_line)
-                    .AddFunc<Tuple<string[], Tuple<string[], int>>, Tuple<string[], int>>("select_flowname", FlowCompiler.Select_flowname)
-                    .AddOperation(new Throttle("throttle_redrawings"));
-                fr.Configure(frc);
 
                 win.Redraw += fr.CreateEventProcessor<Tuple<string[], int>>(".redraw");
                 win.Load_flow_from_textfile += fr.CreateEventProcessor<string>(".loadFromTextfile");
@@ -61,7 +57,7 @@ namespace npantarhei.interviz
                 win.Navigate_backward += fr.CreateEventProcessor<string[]>(".navigate_backward");
                 win.Navigate_forward += fr.CreateEventProcessor<string[]>(".navigate_forward");
 
-                fr.Process(new runtime.messagetypes.Message(".run", args));
+                fr.Process(".run", args);
 
                 Application.Run(win);
             }

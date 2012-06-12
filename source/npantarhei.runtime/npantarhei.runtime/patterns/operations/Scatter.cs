@@ -22,10 +22,10 @@ namespace npantarhei.runtime.patterns.operations
             var count = 0;
             foreach (var item in items)
             {
-                continueWith(new Message(this.Name + ".stream", item));
+                continueWith(new Message(this.Name + ".stream", item, input.CorrelationId));
                 count++;
             }
-            continueWith(new Message(this.Name + ".count", count));
+            continueWith(new Message(this.Name + ".count", count, input.CorrelationId));
         }
     }
 }
