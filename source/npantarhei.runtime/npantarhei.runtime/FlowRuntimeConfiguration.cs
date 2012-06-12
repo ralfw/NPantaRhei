@@ -33,7 +33,7 @@ namespace npantarhei.runtime
 		{
 			_operations.Add(new Operation(name,
 										  (input, outputCont, _) => { var result = implementation();
-																	  outputCont(new Message(name, result)); }
+																	  outputCont(new Message(name, result, input.CorrelationId)); }
 						   ));
 			return this;
 		}
@@ -42,7 +42,7 @@ namespace npantarhei.runtime
 		{
 			_operations.Add(new Operation(name, 
 										  (input, outputCont, _) => { var result = implementation((TInput)input.Data);
-																	  outputCont(new Message(name, result)); }
+																	  outputCont(new Message(name, result, input.CorrelationId)); }
 						   ));
 			return this;
 		}
@@ -51,14 +51,14 @@ namespace npantarhei.runtime
 		public FlowRuntimeConfiguration AddAction(string name, Action implementation, bool createContinuationSignal = false)
 		{
 			_operations.Add(new Operation(name, (input, outputCont, _) => { implementation(); 
-																			if (createContinuationSignal) outputCont(new Message(name, null)); }));
+																			if (createContinuationSignal) outputCont(new Message(name, null, input.CorrelationId)); }));
 			return this;
 		}
 		
 		public FlowRuntimeConfiguration AddAction<TInput>(string name, Action<TInput> implementation, bool createContinuationSignal = false)
 		{
 			_operations.Add(new Operation(name, (input, outputCont, _) => { implementation((TInput)input.Data); 
-																			if (createContinuationSignal) outputCont(new Message(name, null)); }));
+																			if (createContinuationSignal) outputCont(new Message(name, null, input.CorrelationId)); }));
 			return this;
 		}
 		
@@ -66,7 +66,7 @@ namespace npantarhei.runtime
 		{
 			_operations.Add(new Operation(name,
 										  (input, outputCont, _) => implementation((TInput)input.Data,
-																				   () => outputCont(new Message(name, null)))
+																				   () => outputCont(new Message(name, null, input.CorrelationId)))
 						   ));
 			return this;
 		}
@@ -74,13 +74,13 @@ namespace npantarhei.runtime
 		public FlowRuntimeConfiguration AddAction<TInput, TOutput>(string name, Action<TInput, Action<TOutput>> implementation)
 		{
 			_operations.Add(new Operation(name, (input, outputCont, _) => implementation((TInput)input.Data, 
-																						 output => outputCont(new Message(name, output)))));
+																						 output => outputCont(new Message(name, output, input.CorrelationId)))));
 			return this;
 		}
 
 		public FlowRuntimeConfiguration AddAction<TOutput>(string name, Action<Action<TOutput>> implementation)
 		{
-			_operations.Add(new Operation(name, (input, outputCont, _) => implementation(output => outputCont(new Message(name, output)))));
+			_operations.Add(new Operation(name, (input, outputCont, _) => implementation(output => outputCont(new Message(name, output, input.CorrelationId)))));
 			return this;
 		}
 
@@ -88,8 +88,8 @@ namespace npantarhei.runtime
 		{
 			_operations.Add(new Operation(name,
 										  (input, outputCont, _) => implementation((TInput)input.Data,
-																				   output0 => outputCont(new Message(name + ".out0", output0)),
-																				   output1 => outputCont(new Message(name + ".out1", output1)))
+																				   output0 => outputCont(new Message(name + ".out0", output0, input.CorrelationId)),
+																				   output1 => outputCont(new Message(name + ".out1", output1, input.CorrelationId)))
 						   ));
 			return this;
 		}

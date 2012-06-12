@@ -28,14 +28,14 @@ namespace npantarhei.runtime.operations
 			if (!(task.Operation is IFlow) && task.Message.Port.Path != output.Port.Path)
 					output = new Message(Port.Build(task.Message.Port.Path, output.Port.OperationName, output.Port.InstanceNumber, output.Port.Name),
 										 output.Data,
-                                         task.Message.CorrelationId);
+										 task.Message.CorrelationId);
 
-            if (task.Message.Port.InstanceNumber != "" && output.Port.InstanceNumber == "")
-                output = new Message(Port.Build(output.Port.Path, output.Port.OperationName, task.Message.Port.InstanceNumber, output.Port.Name),
-                                     output.Data,
-                                     task.Message.CorrelationId);
+			if (task.Message.Port.InstanceNumber != "" && output.Port.InstanceNumber == "")
+				output = new Message(Port.Build(output.Port.Path, output.Port.OperationName, task.Message.Port.InstanceNumber, output.Port.Name),
+									 output.Data,
+									 task.Message.CorrelationId);
 
-            if (!(task.Operation is IFlow)) output.FlowStack = task.Message.FlowStack;
+			if (!(task.Operation is IFlow)) output.FlowStack = task.Message.FlowStack;
 			output.Causalities = task.Message.Causalities;
 
 			Result(output);
