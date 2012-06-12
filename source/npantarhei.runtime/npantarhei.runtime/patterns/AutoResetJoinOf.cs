@@ -51,7 +51,7 @@ namespace npantarhei.runtime.patterns
                                           throw new ArgumentException("AutoResetJoin: Invalid port name! Use 'in0'..'in9'.");
                                       
                                       var inputIndex = int.Parse(input.Port.Name.Substring(input.Port.Name.Length - 1));
-                                      _arj.Process(inputIndex, input.Data, 
+                                      _arj.Process(inputIndex, input.Data, input.CorrelationId,
                                                    joinList => continueWith(new Message(_name, createJoinTuple(joinList), input.CorrelationId)));
                                   };
         }

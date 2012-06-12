@@ -61,8 +61,8 @@ namespace npantarhei.runtime.patterns.operations
             if (!bucket.IsFull) return;
 
             continueWith(new Message(base.Name, bucket.Items.Take((int)bucket.NumberOfItemsToExpect).ToArray(), correlationId));
-            bucket.Items.RemoveRange(0, (int)bucket.NumberOfItemsToExpect);
-            if (bucket.Items.Count == 0) _buckets.Remove(correlationId);
+            bucket.Items.RemoveRange(0, (int)bucket.NumberOfItemsToExpect); // remove items gathered from bucket
+            if (bucket.Items.Count == 0) _buckets.Remove(correlationId);    // remove bucket if empty (en passent bucket GC)
         }
     }
 }

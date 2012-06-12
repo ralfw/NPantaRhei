@@ -19,17 +19,17 @@ namespace npantarhei.runtime.tests.patterns
             List<object> result = null;
             Action<List<object>> onJoin = _ => result = _;
 
-            sut.Process(0, "1", onJoin);
-            sut.Process(1, 1, onJoin);
-            Assert.That(new object[]{"1", 1}, Is.EqualTo(result));
+            sut.Process(0, "a", Guid.Empty, onJoin);
+            sut.Process(1, 1, Guid.Empty, onJoin);
+            Assert.That(new object[]{"a", 1}, Is.EqualTo(result));
 
-            sut.Process(0, "2", onJoin);
-            sut.Process(0, "3", onJoin);
-            sut.Process(1, 2, onJoin);
-            Assert.That(new object[] { "2", 2 }, Is.EqualTo(result));
+            sut.Process(0, "b", Guid.Empty, onJoin);
+            sut.Process(0, "c", Guid.Empty, onJoin);
+            sut.Process(1, 2, Guid.Empty, onJoin);
+            Assert.That(result, Is.EqualTo(new object[] { "b", 2 }));
 
-            sut.Process(1, 3, onJoin);
-            Assert.That(new object[] { "3", 3 }, Is.EqualTo(result));
+            sut.Process(1, 3, Guid.Empty, onJoin);
+            Assert.That(result, Is.EqualTo(new object[] { "c", 3 }));
         }
 
 
@@ -45,6 +45,35 @@ namespace npantarhei.runtime.tests.patterns
             sut.Implementation(new Message(new Port("x.in1"), 1), onJoin, null);
             Assert.AreEqual("arj", result.Port.Fullname);
             Assert.AreEqual(new Tuple<string,int>("1", 1), result.Data);
+        }
+
+
+        [Test]
+        public void Multiple_correlationIds()
+        {
+            var sut = new AutoResetJoin(2);
+
+            List<object> result = null;
+            Action<List<object>> onJoin = _ => result = _;
+
+            var corrId1 = Guid.NewGuid();
+            var corrId2 = Guid.NewGuid();
+
+            sut.Process(0, "a", corrId1, onJoin);
+            sut.Process(0, "x", corrId2, onJoin);
+            sut.Process(1, 1, corrId1, onJoin);
+            Assert.That(new object[] { "a", 1 }, Is.EqualTo(result));
+
+            sut.Process(1, 10, corrId2, onJoin);
+            Assert.That(new object[] { "x", 10 }, Is.EqualTo(result));
+
+            sut.Process(0, "b", corrId1, onJoin);
+            sut.Process(1, 11, corrId2, onJoin);
+            sut.Process(1, 2, corrId1, onJoin);
+            Assert.That(result, Is.EqualTo(new object[] { "b", 2 }));
+
+            sut.Process(0, "y", corrId2, onJoin);
+            Assert.That(result, Is.EqualTo(new object[] { "y", 11 }));
         }
     }
 }

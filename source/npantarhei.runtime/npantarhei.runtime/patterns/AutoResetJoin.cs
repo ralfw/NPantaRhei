@@ -12,36 +12,66 @@ namespace npantarhei.runtime.patterns
      */
     internal class AutoResetJoin
     {
-        private readonly List<Queue<object>> _inputQueues;
- 
-        public AutoResetJoin(int numberOfInputs)
+        class JoinBucket
         {
-            _inputQueues = new List<Queue<object>>();
-            for (var i = 0; i < numberOfInputs; i++)
-                _inputQueues.Add(new Queue<object>());
-        }
-
-
-        public void Process(int inputIndex, object inputData, Action<List<object>> continueOnJoin)
-        {
-            lock (this)
+            public JoinBucket(int numberOfInputs)
             {
-                _inputQueues[inputIndex].Enqueue(inputData);
+                InputQueues = new List<Queue<object>>();
+                for (var i = 0; i < numberOfInputs; i++)
+                    InputQueues.Add(new Queue<object>());
+            }
 
-                if (Is_ready_to_join())
-                    continueOnJoin(Join_inputs());
+            public readonly List<Queue<object>> InputQueues;
+
+
+            public bool Is_ready_to_join()
+            {
+                return InputQueues.Count(q => q.Count > 0) == InputQueues.Count;
+            }
+
+            public bool Is_empty()
+            {
+                return InputQueues.Count(q => q.Count > 0) == 0;
+            }
+
+            public List<object> Join_inputs()
+            {
+                return new List<object>(InputQueues.Select(q => q.Dequeue()));
             }
         }
 
 
-        private bool Is_ready_to_join()
+        private readonly int _numberOfInputs;
+        private readonly Dictionary<Guid, JoinBucket> _buckets = new Dictionary<Guid,JoinBucket>(); 
+ 
+        public AutoResetJoin(int numberOfInputs)
         {
-            return _inputQueues.Count(q => q.Count > 0) == _inputQueues.Count;
+            _numberOfInputs = numberOfInputs;
         }
 
-        private List<object> Join_inputs()
+
+        public void Process(int inputIndex, object inputData, Guid correlationId, Action<List<object>> continueOnJoin)
         {
-            return new List<object>(_inputQueues.Select(q => q.Dequeue()));
+            var bucket = Get_bucket(correlationId);
+
+            bucket.InputQueues[inputIndex].Enqueue(inputData);
+
+            if (bucket.Is_ready_to_join())
+            {
+                continueOnJoin(bucket.Join_inputs());
+                if (bucket.Is_empty()) _buckets.Remove(correlationId);
+            }
+        }
+
+        private JoinBucket Get_bucket(Guid correlationId)
+        {
+            JoinBucket bucket = null;
+            if (!_buckets.TryGetValue(correlationId, out bucket))
+            {
+                bucket = new JoinBucket(_numberOfInputs);
+                _buckets[correlationId] = bucket;
+            }
+            return bucket;
         }
     }
 }
