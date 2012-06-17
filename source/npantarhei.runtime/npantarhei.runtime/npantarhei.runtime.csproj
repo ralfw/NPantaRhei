@@ -54,6 +54,7 @@
     <Compile Include="patterns\ManualResetJoinOf.cs" />
     <Compile Include="patterns\ManualResetJoin.cs" />
     <Compile Include="patterns\operations\Clock.cs" />
+    <Compile Include="patterns\operations\Correlator.cs" />
     <Compile Include="patterns\operations\Gather.cs" />
     <Compile Include="patterns\operations\Scatter.cs" />
     <Compile Include="FlowLoader.cs" />

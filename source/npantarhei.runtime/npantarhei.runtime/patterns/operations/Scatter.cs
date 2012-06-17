@@ -14,6 +14,7 @@ namespace npantarhei.runtime.patterns.operations
      */
     public class Scatter<T> : AOperation
     {
+        public Scatter() : this("scatter") {} 
         public Scatter(string name) : base(name) {}
 
         protected override void Process(IMessage input, Action<IMessage> continueWith, Action<FlowRuntimeException> unhandledException)

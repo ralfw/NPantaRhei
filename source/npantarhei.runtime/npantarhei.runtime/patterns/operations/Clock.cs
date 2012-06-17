@@ -16,7 +16,7 @@ namespace npantarhei.runtime.patterns.operations
         private System.Threading.Timer _timer;
 
         public Clock() : this(DEFAULT_PERIOD) { }
-        public Clock(int period) : this(DEFAULT_NAME, period) { }
+        public Clock(int periodMilliseconds) : this(DEFAULT_NAME, periodMilliseconds) { }
         public Clock(string name) : this(name, DEFAULT_PERIOD) { }
         public Clock(string name, int periodMilliseconds) : base(name)
         {

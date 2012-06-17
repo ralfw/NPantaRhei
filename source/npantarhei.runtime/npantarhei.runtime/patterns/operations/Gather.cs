@@ -25,6 +25,7 @@ namespace npantarhei.runtime.patterns.operations
         private readonly Dictionary<Guid, GatherBucket> _buckets = new Dictionary<Guid, GatherBucket>(); 
 
 
+        public Gather() : this("gather") {}
         public Gather(string name) : base(name) {}
 
 
