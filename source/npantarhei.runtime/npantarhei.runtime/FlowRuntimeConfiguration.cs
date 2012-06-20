@@ -12,11 +12,12 @@ namespace npantarhei.runtime
 {
 	public class FlowRuntimeConfiguration
 	{
-		public static Func<ISynchronizationBuilder> SynchronizationBuilderFactory { get; set; }
+		public static Func<ISynchronizeWithContext> SynchronizationFactory { get; set; }
+
 
 		static FlowRuntimeConfiguration()
 		{
-			SynchronizationBuilderFactory = () => new SynchronizationContextBuilder();
+			SynchronizationFactory = () => new SyncWithSynchronizationContext();
 		}
 
 		#region Operations
@@ -144,7 +145,7 @@ namespace npantarhei.runtime
 
 		public FlowRuntimeConfiguration MakeSync()
 		{
-			var sync = FlowRuntimeConfiguration.SynchronizationBuilderFactory();
+			var sync = FlowRuntimeConfiguration.SynchronizationFactory();
 			WrapLastOperation(op => new Operation(op.Name, (input, continueWith, unhandledException) => 
 																sync.Process(input,
 																			 output =>

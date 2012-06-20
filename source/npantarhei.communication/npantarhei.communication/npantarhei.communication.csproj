@@ -31,11 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="clrzmq">
-      <HintPath>..\packages\clrzmq.2.2.3\lib\clrzmq.dll</HintPath>
-    </Reference>
-    <Reference Include="clrzmq-ext">
-      <HintPath>..\packages\clrzmq.2.2.3\lib\clrzmq-ext.dll</HintPath>
+    <Reference Include="AWSSDK">
+      <HintPath>..\..\..\lib\AWSSDK.dll</HintPath>
     </Reference>
     <Reference Include="npantarhei.runtime">
       <HintPath>..\..\..\bin\npantarhei.runtime.dll</HintPath>
@@ -49,16 +46,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ZeroMQAdapter.cs" />
+    <Compile Include="AWS\AWSCredentials.cs" />
+    <Compile Include="AWS\SQSBase.cs" />
+    <Compile Include="AWS\SQSDequeue.cs" />
+    <Compile Include="AWS\SQSEnqueue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="libzmq.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <Folder Include="IronMQ\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
