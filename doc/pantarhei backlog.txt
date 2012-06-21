@@ -1,7 +1,8 @@
 Topics to address in future increments
 ------------
 
-Add a correlation ID to IMessage that gets copied with port and data.
+Introduce null input port. Message delivered there require no processing operation.
+	This is for output ports that are not used.
 
 Make copying IMessage/Message easier.
 
@@ -100,3 +101,5 @@ Remove sync mode from exec engine. Should always run async with regard to enviro
 Parallel processing on many threads
 	but still sequential processing of message with each operation
 	do this with a special standard operation
+
+Add a correlation ID to IMessage that gets copied with port and data.

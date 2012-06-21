@@ -94,6 +94,25 @@ namespace npantarhei.runtime
 			return this;
 		}
 
+        public FlowRuntimeConfiguration AddAction<TOutput>(string name, Action<Action<TOutput>, Action> implementation)
+        {
+            _operations.Add(new Operation(name,
+                                          (input, outputCont, _) => implementation(output => outputCont(new Message(name + ".out0", output, input.CorrelationId)),
+                                                                                   () => outputCont(new Message(name + ".out1", null, input.CorrelationId)))
+                           ));
+            return this;
+        }
+
+        public FlowRuntimeConfiguration AddAction<TInput, TOutput>(string name, Action<TInput, Action<TOutput>, Action> implementation)
+        {
+            _operations.Add(new Operation(name,
+                                          (input, outputCont, _) => implementation((TInput)input.Data,
+                                                                                   output => outputCont(new Message(name + ".out0", output, input.CorrelationId)),
+                                                                                   () => outputCont(new Message(name + ".out1", null, input.CorrelationId)))
+                           ));
+            return this;
+        }
+
 		public FlowRuntimeConfiguration AddAction<TInput, TOutput0, TOutput1>(string name, Action<TInput, Action<TOutput0>, Action<TOutput1>> implementation)
 		{
 			_operations.Add(new Operation(name,
