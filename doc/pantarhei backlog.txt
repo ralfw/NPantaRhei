@@ -4,6 +4,9 @@ Topics to address in future increments
 Introduce null input port. Message delivered there require no processing operation.
 	This is for output ports that are not used.
 
+Map from any type to any type. Also from signal to constant.
+
+
 Make copying IMessage/Message easier.
 
 
