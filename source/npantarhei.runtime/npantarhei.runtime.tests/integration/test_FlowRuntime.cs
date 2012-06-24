@@ -263,6 +263,29 @@ namespace npantarhei.runtime.tests.integration
 			Assert.IsTrue(_sut.WaitForResult(500, _ => result = _));
 			Assert.AreEqual("hellox", (string)result.Data);
 		}
+
+
+	    [Test]
+	    public void An_output_without_an_input()
+	    {
+            var frc = new FlowRuntimeConfiguration()
+                        .AddStreamsFrom(@"
+                                            /
+                                            .in, a
+                                         ")
+                        .AddFunc<string, string>("a", _ => _ + "x");
+
+            using(var fr = new FlowRuntime(frc))
+            {
+                Exception ex = null;
+                fr.UnhandledException += _ => ex = _;
+
+                fr.Process(".in", "hello");
+
+                Assert.IsFalse(fr.WaitForResult(500));
+                Assert.IsNull(ex);
+            }
+	    }
 	}
 }
 

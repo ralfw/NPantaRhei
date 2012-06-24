@@ -22,9 +22,10 @@ namespace npantarhei.runtime.operations
 			var inputPorts = _streams.Where(s => s.FromPort.Fullname.ToLower() == outputMessage.Port.Fullname.ToLower())
 									 .Select(s => s.ToPort)
 									 .ToArray();
-			
-			if (!inputPorts.Any())
-				throw new InvalidOperationException(string.Format("Unknown output port: '{0}'!", outputMessage.Port.Fullname));
+
+			// it is explicitly no error if no input port was found!
+            // an output message can be generated without a corresponding input.
+            // it´s like a ray of light hitting no eye.
 			
 			foreach(var port in inputPorts)
 				Result(new Message(port, outputMessage.Data, outputMessage.CorrelationId){Causalities = outputMessage.Causalities, FlowStack = outputMessage.FlowStack});	
