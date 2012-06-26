@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSV Viewer", "CSV Viewer\CS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDictionary", "ToDictionary\ToDictionary.csproj", "{084247CB-37E3-4B5C-A5B2-F2DF790C2F8F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelegramProblem", "TelegramProblem\TelegramProblem.csproj", "{A9CF5DA9-9CA9-437A-AF56-698B9447782E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,16 @@ Global
 		{084247CB-37E3-4B5C-A5B2-F2DF790C2F8F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{084247CB-37E3-4B5C-A5B2-F2DF790C2F8F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{084247CB-37E3-4B5C-A5B2-F2DF790C2F8F}.Release|x86.ActiveCfg = Release|Any CPU
+		{A9CF5DA9-9CA9-437A-AF56-698B9447782E}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{A9CF5DA9-9CA9-437A-AF56-698B9447782E}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{A9CF5DA9-9CA9-437A-AF56-698B9447782E}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{A9CF5DA9-9CA9-437A-AF56-698B9447782E}.Debug|x86.ActiveCfg = Debug|x86
+		{A9CF5DA9-9CA9-437A-AF56-698B9447782E}.Debug|x86.Build.0 = Debug|x86
+		{A9CF5DA9-9CA9-437A-AF56-698B9447782E}.Release|Any CPU.ActiveCfg = Release|x86
+		{A9CF5DA9-9CA9-437A-AF56-698B9447782E}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{A9CF5DA9-9CA9-437A-AF56-698B9447782E}.Release|Mixed Platforms.Build.0 = Release|x86
+		{A9CF5DA9-9CA9-437A-AF56-698B9447782E}.Release|x86.ActiveCfg = Release|x86
+		{A9CF5DA9-9CA9-437A-AF56-698B9447782E}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

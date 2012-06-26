@@ -1,0 +1,9 @@
+﻿/
+.configFilenames, textfileadapter_config
+.configLineWidth, formatter_config
+
+.run, read
+read, decompose
+decompose, concatenate
+concatenate, write
+write, .exit
