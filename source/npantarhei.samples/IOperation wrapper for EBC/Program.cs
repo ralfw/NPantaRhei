@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using npantarhei.runtime.contract;
-using npantarhei.runtime.patterns;
+using npantarhei.runtime;
 
 namespace IOperation_wrapper_for_EBC
 {
@@ -11,32 +10,20 @@ namespace IOperation_wrapper_for_EBC
     {
         static void Main(string[] args)
         {
+            var config = new FlowRuntimeConfiguration()
+                            .AddStreamsFrom(@"
+                                                /
+                                                .in, toupper
+                                                toupper, .out
+                                             ")
+                            .AddOperation(new ToUpperOp("toupper"));
+
+            using(var fr = new FlowRuntime(config))
+            {
+                fr.Process(".in", "hello");
+
+                fr.WaitForResult(_ => Console.WriteLine(_.Data));
+            }
         }
-    }
-
-    class ToUpperOp : AOperation
-    {
-        public ToUpperOp(string name) : base(name)
-        {
-            var ebc = new EBCtoUpper();
-            _adapter = (input, continueWith, unhandledException) => { ebc.Process((string) input.Data); };
-
-        }
-
-        private readonly OperationAdapter _adapter;
-        protected override void Process(npantarhei.runtime.contract.IMessage input, Action<npantarhei.runtime.contract.IMessage> continueWith, Action<npantarhei.runtime.contract.FlowRuntimeException> unhandledException)
-        {
-            _adapter(input, continueWith, unhandledException);
-        }
-    }
-
-    class EBCtoUpper
-    {
-        public void Process(string text)
-        {
-            Result(text.ToUpper());
-        }
-
-        public event Action<string> Result;
     }
 }

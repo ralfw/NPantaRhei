@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDictionary", "ToDictionar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelegramProblem", "TelegramProblem\TelegramProblem.csproj", "{A9CF5DA9-9CA9-437A-AF56-698B9447782E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IOperation wrapper for EBC", "IOperation wrapper for EBC\IOperation wrapper for EBC.csproj", "{0A24C7ED-CBBB-488D-A426-C55E2E25EA61}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,16 @@ Global
 		{A9CF5DA9-9CA9-437A-AF56-698B9447782E}.Release|Mixed Platforms.Build.0 = Release|x86
 		{A9CF5DA9-9CA9-437A-AF56-698B9447782E}.Release|x86.ActiveCfg = Release|x86
 		{A9CF5DA9-9CA9-437A-AF56-698B9447782E}.Release|x86.Build.0 = Release|x86
+		{0A24C7ED-CBBB-488D-A426-C55E2E25EA61}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{0A24C7ED-CBBB-488D-A426-C55E2E25EA61}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{0A24C7ED-CBBB-488D-A426-C55E2E25EA61}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{0A24C7ED-CBBB-488D-A426-C55E2E25EA61}.Debug|x86.ActiveCfg = Debug|x86
+		{0A24C7ED-CBBB-488D-A426-C55E2E25EA61}.Debug|x86.Build.0 = Debug|x86
+		{0A24C7ED-CBBB-488D-A426-C55E2E25EA61}.Release|Any CPU.ActiveCfg = Release|x86
+		{0A24C7ED-CBBB-488D-A426-C55E2E25EA61}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{0A24C7ED-CBBB-488D-A426-C55E2E25EA61}.Release|Mixed Platforms.Build.0 = Release|x86
+		{0A24C7ED-CBBB-488D-A426-C55E2E25EA61}.Release|x86.ActiveCfg = Release|x86
+		{0A24C7ED-CBBB-488D-A426-C55E2E25EA61}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
