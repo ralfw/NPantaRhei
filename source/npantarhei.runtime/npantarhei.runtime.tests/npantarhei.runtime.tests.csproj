@@ -77,6 +77,7 @@
     <Compile Include="patterns\test_Wait_for_work.cs" />
     <Compile Include="integration\test_parallel_processing.cs" />
     <Compile Include="patterns\test_Parallelize.cs" />
+    <Compile Include="spikes\spike_EBC_wrapping.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

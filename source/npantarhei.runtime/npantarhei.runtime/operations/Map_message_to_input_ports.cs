@@ -24,8 +24,8 @@ namespace npantarhei.runtime.operations
 									 .ToArray();
 
 			// it is explicitly no error if no input port was found!
-            // an output message can be generated without a corresponding input.
-            // it´s like a ray of light hitting no eye.
+			// an output message can be generated without a corresponding input.
+			// it´s like a ray of light hitting no eye.
 			
 			foreach(var port in inputPorts)
 				Result(new Message(port, outputMessage.Data, outputMessage.CorrelationId){Causalities = outputMessage.Causalities, FlowStack = outputMessage.FlowStack});	
