@@ -13,6 +13,25 @@ namespace IOperation_wrapper_for_EBC
             var config = new FlowRuntimeConfiguration()
                             .AddStreamsFrom(@"
                                                 /
+                                                .in, toupper.process
+                                                toupper.result, .out
+                                             ")
+                            .AddEventBasedComponent("toupper", new ToUpperEBC());
+
+            using (var fr = new FlowRuntime(config))
+            {
+                fr.Process(".in", "hello");
+
+                fr.WaitForResult(_ => Console.WriteLine(_.Data));
+            }
+        }
+
+
+        static void Main_use_manual_wrapper(string[] args)
+        {
+            var config = new FlowRuntimeConfiguration()
+                            .AddStreamsFrom(@"
+                                                /
                                                 .in, toupper
                                                 toupper, .out
                                              ")
