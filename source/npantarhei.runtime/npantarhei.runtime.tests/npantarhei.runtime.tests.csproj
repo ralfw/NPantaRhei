@@ -61,6 +61,7 @@
     <Compile Include="integration\test_Synchronize.cs" />
     <Compile Include="integration\test_Throttling.cs" />
     <Compile Include="messagetypes\test_AsyncWrapperOperation.cs" />
+    <Compile Include="patterns\test_EBCOperation.cs" />
     <Compile Include="patterns\test_Gather.cs" />
     <Compile Include="patterns\test_ManualResetJoin.cs" />
     <Compile Include="patterns\test_AutoResetJoin.cs" />

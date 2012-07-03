@@ -52,6 +52,7 @@
     <Compile Include="patterns\AutoResetJoinOf.cs" />
     <Compile Include="patterns\AOperation.cs" />
     <Compile Include="contract\ISynchronizeWithContext.cs" />
+    <Compile Include="patterns\EBCOperation.cs" />
     <Compile Include="patterns\ManualResetJoinOf.cs" />
     <Compile Include="patterns\ManualResetJoin.cs" />
     <Compile Include="patterns\operations\Clock.cs" />
