@@ -15,10 +15,10 @@ namespace npantarhei.runtime.tests
 		[Test()]
 		public void Enqueue()
 		{
-			var messages = new Queue<string>();
+			var messages = new PriorityQueue<string>();
 			var sut = new NotifyingSingleQueue<string>(messages);
 			
-			sut.Enqueue("x");
+			sut.Enqueue(0, "x");
 			
 			Assert.AreSame("x", messages.Dequeue());
 			Assert.AreEqual(0, messages.Count);
@@ -27,10 +27,10 @@ namespace npantarhei.runtime.tests
 		[Test]
 		public void TryDequeue()
 		{
-			var messages = new Queue<string>();
+			var messages = new PriorityQueue<string>();
 			var sut = new NotifyingSingleQueue<string>(messages);
 			
-			messages.Enqueue("x");
+			messages.Enqueue(0, "x");
 			
 			string result = null;
 			Assert.IsTrue(sut.TryDequeue(out result));
@@ -41,10 +41,10 @@ namespace npantarhei.runtime.tests
 		[Test]
 		public void Wait_successful_after_enqueue()
 		{
-			var messages = new Queue<string>();
+			var messages = new PriorityQueue<string>();
 			var sut = new NotifyingSingleQueue<string>(messages);
 			
-			sut.Enqueue("x");
+			sut.Enqueue(0, "x");
 			
 			Assert.IsTrue(sut.Wait(500));
 		}
@@ -52,10 +52,10 @@ namespace npantarhei.runtime.tests
 		[Test]
 		public void Wait_fails_after_dequeue()
 		{
-			var messages = new Queue<string>();
+			var messages = new PriorityQueue<string>();
 			var sut = new NotifyingSingleQueue<string>(messages);
 			
-			sut.Enqueue("x");
+			sut.Enqueue(0, "x");
 			string msg;
 			sut.TryDequeue(out msg);
 			

@@ -15,7 +15,7 @@ namespace npantarhei.runtime.flows
 		public Flow_asynchronously()
 		{
 			// Build
-			var async = new Asynchronize<IMessage>();
+			var async = new Asynchronize();
 			var throttle = new Throttle_message_flow();
 			var handle_exception = new Handle_exception();
 			_processMessage = new Process_message();

@@ -95,5 +95,44 @@ namespace npantarhei.runtime.tests.integration
             Assert.IsTrue(_are.WaitOne(500));
             Assert.AreEqual("exOn2", _exUnhandled.Context.Port.Fullname);
         }
+
+
+        [Test]
+        public void Causality_exception_messages_bypasses_other_pending_messages()
+        {
+            var config = new FlowRuntimeConfiguration()
+                                .AddStreamsFrom(@"
+                                                    /
+                                                    .in, push
+                                                    push, doit
+                                                    push.exception, .error
+                                                    doit, .result
+                                                 ")
+                                .AddPushCausality("push")
+                                .AddPopCausality("pop")
+                                .AddAction("doit", (int d, Action<string> continueWith) =>
+                                                       {
+                                                           continueWith(d + "x");
+                                                           continueWith(d + "y");
+                                                           throw new ApplicationException("arrrghhh!");
+                                                       });
+
+            using(var fr = new FlowRuntime(config))
+            {
+                var results = new List<IMessage>();
+                var are = new AutoResetEvent(false);
+
+                fr.Result += _ =>
+                                 {
+                                     results.Add(_);
+                                     if (results.Count == 3 || _.Port.Name == ".error") are.Set();
+                                 };
+
+                fr.Process(".in", 42);
+
+                Assert.IsTrue(are.WaitOne(1000));
+                Assert.AreEqual("error", results[0].Port.Name);
+            }
+        }
     }
 }

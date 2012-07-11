@@ -188,14 +188,14 @@ namespace npantarhei.runtime
 		}
 
 
-		private readonly Dictionary<string, Asynchronize<IMessage>> _asynchronizingOps = new Dictionary<string, Asynchronize<IMessage>>();
+		private readonly Dictionary<string, Asynchronize> _asynchronizingOps = new Dictionary<string, Asynchronize>();
 		public FlowRuntimeConfiguration MakeAsync() { return MakeAsync("~~~async~~~"); }
 		public FlowRuntimeConfiguration MakeAsync(string name)
 		{
-			Asynchronize<IMessage> async;
+			Asynchronize async;
 			if (!_asynchronizingOps.TryGetValue(name, out async))
 			{
-				async = new Asynchronize<IMessage>();
+				async = new Asynchronize();
 				async.Start();
 				_asynchronizingOps.Add(name, async);
 			}
@@ -206,14 +206,14 @@ namespace npantarhei.runtime
 		}
 
 
-		private readonly Dictionary<string, Parallelize<IMessage>> _parallelizingOps = new Dictionary<string, Parallelize<IMessage>>();
+		private readonly Dictionary<string, Parallelize> _parallelizingOps = new Dictionary<string, Parallelize>();
 		public FlowRuntimeConfiguration MakeParallel() { return MakeParallel("~~~parallel~~~"); }
 		public FlowRuntimeConfiguration MakeParallel(string name)
 		{
-			Parallelize<IMessage> parallel;
+			Parallelize parallel;
 			if (!_parallelizingOps.TryGetValue(name, out parallel))
 			{
-				parallel = new Parallelize<IMessage>();
+				parallel = new Parallelize();
 				parallel.Start();
 				_parallelizingOps.Add(name, parallel);
 			}
@@ -224,14 +224,14 @@ namespace npantarhei.runtime
 		}
 
 
-		private readonly Dictionary<string, Serialize<IMessage>> _serializingOps = new Dictionary<string, Serialize<IMessage>>();
+		private readonly Dictionary<string, Serialize> _serializingOps = new Dictionary<string, Serialize>();
 		public FlowRuntimeConfiguration MakeSerial() { return MakeSerial("~~~serial~~~"); }
 		public FlowRuntimeConfiguration MakeSerial(string name)
 		{
-			Serialize<IMessage> serial;
+			Serialize serial;
 			if (!_serializingOps.TryGetValue(name, out serial))
 			{
-				serial = new Serialize<IMessage>(_ => _.Port.Fullname);
+				serial = new Serialize(_ => _.Port.Fullname);
 				serial.Start();
 				_serializingOps.Add(name, serial);
 			};

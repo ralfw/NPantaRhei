@@ -36,7 +36,7 @@ namespace npantarhei.runtime.tests.patterns
 		public void Dequeues_until_stopped()
 		{
 			var messages = new NotifyingSingleQueue<string>();
-			messages.Enqueue("a");
+			messages.Enqueue(0, "a");
 			var sut = new Wait_for_work<string>(messages, () =>
                                                             {
                                                                 string result;

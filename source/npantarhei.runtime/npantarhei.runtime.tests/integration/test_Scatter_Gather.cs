@@ -40,7 +40,7 @@ namespace npantarhei.runtime.tests.integration
 
                 IMessage result = null;
                 Assert.IsTrue(fr.WaitForResult(1000, _ => result = _));
-                Assert.That(list, Is.EquivalentTo(((List<int>)result.Data).ToArray()));
+                Assert.That(list, Is.EquivalentTo(((int[])result.Data)));
             }
         }
     }

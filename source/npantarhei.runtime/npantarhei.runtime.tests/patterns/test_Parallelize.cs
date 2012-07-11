@@ -5,6 +5,7 @@ using System.Threading;
 
 using NUnit.Framework;
 using npantarhei.runtime.contract;
+using npantarhei.runtime.messagetypes;
 using npantarhei.runtime.patterns;
 
 namespace npantarhei.runtime.tests
@@ -18,25 +19,26 @@ namespace npantarhei.runtime.tests
 			const int N = 200;
 			const int N_THREADS = 3;
 			
-			var sut = new Parallelize<int>(N_THREADS);
+			var sut = new Parallelize(N_THREADS);
 			
 			var are = new AutoResetEvent(false);
 			var results = new List<int>();
 			var threads = new Dictionary<long,bool>();
-			Action<int> dequeue = _ => {
+			Action<IMessage> dequeue = _ => {
 				lock(results)
 				{
 					if (!threads.ContainsKey(Thread.CurrentThread.GetHashCode()))
 						threads.Add(Thread.CurrentThread.GetHashCode(), true);
-					results.Add(_);
+				    var i = (int) _.Data;
+					results.Add(i);
 					if (results.Count == N) are.Set();
-					Thread.Sleep(_ % 10);
+					Thread.Sleep(i % 10);
 				}
 			};
 			
 			sut.Start();
 			for(var i = 1; i<=N; i++)
-				sut.Process(i, dequeue);
+				sut.Process(new Message("x", i), dequeue);
 			
 			Assert.IsTrue(are.WaitOne(4000));
 			Assert.AreEqual((N*(N+1)/2), results.Sum());

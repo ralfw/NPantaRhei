@@ -23,6 +23,7 @@ namespace npantarhei.runtime.messagetypes
 		#region IMessage implementation
 		public IPort Port { get; private set; }
 		public Guid CorrelationId { get; set; }
+		public int Priority { get; set; }
 		public object Data { get; private set; }
 
 		private CausalityStack _causalities;

@@ -6,24 +6,24 @@ namespace npantarhei.runtime.data
 {
 	internal class NotifyingSingleQueue<T> : INotifyingResource
 	{
-		private readonly Queue<T> _messages;
+		private readonly PriorityQueue<T> _messages;
 		private readonly ReaderWriterLock _lock = new ReaderWriterLock();
 		private readonly ManualResetEvent _signal = new ManualResetEvent(false);
 		
 		
-		public NotifyingSingleQueue() : this(new Queue<T>()) {}
-		internal NotifyingSingleQueue(Queue<T> messages)
+		public NotifyingSingleQueue() : this(new PriorityQueue<T>()) {}
+		internal NotifyingSingleQueue(PriorityQueue<T> messages)
 		{
 			_messages = messages;
 		}
 		
 		
-		public void Enqueue(T message)
+		public void Enqueue(int priority, T message)
 		{
 			_lock.AcquireWriterLock(500);
 			try
 			{
-				_messages.Enqueue(message);
+				_messages.Enqueue(priority, message);
 				_signal.Set();
 			}
 			finally

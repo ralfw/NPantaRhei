@@ -56,7 +56,7 @@ namespace npantarhei.runtime.operations
 		private void Catch_exception_with_causality(Task task, FlowRuntimeException ex)
 		{
 			var c = task.Message.Causalities.Peek();
-			var cMsg = new Message(c.Port, ex, task.Message.CorrelationId);
+			var cMsg = new Message(c.Port, ex, task.Message.CorrelationId) { Priority = 99 };
 			HandledException(cMsg);
 		}
 

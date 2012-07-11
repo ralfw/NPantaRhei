@@ -42,8 +42,8 @@ namespace npantarhei.runtime.tests.integration
 		[Test]
 		public void No_processing_Just_redirect_input_to_output()
 		{
-            var frc = new FlowRuntimeConfiguration().AddStream(new Stream(".in", ".out"));
-            _sut.Configure(frc);
+			var frc = new FlowRuntimeConfiguration().AddStream(new Stream(".in", ".out"));
+			_sut.Configure(frc);
 
 			_sut.Process(new Message(".in", "hello"));
 
@@ -55,12 +55,12 @@ namespace npantarhei.runtime.tests.integration
 		[Test]
 		public void Single_operation()
 		{
-            var frc = new FlowRuntimeConfiguration()
-			                .AddStream(new Stream(".in", "A.in"))
-			                .AddStream(new Stream("A.out", ".out"))
+			var frc = new FlowRuntimeConfiguration()
+							.AddStream(new Stream(".in", "A.in"))
+							.AddStream(new Stream("A.out", ".out"))
 			
-			                .AddOperation(new Operation("A", (input, outputCont, _) => outputCont(new Message("A.out", input.Data.ToString() + "x"))));
-            _sut.Configure(frc);
+							.AddOperation(new Operation("A", (input, outputCont, _) => outputCont(new Message("A.out", input.Data.ToString() + "x"))));
+			_sut.Configure(frc);
 
 			_sut.Process(new Message(".in", "hello"));
 
@@ -72,13 +72,13 @@ namespace npantarhei.runtime.tests.integration
 		[Test]
 		public void Sequence_of_operations()
 		{
-            var frc = new FlowRuntimeConfiguration()
-			                .AddStream(new Stream(".in", "A.in"))
-			                .AddStream(new Stream("A.out", "B.in"))
-			                .AddStream(new Stream("B.out", ".out"))
+			var frc = new FlowRuntimeConfiguration()
+							.AddStream(new Stream(".in", "A.in"))
+							.AddStream(new Stream("A.out", "B.in"))
+							.AddStream(new Stream("B.out", ".out"))
 			
-			                .AddOperation(new Operation("A", (input, outputCont, _) => outputCont(new Message("A.out", input.Data.ToString() + "x"))))
-			                .AddOperation(new Operation("B", (input, outputCont, _) => outputCont(new Message("B.out", input.Data.ToString() + "y"))));
+							.AddOperation(new Operation("A", (input, outputCont, _) => outputCont(new Message("A.out", input.Data.ToString() + "x"))))
+							.AddOperation(new Operation("B", (input, outputCont, _) => outputCont(new Message("B.out", input.Data.ToString() + "y"))));
 			_sut.Configure(frc);
 
 			_sut.Process(new Message(".in", "hello"));
@@ -91,14 +91,14 @@ namespace npantarhei.runtime.tests.integration
 		[Test]
 		public void Output_with_fan_out()
 		{
-            var frc = new FlowRuntimeConfiguration()
-                            .AddStream(new Stream(".in", "A.in"))
-                            .AddStream(new Stream(".in", "B.in"))
-                            .AddStream(new Stream("A.out", ".out"))
-                            .AddStream(new Stream("B.out", ".out"))
+			var frc = new FlowRuntimeConfiguration()
+							.AddStream(new Stream(".in", "A.in"))
+							.AddStream(new Stream(".in", "B.in"))
+							.AddStream(new Stream("A.out", ".out"))
+							.AddStream(new Stream("B.out", ".out"))
 
-                            .AddOperation(new Operation("A", (input, outputCont, _) => outputCont(new Message("A.out", input.Data.ToString() + "x"))))
-                            .AddOperation(new Operation("B", (input, outputCont, _) => outputCont(new Message("B.out", input.Data.ToString() + "y"))));
+							.AddOperation(new Operation("A", (input, outputCont, _) => outputCont(new Message("A.out", input.Data.ToString() + "x"))))
+							.AddOperation(new Operation("B", (input, outputCont, _) => outputCont(new Message("B.out", input.Data.ToString() + "y"))));
 			_sut.Configure(frc);
 
 			var results = new List<IMessage>();
@@ -119,12 +119,12 @@ namespace npantarhei.runtime.tests.integration
 		[Test]
 		public void Ports_with_context()
 		{
-            var frc = new FlowRuntimeConfiguration()
-                            .AddStream(new Stream(".in", "A/B/X.in"))
-                            .AddStream(new Stream("A/B/X.out", ".out"))
+			var frc = new FlowRuntimeConfiguration()
+							.AddStream(new Stream(".in", "A/B/X.in"))
+							.AddStream(new Stream("A/B/X.out", ".out"))
 
-                            .AddOperation(new Operation("X", (input, outputCont, _) => outputCont(new Message("A/B/X.out", input.Data.ToString() + "x"))));
-            _sut.Configure(frc);
+							.AddOperation(new Operation("X", (input, outputCont, _) => outputCont(new Message("A/B/X.out", input.Data.ToString() + "x"))));
+			_sut.Configure(frc);
 			
 			_sut.Process(new Message(".in", "hello"));
 
@@ -136,12 +136,12 @@ namespace npantarhei.runtime.tests.integration
 		[Test]
 		public void Process_exception_in_operation()
 		{
-            var frc = new FlowRuntimeConfiguration()
-			                .AddStream(new Stream(".process", "ThrowEx.in"))
-			                .AddStream(new Stream("ThrowEx.out", ".out"))
+			var frc = new FlowRuntimeConfiguration()
+							.AddStream(new Stream(".process", "ThrowEx.in"))
+							.AddStream(new Stream("ThrowEx.out", ".out"))
 
-                            .AddOperation(new Operation("ThrowEx", (input, outputCont, _) => { throw new NotImplementedException("xxx"); }));
-            _sut.Configure(frc);
+							.AddOperation(new Operation("ThrowEx", (input, outputCont, _) => { throw new NotImplementedException("xxx"); }));
+			_sut.Configure(frc);
 
 			FlowRuntimeException ex = null;
 			_sut.UnhandledException += _ =>
@@ -157,35 +157,17 @@ namespace npantarhei.runtime.tests.integration
 			Assert.AreEqual("ThrowEx.in", ex.Context.Port.Fullname);
 		}
 
-		[Test]
-		public void Process_exception_in_runtime()
-		{
-		    _sut.Configure(new FlowRuntimeConfiguration().AddStream(new Stream(".process", "unknown op")));
-
-			FlowRuntimeException ex = null;
-			_sut.UnhandledException += _ =>
-											{
-												ex = _;
-												_are.Set();
-											};
-
-			_sut.Process(new Message(".process", "hello"));
-
-			Assert.IsTrue(_are.WaitOne(1000));
-			Assert.AreEqual(".process", ex.Context.Port.Fullname);
-			Assert.IsTrue(ex.InnerException.Message.IndexOf("unknown op") > 0);
-		}
 
 		[Test, Explicit]
 		// Watch for exception output in test window. It should show an exception reporting a missing exception handler.
 		public void Report_missing_exception_handler()
 		{
-		    var frc = new FlowRuntimeConfiguration()
-		                    .AddStream(new Stream(".process", "ThrowEx.in"))
-		                    .AddStream(new Stream("ThrowEx.out", ".out"))
+			var frc = new FlowRuntimeConfiguration()
+							.AddStream(new Stream(".process", "ThrowEx.in"))
+							.AddStream(new Stream("ThrowEx.out", ".out"))
 
-                            .AddOperation(new Operation("ThrowEx", (input, outputCont, _) => { throw new NotImplementedException("xxx"); }));
-            _sut.Configure(frc);
+							.AddOperation(new Operation("ThrowEx", (input, outputCont, _) => { throw new NotImplementedException("xxx"); }));
+			_sut.Configure(frc);
 
 			_sut.Process(new Message(".process", "hello"));
 		}
@@ -193,14 +175,14 @@ namespace npantarhei.runtime.tests.integration
 		[Test]
 		public void Log_messages()
 		{
-            var frc = new FlowRuntimeConfiguration()
-			                .AddStream(new Stream(".in", "A.in"))
-			                .AddStream(new Stream("A.out", "B.in"))
-			                .AddStream(new Stream("B.out", ".out"))
+			var frc = new FlowRuntimeConfiguration()
+							.AddStream(new Stream(".in", "A.in"))
+							.AddStream(new Stream("A.out", "B.in"))
+							.AddStream(new Stream("B.out", ".out"))
 
-			                .AddOperation(new Operation("A", (input, outputCont, _) => outputCont(new Message("A.out", input.Data.ToString() + "x"))))
-			                .AddOperation(new Operation("B", (input, outputCont, _) => outputCont(new Message("B.out", input.Data.ToString() + "y"))));
-            _sut.Configure(frc);
+							.AddOperation(new Operation("A", (input, outputCont, _) => outputCont(new Message("A.out", input.Data.ToString() + "x"))))
+							.AddOperation(new Operation("B", (input, outputCont, _) => outputCont(new Message("B.out", input.Data.ToString() + "y"))));
+			_sut.Configure(frc);
 
 			var messages = new List<string>();
 			_sut.Message += _ => messages.Add(_.Port.Fullname);
@@ -215,15 +197,15 @@ namespace npantarhei.runtime.tests.integration
 		[Test]
 		public void Multiple_instances_of_same_op_in_one_flow()
 		{
-            var frc = new FlowRuntimeConfiguration()
-                            .AddStream(new Stream(".in", "A#1"))
-                            .AddStream(new Stream("A#1.out", "B"))
-                            .AddStream(new Stream("B", "A#2"))
-                            .AddStream(new Stream("A#2.out", ".out"))
+			var frc = new FlowRuntimeConfiguration()
+							.AddStream(new Stream(".in", "A#1"))
+							.AddStream(new Stream("A#1.out", "B"))
+							.AddStream(new Stream("B", "A#2"))
+							.AddStream(new Stream("A#2.out", ".out"))
 
-                            .AddOperation(new Operation("A", (input, outputCont, _) => outputCont(new Message("A.out", input.Data.ToString() + "x"))))
-                            .AddOperation(new Operation("B", (input, outputCont, _) => outputCont(new Message("B", input.Data.ToString() + "y"))));
-            _sut.Configure(frc);
+							.AddOperation(new Operation("A", (input, outputCont, _) => outputCont(new Message("A.out", input.Data.ToString() + "x"))))
+							.AddOperation(new Operation("B", (input, outputCont, _) => outputCont(new Message("B", input.Data.ToString() + "y"))));
+			_sut.Configure(frc);
 
 			var messages = new List<IMessage>();
 			_sut.Message += messages.Add;
@@ -238,24 +220,24 @@ namespace npantarhei.runtime.tests.integration
 		[Test]
 		public void Nested_flows()
 		{
-            var frc = new FlowRuntimeConfiguration()
-			                .AddStreamsFrom(@"
-								                .in, f.in // flow with explicit ports
-								                f.out, .out
+			var frc = new FlowRuntimeConfiguration()
+							.AddStreamsFrom(@"
+												.in, f.in // flow with explicit ports
+												f.out, .out
 
-								                f
-								                .in, g // flow without explicit ports
-								                g, .out
+												f
+												.in, g // flow without explicit ports
+												g, .out
 
-								                g
-								                ., a // port without a name
-								                a, .
-								                ")
+												g
+												., a // port without a name
+												a, .
+												")
 
-			                .AddOperation(new Operation("a", (input, outputCont, _) => outputCont(new Message("a", input.Data.ToString() + "x"))));
-            _sut.Configure(frc);
+							.AddOperation(new Operation("a", (input, outputCont, _) => outputCont(new Message("a", input.Data.ToString() + "x"))));
+			_sut.Configure(frc);
 
-		    _sut.Message += Console.WriteLine;
+			_sut.Message += Console.WriteLine;
 
 			_sut.Process(new Message(".in", "hello"));
 
@@ -265,25 +247,55 @@ namespace npantarhei.runtime.tests.integration
 		}
 
 
+		[Test]
+		public void An_output_without_an_input()
+		{
+			var frc = new FlowRuntimeConfiguration()
+						.AddStreamsFrom(@"
+											/
+											.in, a
+										 ")
+						.AddFunc<string, string>("a", _ => _ + "x");
+
+			using(var fr = new FlowRuntime(frc))
+			{
+				Exception ex = null;
+				fr.UnhandledException += _ => ex = _;
+
+				fr.Process(".in", "hello");
+
+				Assert.IsFalse(fr.WaitForResult(500));
+				Assert.IsNull(ex);
+			}
+		}
+
 	    [Test]
-	    public void An_output_without_an_input()
+	    public void High_prio_exception_message_terminates_runtime()
 	    {
-            var frc = new FlowRuntimeConfiguration()
-                        .AddStreamsFrom(@"
-                                            /
-                                            .in, a
-                                         ")
-                        .AddFunc<string, string>("a", _ => _ + "x");
+            var config = new FlowRuntimeConfiguration()
+                                .AddStreamsFrom(@"
+                                                    /
+                                                    .in, doit
+                                                    .stop, .error
+                                                    doit, .result
+                                                 ")
+                                .AddAction("doit", (int d, Action<string> continueWith) =>
+                                                       {
+                                                           continueWith(d + "x");
+                                                           continueWith(d + "y");
+                                                           throw new ApplicationException("arrrghhh!");
+                                                       });
 
-            using(var fr = new FlowRuntime(frc))
+            using (var fr = new FlowRuntime(config))
             {
-                Exception ex = null;
-                fr.UnhandledException += _ => ex = _;
+                IMessage result = null;
 
-                fr.Process(".in", "hello");
+                fr.UnhandledException += ex => { fr.Process(new Message(".stop", ex) { Priority = 99 }); };
 
-                Assert.IsFalse(fr.WaitForResult(500));
-                Assert.IsNull(ex);
+                fr.Process(".in", 42);
+
+                Assert.IsTrue(fr.WaitForResult(500, _ => { if (result == null) result = _; }));
+                Assert.AreEqual("error", result.Port.Name);
             }
 	    }
 	}

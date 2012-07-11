@@ -3,9 +3,9 @@ using npantarhei.runtime.contract;
 
 namespace npantarhei.runtime.patterns
 {
-    public interface IAsynchronizer<T>
+    public interface IAsynchronizer
     {
-        void Process(T message, Action<T> continueWith);
+        void Process(IMessage message, Action<IMessage> continueWith);
 
         void Start();
         void Stop();
@@ -13,9 +13,9 @@ namespace npantarhei.runtime.patterns
 
     public class AsyncWrapperOperation : IOperation
     {
-        private readonly IAsynchronizer<IMessage> _asyncer;
+        private readonly IAsynchronizer _asyncer;
 
-        public AsyncWrapperOperation(IAsynchronizer<IMessage> asyncer, IOperation operationToWrap)
+        public AsyncWrapperOperation(IAsynchronizer asyncer, IOperation operationToWrap)
         {
             _asyncer = asyncer;
             this.Name = operationToWrap.Name;

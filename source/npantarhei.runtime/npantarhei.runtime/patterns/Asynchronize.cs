@@ -10,14 +10,14 @@ using npantarhei.runtime.messagetypes;
 
 namespace npantarhei.runtime.patterns
 {
-    internal class Asynchronize<T> : IAsynchronizer<T>
+    internal class Asynchronize : IAsynchronizer
     {
-        private readonly Parallelize<T> _parallelize;
+        private readonly Parallelize _parallelize;
 
-        internal Asynchronize() { _parallelize = new Parallelize<T>(1); }
+        internal Asynchronize() { _parallelize = new Parallelize(1); }
 
 
-        public void Process(T message, Action<T> continueWith) { _parallelize.Process(message, continueWith); }
+        public void Process(IMessage message, Action<IMessage> continueWith) { _parallelize.Process(message, continueWith); }
 
 
         public void Start() { _parallelize.Start(); }

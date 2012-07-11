@@ -8,26 +8,26 @@ using npantarhei.runtime.messagetypes;
 
 namespace npantarhei.runtime.patterns
 {
-    internal class Parallelize<T> : IAsynchronizer<T>
+    internal class Parallelize : IAsynchronizer
     {
-        private readonly NotifyingSingleQueue<ScheduledTask<T>> _messages;
-        private readonly List<Wait_for_work<ScheduledTask<T>>> _waitForWork;
+        private readonly NotifyingSingleQueue<ScheduledTask<IMessage>> _messages;
+        private readonly List<Wait_for_work<ScheduledTask<IMessage>>> _waitForWork;
 
 
         public Parallelize() : this(4) { }
         public Parallelize(int numberOfThreads)
         {
-            _messages = new NotifyingSingleQueue<ScheduledTask<T>>();
+            _messages = new NotifyingSingleQueue<ScheduledTask<IMessage>>();
 
-            _waitForWork = new List<Wait_for_work<ScheduledTask<T>>>();
+            _waitForWork = new List<Wait_for_work<ScheduledTask<IMessage>>>();
             for (var i = 0; i < numberOfThreads; i++)
             {
-                var wfw = new Wait_for_work<ScheduledTask<T>>(_messages,
+                var wfw = new Wait_for_work<ScheduledTask<IMessage>>(_messages,
                                                () =>
                                                {
-                                                   ScheduledTask<T> result;
+                                                   ScheduledTask<IMessage> result;
                                                    var success = _messages.TryDequeue(out result);
-                                                   return new Tuple<bool, ScheduledTask<T>>(success, result);
+                                                   return new Tuple<bool, ScheduledTask<IMessage>>(success, result);
                                                });
                 wfw.Dequeued += _ => _.ContinueWith(_.Message);
                 _waitForWork.Add(wfw);
@@ -35,11 +35,12 @@ namespace npantarhei.runtime.patterns
         }
 
 
-        public void Process(T message, Action<T> continueWith) { _messages.Enqueue(new ScheduledTask<T>()
-                                                                                       {
-                                                                                           Message = message,
-                                                                                           ContinueWith = continueWith
-                                                                                       }); }
+        public void Process(IMessage message, Action<IMessage> continueWith) { _messages.Enqueue(message.Priority, 
+                                                                                                 new ScheduledTask<IMessage>()
+                                                                                                       {
+                                                                                                           Message = message,
+                                                                                                           ContinueWith = continueWith
+                                                                                                       }); }
 
 
         public void Start() { _waitForWork.ForEach(wfw => wfw.Start()); }

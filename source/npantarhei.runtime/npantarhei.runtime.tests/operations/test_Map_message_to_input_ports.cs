@@ -51,14 +51,14 @@ namespace npantarhei.runtime.tests.operations
 		{
 			var sut = new Map_message_to_input_ports();
 			
-			List<IStream> streams = new List<IStream>();
+			var streams = new List<IStream>();
 			streams.Add(new Stream("a", "a1"));
 			streams.Add(new Stream("b", "b1"));
 			streams.Add(new Stream("b", "b2"));
 			streams.Add(new Stream("c", "c1"));
 			sut.Inject(streams);
 			
-			List<string> results = new List<string>();
+			var results = new List<string>();
 			sut.Result += _ => results.Add(_.Port.Fullname);
 			
 			sut.Process(new Message("b", "some data"));
@@ -67,15 +67,19 @@ namespace npantarhei.runtime.tests.operations
 		}
 		
 		[Test]
-		public void Unknow_port_to_map()
+		public void Unknow_port_to_map_causes_no_error()
 		{
 			var sut = new Map_message_to_input_ports();
 			
-			List<IStream> streams = new List<IStream>();
+			var streams = new List<IStream>();
 			sut.Inject(streams);
-			
-			Assert.Throws(typeof(InvalidOperationException), 
-						  () => sut.Process(new Message("b", "some data")));
+
+            var results = new List<string>();
+            sut.Result += _ => results.Add(_.Port.Fullname);
+
+		    sut.Process(new Message("b", "some data"));
+            
+            Assert.AreEqual(0, results.Count);
 		}
 	}
 }
