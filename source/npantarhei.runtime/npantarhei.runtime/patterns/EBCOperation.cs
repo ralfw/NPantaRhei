@@ -120,7 +120,9 @@ namespace npantarhei.runtime.patterns
         #region Call input port method
         private void Call_input_port_method(object ebc, IEnumerable<MethodInfo> inputPorts, string portName, object parameter)
         {
-            var miInput = inputPorts.First(mi => mi.Name.ToLower() == portName.ToLower());
+            var miInput = inputPorts.FirstOrDefault(mi => mi.Name.ToLower() == portName.ToLower());
+            if (miInput == null) throw new ArgumentException(string.Format("EBC-Operation {0}: Unknown input port name '{1}'!", base.Name, portName));
+
             var parameters = new[] { parameter };
             if (!miInput.GetParameters().Any()) parameters = null;
             miInput.Invoke(ebc, parameters);
