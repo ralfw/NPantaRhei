@@ -1,17 +1,22 @@
 Topics to address in future increments
 ------------
 
-Introduce null input port. Message delivered there require no processing operation.
-	This is for output ports that are not used.
+
+EBC operations: if they are made active operations, would then the need for TLS go away?
+probably.
+also this would enable them to be sources of events without special initialization.
+and this would make it easier to move the UI into a flow, because a dialog class naturally is an EBC class.
+
+
+Remove default sync factory from FlowRuntimeConfig. Throw meaningful message if none has been set prio to using MakeSync().
+(Neither WinForms nor WPF are default GUI technologies, it seems.)
+
 
 Map from any type to any type. Also from signal to constant.
 
 
 Make copying IMessage/Message easier.
 
-
-Make it easier to implement multi-port operations with custom port names. (No code generation must be used, to avoid incompatibility with
-MonoTouch and like platforms.)
 
 
 For functional units producing many results: do they really need to produce all results at once?

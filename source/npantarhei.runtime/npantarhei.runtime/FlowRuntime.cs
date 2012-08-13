@@ -30,7 +30,6 @@ namespace npantarhei.runtime
 			// Bind
 			_addStream += regStream.Process;
 			_addOperation += regOp.Process;
-
 			_addOperation += configOp.Process;
 			configOp.Result += flow.Execute;
 			
