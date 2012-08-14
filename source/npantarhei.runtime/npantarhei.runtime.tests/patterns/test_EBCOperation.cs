@@ -18,21 +18,20 @@ namespace npantarhei.runtime.tests.patterns
             var sut = new EBCOperation("math", new MyEbc(), null);
 
             IMessage result = null;
-            sut.Implementation(new ActivationMessage(), _ => result = _, null);
 
-            sut.Implementation(new Message("math.Inc", 41), null, null);
+            sut.Implementation(new Message("math.Inc", 41), _ => result = _, null);
 
             Assert.AreEqual("math.Result", result.Port.Fullname);
             Assert.AreEqual(42, (int)result.Data);
 
 
-            sut.Implementation(new Message("math.Divide", new Tuple<int, int>(42, 7)), null, null);
+            sut.Implementation(new Message("math.Divide", new Tuple<int, int>(42, 7)), _ => result = _, null);
 
             Assert.AreEqual("math.Result", result.Port.Fullname);
             Assert.AreEqual(6, (int)result.Data);
 
 
-            sut.Implementation(new Message("math.Divide", new Tuple<int, int>(42, 0)), null, null);
+            sut.Implementation(new Message("math.Divide", new Tuple<int, int>(42, 0)), _ => result = _, null);
 
             Assert.AreEqual("math.DivisionByZero", result.Port.Fullname);
             Assert.IsNull(result.Data);

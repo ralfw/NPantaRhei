@@ -12,6 +12,8 @@ namespace npantarhei.runtime.patterns
     [ActiveOperation]
     internal class EBCOperation : AOperation
     {
+        private const string CONTINUATION_SLOT_NAME = "continueWith";
+
         private readonly object _eventBasedComponent;
         private readonly IDispatcher _dispatcher;
         private readonly IEnumerable<MethodInfo> _inputPorts;
@@ -26,19 +28,35 @@ namespace npantarhei.runtime.patterns
             _inputPorts = Find_input_ports(_eventBasedComponent);
             var outputPorts = Find_output_ports(_eventBasedComponent);
 
-            Assign_handlers_to_output_port_events(_eventBasedComponent, 
-                                                  outputPorts , 
-                                                  _ => _active_continueWith(_)); // indirection required, since delegate hasn´t 
-                                                                                 // been assigned during ctor execution
+            Assign_handlers_to_output_port_events(_eventBasedComponent,
+                                                  outputPorts,
+                                                  _ => {
+                                                            var continueWith = (Action<IMessage>)Thread.GetData(Thread.GetNamedDataSlot(CONTINUATION_SLOT_NAME)) ??
+                                                                               _active_continueWith;
+                                                            continueWith(_);
+                                                        });
         }
 
 
         protected override void Process(IMessage input, Action<IMessage> continueWith, Action<FlowRuntimeException> unhandledException)
         {
             if (input is ActivationMessage)
+            {
                 _active_continueWith = continueWith;
+            }
             else
-                Call_input_port_method(_eventBasedComponent, _inputPorts, input.Port.Name, input.Data);
+            {
+                Thread.AllocateNamedDataSlot(CONTINUATION_SLOT_NAME);
+                Thread.SetData(Thread.GetNamedDataSlot(CONTINUATION_SLOT_NAME), continueWith);
+                try
+                {
+                    Call_input_port_method(_eventBasedComponent, _inputPorts, input.Port.Name, input.Data);
+                }
+                finally
+                {
+                    Thread.FreeNamedDataSlot(CONTINUATION_SLOT_NAME);
+                }
+            }
         }
 
 
