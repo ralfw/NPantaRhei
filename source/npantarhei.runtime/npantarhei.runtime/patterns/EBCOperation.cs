@@ -10,16 +10,18 @@ using npantarhei.runtime.messagetypes;
 namespace npantarhei.runtime.patterns
 {
     [ActiveOperation]
-    public class EBCOperation : AOperation
+    internal class EBCOperation : AOperation
     {
         private readonly object _eventBasedComponent;
+        private readonly IDispatcher _dispatcher;
         private readonly IEnumerable<MethodInfo> _inputPorts;
         private Action<IMessage> _active_continueWith;
 
 
-        public EBCOperation(string name, object eventBasedComponent) : base(name)
+        public EBCOperation(string name, object eventBasedComponent, IDispatcher dispatcher) : base(name)
         {
             _eventBasedComponent = eventBasedComponent;
+            _dispatcher = dispatcher;
 
             _inputPorts = Find_input_ports(_eventBasedComponent);
             var outputPorts = Find_output_ports(_eventBasedComponent);
@@ -117,7 +119,11 @@ namespace npantarhei.runtime.patterns
 
             var parameters = new[] { parameter };
             if (!miInput.GetParameters().Any()) parameters = null;
-            miInput.Invoke(ebc, parameters);
+
+            if (DispatchedMethodAttribute.HasBeenApplied(miInput))
+                _dispatcher.Process(() => miInput.Invoke(ebc, parameters));
+            else
+                miInput.Invoke(ebc, parameters);
         }
         #endregion
 

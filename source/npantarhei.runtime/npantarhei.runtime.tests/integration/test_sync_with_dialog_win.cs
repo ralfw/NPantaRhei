@@ -25,10 +25,13 @@ namespace npantarhei.runtime.tests.integration
             frc.AddStream(new Stream("gettime", "showtimeMakeSync"));
             frc.AddStream(new Stream(".inAttribute", "gettime2"));
             frc.AddStream(new Stream("gettime2", "showtimeAttribute"));
+            frc.AddStream(new Stream(".inEbc", "gettime3"));
+            frc.AddStream(new Stream("gettime3", "ebc.showtimeAttribute"));
 
             var opcont = new FlowRuntimeConfiguration();
             opcont.AddFunc("gettime", () => DateTime.Now);
             opcont.AddFunc("gettime2", () => DateTime.Now);
+            opcont.AddFunc("gettime3", () => DateTime.Now);
             opcont.AddAction<DateTime>("showtimeMakeSync", (DateTime _) =>
                                                        {
                                                            Console.WriteLine("event handler thread: {0}",
@@ -38,6 +41,7 @@ namespace npantarhei.runtime.tests.integration
                                                        })
                   .MakeDispatched();
             opcont.AddAction<DateTime>("showtimeAttribute", this.ShowTimeAttribute);
+            opcont.AddEventBasedComponent("ebc", this);
 
             frc.AddOperations(opcont.Operations);
 
@@ -66,6 +70,12 @@ namespace npantarhei.runtime.tests.integration
             _fr.Process(".inAttribute", null);
         }
 
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Console.WriteLine("button thread: {0}", Thread.CurrentThread.GetHashCode());
+            _fr.Process(".inEbc", null);
+        }
+
 
         [DispatchedMethod]
         public void ShowTimeAttribute(DateTime dt)
@@ -74,6 +84,5 @@ namespace npantarhei.runtime.tests.integration
             label1.Text = dt.ToString();
             listBox1.Items.Add(dt.ToString() + "/attr");
         }
-
     }
 }

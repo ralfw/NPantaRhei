@@ -15,7 +15,7 @@ namespace npantarhei.runtime.tests.patterns
         [Test]
         public void Wrap_EBC()
         {
-            var sut = new EBCOperation("math", new MyEbc());
+            var sut = new EBCOperation("math", new MyEbc(), null);
 
             IMessage result = null;
             sut.Implementation(new ActivationMessage(), _ => result = _, null);

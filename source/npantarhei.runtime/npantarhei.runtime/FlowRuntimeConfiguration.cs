@@ -11,13 +11,15 @@ using System.IO;
 namespace npantarhei.runtime
 {
 	public class FlowRuntimeConfiguration
-	{
-		public static Func<ISynchronizeWithContext> SynchronizationFactory { get; set; }
+	{        
+		public static Func<IDispatcher> DispatcherFactory { get; set; }
+	    [Obsolete]
+	    public static Func<IDispatcher> SynchronizationFactory { get { return DispatcherFactory; } set { DispatcherFactory = value; } } 
 
 
 		static FlowRuntimeConfiguration()
 		{
-			SynchronizationFactory = () => new SyncWithSynchronizationContext();
+			DispatcherFactory = () => new DispatchWithSynchronizationContext();
 		}
 
 		#region Operations
@@ -137,7 +139,7 @@ namespace npantarhei.runtime
 
 		public FlowRuntimeConfiguration AddEventBasedComponent(string name, object eventBasedComponent)
 		{
-			_operations.Add(new EBCOperation(name, eventBasedComponent));
+			_operations.Add(new EBCOperation(name, eventBasedComponent, FlowRuntimeConfiguration.DispatcherFactory()));
 			return this;
 		}
 
@@ -181,7 +183,7 @@ namespace npantarhei.runtime
 
 		public FlowRuntimeConfiguration MakeDispatched()
 		{
-			var sync = FlowRuntimeConfiguration.SynchronizationFactory();
+			var sync = FlowRuntimeConfiguration.DispatcherFactory();
 			WrapLastOperation(op => new Operation(op.Name, (input, continueWith, unhandledException) => 
 																sync.Process(input,
 																			 output =>

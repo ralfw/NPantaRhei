@@ -37,7 +37,7 @@ namespace npantarhei.runtime.tests.integration
 
                 fr.Process(".in", new Tuple<int, int>(42, 0));
 
-                Assert.IsTrue(fr.WaitForResult(1000, _ => result = _));
+                Assert.IsTrue(fr.WaitForResult(2000, _ => result = _));
                 Assert.AreEqual(".fehler", result.Port.Fullname);
                 Assert.AreEqual(new Tuple<int,int>(42,0), result.Data);
             }
