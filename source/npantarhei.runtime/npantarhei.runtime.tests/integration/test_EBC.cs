@@ -75,6 +75,10 @@ namespace npantarhei.runtime.tests.integration
             var config = new FlowRuntimeConfiguration()
                                 .AddStreamsFrom(@"
                                                     /
+                                                    .in, subflow.in
+                                                    subflow.out, .out
+
+                                                    subflow
                                                     .in, ebc.Run
                                                     ebc.Out, .out
                                                  ")
@@ -85,7 +89,7 @@ namespace npantarhei.runtime.tests.integration
                 fr.Process(".in", "hello");
 
                 var result = "";
-                Assert.IsTrue(fr.WaitForResult(_ => result = (string)_.Data));
+                Assert.IsTrue(fr.WaitForResult(2000, _ => result = (string)_.Data));
                 Assert.AreEqual("hellox", result);
             }
         }

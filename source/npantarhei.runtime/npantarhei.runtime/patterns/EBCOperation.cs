@@ -34,7 +34,7 @@ namespace npantarhei.runtime.patterns
                                                             var continueWith = (Action<IMessage>)Thread.GetData(Thread.GetNamedDataSlot(CONTINUATION_SLOT_NAME)) ??
                                                                                _active_continueWith;
                                                             continueWith(_);
-                                                        });
+                                                  });
         }
 
 
