@@ -19,7 +19,7 @@ namespace npantarhei.runtime.tests.integration
                 .AddStream(new Stream(".in", "syncNop"))
                 .AddStream(new Stream("syncNop", ".out"))
 
-                .AddFunc<string, string>("syncNop", _ => _).MakeSync();
+                .AddFunc<string, string>("syncNop", _ => _).MakeDispatched();
 
             using (var sut = new FlowRuntime(frc))
             {

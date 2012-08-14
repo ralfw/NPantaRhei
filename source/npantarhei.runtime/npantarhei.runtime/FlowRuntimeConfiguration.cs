@@ -36,6 +36,7 @@ namespace npantarhei.runtime
 										  (input, outputCont, _) => { var result = implementation();
 																	  outputCont(new Message(name, result, input.CorrelationId)); }
 						   ));
+			Auto_apply_MakeDispatched(implementation);
 			return this;
 		}
 
@@ -45,6 +46,7 @@ namespace npantarhei.runtime
 										  (input, outputCont, _) => { var result = implementation((TInput)input.Data);
 																	  outputCont(new Message(name, result, input.CorrelationId)); }
 						   ));
+			Auto_apply_MakeDispatched(implementation);
 			return this;
 		}
 
@@ -53,6 +55,7 @@ namespace npantarhei.runtime
 		{
 			_operations.Add(new Operation(name, (input, outputCont, _) => { implementation(); 
 																			if (createContinuationSignal) outputCont(new Message(name, null, input.CorrelationId)); }));
+			Auto_apply_MakeDispatched(implementation);
 			return this;
 		}
 		
@@ -60,15 +63,17 @@ namespace npantarhei.runtime
 		{
 			_operations.Add(new Operation(name, (input, outputCont, _) => { implementation((TInput)input.Data); 
 																			if (createContinuationSignal) outputCont(new Message(name, null, input.CorrelationId)); }));
+			Auto_apply_MakeDispatched(implementation);
 			return this;
 		}
-		
+
 		public FlowRuntimeConfiguration AddAction<TInput>(string name, Action<TInput, Action> implementation)
 		{
 			_operations.Add(new Operation(name,
 										  (input, outputCont, _) => implementation((TInput)input.Data,
 																				   () => outputCont(new Message(name, null, input.CorrelationId)))
 						   ));
+			Auto_apply_MakeDispatched(implementation);
 			return this;
 		}
 
@@ -76,12 +81,14 @@ namespace npantarhei.runtime
 		{
 			_operations.Add(new Operation(name, (input, outputCont, _) => implementation((TInput)input.Data, 
 																						 output => outputCont(new Message(name, output, input.CorrelationId)))));
+			Auto_apply_MakeDispatched(implementation);
 			return this;
 		}
 
 		public FlowRuntimeConfiguration AddAction<TOutput>(string name, Action<Action<TOutput>> implementation)
 		{
 			_operations.Add(new Operation(name, (input, outputCont, _) => implementation(output => outputCont(new Message(name, output, input.CorrelationId)))));
+			Auto_apply_MakeDispatched(implementation);
 			return this;
 		}
 
@@ -91,6 +98,7 @@ namespace npantarhei.runtime
 										  (input, outputCont, _) => implementation(() => outputCont(new Message(name + ".out0", null, input.CorrelationId)),
 																				   () => outputCont(new Message(name + ".out1", null, input.CorrelationId)))
 						   ));
+			Auto_apply_MakeDispatched(implementation);
 			return this;
 		}
 
@@ -100,6 +108,7 @@ namespace npantarhei.runtime
 										  (input, outputCont, _) => implementation(output => outputCont(new Message(name + ".out0", output, input.CorrelationId)),
 																				   () => outputCont(new Message(name + ".out1", null, input.CorrelationId)))
 						   ));
+			Auto_apply_MakeDispatched(implementation);
 			return this;
 		}
 
@@ -110,6 +119,7 @@ namespace npantarhei.runtime
 																				   output => outputCont(new Message(name + ".out0", output, input.CorrelationId)),
 																				   () => outputCont(new Message(name + ".out1", null, input.CorrelationId)))
 						   ));
+			Auto_apply_MakeDispatched(implementation);
 			return this;
 		}
 
@@ -120,6 +130,7 @@ namespace npantarhei.runtime
 																				   output0 => outputCont(new Message(name + ".out0", output0, input.CorrelationId)),
 																				   output1 => outputCont(new Message(name + ".out1", output1, input.CorrelationId)))
 						   ));
+			Auto_apply_MakeDispatched(implementation);
 			return this;
 		}
 
@@ -168,7 +179,7 @@ namespace npantarhei.runtime
 		}
 
 
-		public FlowRuntimeConfiguration MakeSync()
+		public FlowRuntimeConfiguration MakeDispatched()
 		{
 			var sync = FlowRuntimeConfiguration.SynchronizationFactory();
 			WrapLastOperation(op => new Operation(op.Name, (input, continueWith, unhandledException) => 
@@ -185,6 +196,13 @@ namespace npantarhei.runtime
 																					 }
 																				 })));
 			return this;
+		}
+		[Obsolete]
+		public FlowRuntimeConfiguration MakeSync() { return MakeDispatched(); }
+
+		private void Auto_apply_MakeDispatched(Delegate implementation)
+		{
+			if (DispatchedMethodAttribute.HasBeenApplied(implementation)) MakeDispatched();
 		}
 
 

@@ -21,24 +21,30 @@ namespace npantarhei.runtime.tests.integration
             InitializeComponent();
 
             var frc = new FlowRuntimeConfiguration();
-            frc.AddStream(new Stream(".in", "gettime"));
-            frc.AddStream(new Stream("gettime", "showtime"));
+            frc.AddStream(new Stream(".inMakeSync", "gettime"));
+            frc.AddStream(new Stream("gettime", "showtimeMakeSync"));
+            frc.AddStream(new Stream(".inAttribute", "gettime2"));
+            frc.AddStream(new Stream("gettime2", "showtimeAttribute"));
 
             var opcont = new FlowRuntimeConfiguration();
             opcont.AddFunc("gettime", () => DateTime.Now);
-            opcont.AddAction<DateTime>("showtime", (DateTime _) =>
+            opcont.AddFunc("gettime2", () => DateTime.Now);
+            opcont.AddAction<DateTime>("showtimeMakeSync", (DateTime _) =>
                                                        {
                                                            Console.WriteLine("event handler thread: {0}",
                                                                              Thread.CurrentThread.GetHashCode());
                                                            label1.Text = _.ToString();
                                                            listBox1.Items.Add(_.ToString());
                                                        })
-                  .MakeSync();
+                  .MakeDispatched();
+            opcont.AddAction<DateTime>("showtimeAttribute", this.ShowTimeAttribute);
 
             frc.AddOperations(opcont.Operations);
 
             _fr = new FlowRuntime(frc);
+            _fr.UnhandledException += Console.WriteLine;
         }
+
 
 
         protected override void OnClosed(EventArgs e)
@@ -50,7 +56,24 @@ namespace npantarhei.runtime.tests.integration
         private void button1_Click(object sender, EventArgs e)
         {
             Console.WriteLine("button thread: {0}", Thread.CurrentThread.GetHashCode());
-            _fr.Process(new npantarhei.runtime.messagetypes.Message(".in", null));
+            _fr.Process(".inMakeSync", null);
         }
+
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Console.WriteLine("button thread: {0}", Thread.CurrentThread.GetHashCode());
+            _fr.Process(".inAttribute", null);
+        }
+
+
+        [DispatchedMethod]
+        public void ShowTimeAttribute(DateTime dt)
+        {
+            Console.WriteLine("event handler thread: {0}", Thread.CurrentThread.GetHashCode());
+            label1.Text = dt.ToString();
+            listBox1.Items.Add(dt.ToString() + "/attr");
+        }
+
     }
 }

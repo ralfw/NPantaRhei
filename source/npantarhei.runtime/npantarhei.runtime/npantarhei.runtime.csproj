@@ -37,6 +37,7 @@
     <Compile Include="contract\ActiveOperationAttribute.cs" />
     <Compile Include="contract\CausalityStack.cs" />
     <Compile Include="contract\DataContainer.cs" />
+    <Compile Include="contract\DispatchedMethodAttribute.cs" />
     <Compile Include="contract\FlowRuntimeException.cs" />
     <Compile Include="contract\FlowStack.cs" />
     <Compile Include="contract\IFlow.cs" />
