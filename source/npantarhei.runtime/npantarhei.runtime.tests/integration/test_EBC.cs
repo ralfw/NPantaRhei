@@ -24,17 +24,20 @@ namespace npantarhei.runtime.tests.integration
 
             using(var fr = new FlowRuntime(config))
             {
+                fr.Message += Console.WriteLine;
+                fr.UnhandledException += Console.WriteLine;
+
                 fr.Process(".in", new Tuple<int,int>(42,7));
 
                 IMessage result = null;
-                fr.WaitForResult(_ => result = _);
+                Assert.IsTrue(fr.WaitForResult(1000, _ => result = _));
                 Assert.AreEqual(".result", result.Port.Fullname);
                 Assert.AreEqual(6, (int)result.Data);
 
 
                 fr.Process(".in", new Tuple<int, int>(42, 0));
 
-                fr.WaitForResult(_ => result = _);
+                Assert.IsTrue(fr.WaitForResult(1000, _ => result = _));
                 Assert.AreEqual(".fehler", result.Port.Fullname);
                 Assert.AreEqual(new Tuple<int,int>(42,0), result.Data);
             }

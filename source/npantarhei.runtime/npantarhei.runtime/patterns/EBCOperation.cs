@@ -12,8 +12,6 @@ namespace npantarhei.runtime.patterns
     [ActiveOperation]
     public class EBCOperation : AOperation
     {
-        private const string CONTINUATION_SLOT_NAME = "continueWith";
-
         private readonly object _eventBasedComponent;
         private readonly IEnumerable<MethodInfo> _inputPorts;
         private Action<IMessage> _active_continueWith;
@@ -28,33 +26,17 @@ namespace npantarhei.runtime.patterns
 
             Assign_handlers_to_output_port_events(_eventBasedComponent, 
                                                   outputPorts , 
-                                                  _ =>  {
-                                                            var continueWith = (Action<IMessage>)Thread.GetData(Thread.GetNamedDataSlot(CONTINUATION_SLOT_NAME)) ??
-                                                                               _active_continueWith;
-                                                            continueWith(_);
-                                                        });
+                                                  _ => _active_continueWith(_)); // indirection required, since delegate hasn´t 
+                                                                                 // been assigned during ctor execution
         }
 
 
         protected override void Process(IMessage input, Action<IMessage> continueWith, Action<FlowRuntimeException> unhandledException)
         {
             if (input is ActivationMessage)
-            {
                 _active_continueWith = continueWith;
-            }
             else
-            {
-                Thread.AllocateNamedDataSlot(CONTINUATION_SLOT_NAME);
-                Thread.SetData(Thread.GetNamedDataSlot(CONTINUATION_SLOT_NAME), continueWith);
-                try
-                {
-                    Call_input_port_method(_eventBasedComponent, _inputPorts, input.Port.Name, input.Data);
-                }
-                finally
-                {
-                    Thread.FreeNamedDataSlot(CONTINUATION_SLOT_NAME);
-                }
-            }
+                Call_input_port_method(_eventBasedComponent, _inputPorts, input.Port.Name, input.Data);
         }
 
 
