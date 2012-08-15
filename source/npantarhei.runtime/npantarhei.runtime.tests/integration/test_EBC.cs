@@ -95,6 +95,31 @@ namespace npantarhei.runtime.tests.integration
         }
 
 
+        [Test]
+        public void An_active_ebc_fires_an_event_before_another_ebc_receives()
+        {
+            var ebc1 = new ActiveEbc();
+
+            var config = new FlowRuntimeConfiguration()
+                                .AddStreamsFrom(@"
+                                                    /
+                                                    ebc1.Out, ebc2.Run
+                                                    ebc2.Out, .out
+                                                 ")
+                                .AddEventBasedComponent("ebc1", ebc1)
+                                .AddEventBasedComponent("ebc2", new ActiveEbc());
+
+            using (var fr = new FlowRuntime(config))
+            {
+                ebc1.Run("hello");
+
+                var result = "";
+                Assert.IsTrue(fr.WaitForResult(2000, _ => result = (string)_.Data));
+                Assert.AreEqual("helloxx", result);
+            }
+        }
+
+
         class Rechenwerk
         {
             public void Teilen(Tuple<int,int> input)

@@ -31,8 +31,8 @@ namespace npantarhei.runtime.patterns
             Assign_handlers_to_output_port_events(_eventBasedComponent,
                                                   outputPorts,
                                                   _ => {
-                                                            var continueWith = (Action<IMessage>)Thread.GetData(Thread.GetNamedDataSlot(CONTINUATION_SLOT_NAME)) ??
-                                                                               _active_continueWith;
+                                                            var continueWith = (Action<IMessage>)Thread.GetData(Thread.GetNamedDataSlot(CONTINUATION_SLOT_NAME))
+                                                                               ?? _active_continueWith;
                                                             continueWith(_);
                                                   });
         }
@@ -46,7 +46,6 @@ namespace npantarhei.runtime.patterns
             }
             else
             {
-                Thread.AllocateNamedDataSlot(CONTINUATION_SLOT_NAME);
                 Thread.SetData(Thread.GetNamedDataSlot(CONTINUATION_SLOT_NAME), continueWith);
                 try
                 {
