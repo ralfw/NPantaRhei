@@ -52,7 +52,9 @@ namespace npantarhei.runtime.patterns
 
         public IOperation Create_method_operation(IMessage input)
         {
-            return new EbcMethodOperation(base.Name + "." + input.Port.Name, _eventBasedComponent, _inputPorts, _dispatcher);
+            var input_port_method = Find_input_port_method(_inputPorts, input.Port.Name);
+            var ebcOp = new EbcMethodOperation(base.Name + "." + input.Port.Name, _eventBasedComponent, input_port_method, _dispatcher);
+            return Schedule_EBC_operation(input_port_method, ebcOp);
         }
 
 
@@ -125,6 +127,33 @@ namespace npantarhei.runtime.patterns
         #endregion
 
 
+        #region Call input port method
+        private MethodInfo Find_input_port_method(IEnumerable<MethodInfo> inputPorts, string portName)
+        {
+            var miInput = inputPorts.FirstOrDefault(mi => mi.Name.ToLower() == portName.ToLower());
+            if (miInput == null) throw new ArgumentException(string.Format("EBC-Operation {0}: Unknown input port name '{1}'!",
+                                                                            base.Name,
+                                                                            portName));
+            return miInput;
+        }
+
+
+        private IOperation Schedule_EBC_operation(MethodInfo input_port_method, IOperation ebcOperation)
+        {
+            var asyncAttr = input_port_method.GetCustomAttributes(true)
+                                             .FirstOrDefault(attr => attr.GetType() == typeof (AsyncMethodAttribute)) 
+                                              as AsyncMethodAttribute;
+            if (asyncAttr != null)
+            {
+                var asyncer = _asyncerCache.Get(asyncAttr.ThreadPoolName, () => new Asynchronize());
+                return new AsyncWrapperOperation(asyncer, ebcOperation);
+            }
+            else
+                return ebcOperation;
+        }
+        #endregion
+
+
         #region Assign handlers to output port events
         private void Assign_handlers_to_output_port_events(object ebc, IEnumerable<EventInfo> outputPorts, Action<IMessage> continueWith)
         {
@@ -171,36 +200,26 @@ namespace npantarhei.runtime.patterns
         class EbcMethodOperation : AOperation
         {
             private readonly object _eventBasedComponent;
-            private readonly IEnumerable<MethodInfo> _inputPorts;
+            private readonly MethodInfo _inputPortMethod;
             private readonly IDispatcher _dispatcher;
 
-            public EbcMethodOperation(string name, object eventBasedComponent, IEnumerable<MethodInfo> inputPorts, IDispatcher dispatcher)
+            public EbcMethodOperation(string name, object eventBasedComponent, MethodInfo inputPortMethod, IDispatcher dispatcher)
                 : base(name)
             {
                 _eventBasedComponent = eventBasedComponent;
-                _inputPorts = inputPorts;
+                _inputPortMethod = inputPortMethod;
                 _dispatcher = dispatcher;
             }
 
 
             protected override void Process(IMessage input, Action<IMessage> continueWith, Action<FlowRuntimeException> unhandledException)
             {
-                var method = Find_input_port_method(_inputPorts, input.Port.Name);
-                var call = Build_input_port_method_call(_eventBasedComponent, method, input.Data, continueWith);
-                Schedule_input_port_method_call(method, call);
+                var call = Build_input_port_method_call(_eventBasedComponent, _inputPortMethod, input.Data, continueWith);
+                Schedule_input_port_method_call(_inputPortMethod, call);
             }
 
 
             #region Call input port method
-            private MethodInfo Find_input_port_method(IEnumerable<MethodInfo> inputPorts, string portName)
-            {
-                var miInput = inputPorts.FirstOrDefault(mi => mi.Name.ToLower() == portName.ToLower());
-                if (miInput == null) throw new ArgumentException(string.Format("EBC-Operation {0}: Unknown input port name '{1}'!",
-                                                                                base.Name,
-                                                                                portName));
-                return miInput;
-            }
-
             private Action Build_input_port_method_call(object ebc, MethodInfo miInput, object parameter, Action<IMessage> continueWith)
             {
                 var parameters = new[] { parameter };

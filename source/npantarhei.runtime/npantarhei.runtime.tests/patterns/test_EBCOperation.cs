@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using NUnit.Framework;
 using npantarhei.runtime.contract;
+using npantarhei.runtime.data;
 using npantarhei.runtime.messagetypes;
 using npantarhei.runtime.patterns;
 
@@ -41,6 +43,28 @@ namespace npantarhei.runtime.tests.patterns
             Assert.AreEqual("math.DivisionByZero", result.Port.Fullname);
             Assert.IsNull(result.Data);
         }
+
+
+        [Test]
+        public void Wrap_async_EBC_method()
+        {
+            var cache = new AsynchronizerCache();
+            var sut = new EBCOperation("math", new MyAsyncEbc(), null, cache);
+
+            var are = new AutoResetEvent(false);
+            IMessage result = null;
+            Thread methodThread = null;
+
+            var input = new Message("math.Inc", 41);
+            var methodOp = sut.Create_method_operation(input);
+            Assert.IsInstanceOf<AsyncWrapperOperation>(methodOp);
+
+            methodOp.Implementation(input, _ => { result = _; methodThread = Thread.CurrentThread; are.Set(); }, null);
+
+            Assert.IsTrue(are.WaitOne(1000));
+            Assert.AreEqual(42, (int)result.Data);
+            Assert.AreNotSame(methodThread, Thread.CurrentThread);
+        }
     }
 
 
@@ -61,5 +85,17 @@ namespace npantarhei.runtime.tests.patterns
 
         public event Action<int> Result;
         public event Action DivisionByZero;
+    }
+
+
+    class MyAsyncEbc
+    {
+        [AsyncMethod]
+        public void Inc(int i)
+        {
+            Result(i + 1);
+        }
+
+        public event Action<int> Result;
     }
 }

@@ -120,6 +120,29 @@ namespace npantarhei.runtime.tests.integration
         }
 
 
+        [Test]
+        public void Processing_message_with_async_EBC_method()
+        {
+            var config = new FlowRuntimeConfiguration()
+                                .AddStreamsFrom(@"
+                                                    /
+                                                    .in, ebc.Run
+                                                    ebc.Out, .out
+                                                 ")
+                                .AddEventBasedComponent("ebc", new AsyncEbc());
+
+            using (var fr = new FlowRuntime(config))
+            {
+                var result = "";
+
+                fr.Process(".in", "hello");
+
+                Assert.IsTrue(fr.WaitForResult(2000, _ => result = (string)_.Data));
+                Assert.AreEqual("hellox", result);
+            }
+        }
+
+
         class Rechenwerk
         {
             public void Teilen(Tuple<int,int> input)
@@ -137,6 +160,18 @@ namespace npantarhei.runtime.tests.integration
 
         class ActiveEbc
         {
+            public void Run(string s)
+            {
+                Out(s + "x");
+            }
+
+            public event Action<string> Out;
+        }
+
+
+        class AsyncEbc
+        {
+            [AsyncMethod]
             public void Run(string s)
             {
                 Out(s + "x");
