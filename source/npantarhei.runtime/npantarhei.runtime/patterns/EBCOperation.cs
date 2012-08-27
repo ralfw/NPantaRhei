@@ -148,8 +148,19 @@ namespace npantarhei.runtime.patterns
                 var asyncer = _asyncerCache.Get(asyncAttr.ThreadPoolName, () => new Asynchronize());
                 return new AsyncWrapperOperation(asyncer, ebcOperation);
             }
-            else
-                return ebcOperation;
+
+
+            var parallelAttr = input_port_method.GetCustomAttributes(true)
+                                            .FirstOrDefault(attr => attr.GetType() == typeof(ParallelMethod))
+                                             as ParallelMethod;
+            if (parallelAttr != null)
+            {
+                var parallelizer = _asyncerCache.Get(parallelAttr.ThreadPoolName, () => new Parallelize());
+                return new AsyncWrapperOperation(parallelizer, ebcOperation);
+            }
+
+            
+            return ebcOperation;
         }
         #endregion
 

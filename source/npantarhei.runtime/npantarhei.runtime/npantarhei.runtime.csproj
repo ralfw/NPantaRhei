@@ -35,6 +35,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="contract\AsyncMethodAttribute.cs" />
+    <Compile Include="contract\ParallelMethod.cs" />
     <Compile Include="data\AsynchronizerCache.cs" />
     <Compile Include="contract\ActiveOperationAttribute.cs" />
     <Compile Include="contract\CausalityStack.cs" />
