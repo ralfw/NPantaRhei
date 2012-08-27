@@ -15,23 +15,28 @@ namespace npantarhei.runtime.tests.patterns
         [Test]
         public void Wrap_EBC()
         {
-            var sut = new EBCOperation("math", new MyEbc(), null);
+            var sut = new EBCOperation("math", new MyEbc(), null, null);
 
             IMessage result = null;
 
-            sut.Implementation(new Message("math.Inc", 41), _ => result = _, null);
+            var input = new Message("math.Inc", 41);
+            var ebcOp = sut.Create_method_operation(input);
+            ebcOp.Implementation(input, _ => result = _, null);
 
             Assert.AreEqual("math.Result", result.Port.Fullname);
             Assert.AreEqual(42, (int)result.Data);
 
 
-            sut.Implementation(new Message("math.Divide", new Tuple<int, int>(42, 7)), _ => result = _, null);
+            input = new Message("math.Divide", new Tuple<int, int>(42, 7));
+            ebcOp = sut.Create_method_operation(input);
+            ebcOp.Implementation(input, _ => result = _, null);
 
             Assert.AreEqual("math.Result", result.Port.Fullname);
             Assert.AreEqual(6, (int)result.Data);
 
-
-            sut.Implementation(new Message("math.Divide", new Tuple<int, int>(42, 0)), _ => result = _, null);
+            input = new Message("math.Divide", new Tuple<int, int>(42, 0));
+            ebcOp = sut.Create_method_operation(input);
+            ebcOp.Implementation(input, _ => result = _, null);
 
             Assert.AreEqual("math.DivisionByZero", result.Port.Fullname);
             Assert.IsNull(result.Data);

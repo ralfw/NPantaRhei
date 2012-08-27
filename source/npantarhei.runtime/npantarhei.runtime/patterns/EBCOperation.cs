@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using npantarhei.runtime.contract;
+using npantarhei.runtime.data;
 using npantarhei.runtime.messagetypes;
 
 namespace npantarhei.runtime.patterns
@@ -16,14 +17,16 @@ namespace npantarhei.runtime.patterns
 
         private readonly object _eventBasedComponent;
         private readonly IDispatcher _dispatcher;
+        private readonly AsynchronizerCache _asyncerCache;
         private readonly IEnumerable<MethodInfo> _inputPorts;
         private Action<IMessage> _active_continueWith;
 
 
-        public EBCOperation(string name, object eventBasedComponent, IDispatcher dispatcher) : base(name)
+        public EBCOperation(string name, object eventBasedComponent, IDispatcher dispatcher, AsynchronizerCache asyncerCache) : base(name)
         {
             _eventBasedComponent = eventBasedComponent;
             _dispatcher = dispatcher;
+            _asyncerCache = asyncerCache;
 
             _inputPorts = Find_input_ports(_eventBasedComponent);
             var outputPorts = Find_output_ports(_eventBasedComponent);
@@ -44,18 +47,12 @@ namespace npantarhei.runtime.patterns
             {
                 _active_continueWith = continueWith;
             }
-            else
-            {
-                Thread.SetData(Thread.GetNamedDataSlot(CONTINUATION_SLOT_NAME), continueWith);
-                try
-                {
-                    Call_input_port_method(_eventBasedComponent, _inputPorts, input.Port.Name, input.Data);
-                }
-                finally
-                {
-                    Thread.FreeNamedDataSlot(CONTINUATION_SLOT_NAME);
-                }
-            }
+        }
+
+
+        public IOperation Create_method_operation(IMessage input)
+        {
+            return new EbcMethodOperation(base.Name + "." + input.Port.Name, _eventBasedComponent, _inputPorts, _dispatcher);
         }
 
 
@@ -128,23 +125,6 @@ namespace npantarhei.runtime.patterns
         #endregion
 
 
-        #region Call input port method
-        private void Call_input_port_method(object ebc, IEnumerable<MethodInfo> inputPorts, string portName, object parameter)
-        {
-            var miInput = inputPorts.FirstOrDefault(mi => mi.Name.ToLower() == portName.ToLower());
-            if (miInput == null) throw new ArgumentException(string.Format("EBC-Operation {0}: Unknown input port name '{1}'!", base.Name, portName));
-
-            var parameters = new[] { parameter };
-            if (!miInput.GetParameters().Any()) parameters = null;
-
-            if (DispatchedMethodAttribute.HasBeenApplied(miInput))
-                _dispatcher.Process(() => miInput.Invoke(ebc, parameters));
-            else
-                miInput.Invoke(ebc, parameters);
-        }
-        #endregion
-
-
         #region Assign handlers to output port events
         private void Assign_handlers_to_output_port_events(object ebc, IEnumerable<EventInfo> outputPorts, Action<IMessage> continueWith)
         {
@@ -186,5 +166,68 @@ namespace npantarhei.runtime.patterns
             public void ContinueActionOf<T>(T output) { _continueWith(new Message(_portName, output)); }
         }
         #endregion
+
+
+        class EbcMethodOperation : AOperation
+        {
+            private readonly object _eventBasedComponent;
+            private readonly IEnumerable<MethodInfo> _inputPorts;
+            private readonly IDispatcher _dispatcher;
+
+            public EbcMethodOperation(string name, object eventBasedComponent, IEnumerable<MethodInfo> inputPorts, IDispatcher dispatcher)
+                : base(name)
+            {
+                _eventBasedComponent = eventBasedComponent;
+                _inputPorts = inputPorts;
+                _dispatcher = dispatcher;
+            }
+
+
+            protected override void Process(IMessage input, Action<IMessage> continueWith, Action<FlowRuntimeException> unhandledException)
+            {
+                var method = Find_input_port_method(_inputPorts, input.Port.Name);
+                var call = Build_input_port_method_call(_eventBasedComponent, method, input.Data, continueWith);
+                Schedule_input_port_method_call(method, call);
+            }
+
+
+            #region Call input port method
+            private MethodInfo Find_input_port_method(IEnumerable<MethodInfo> inputPorts, string portName)
+            {
+                var miInput = inputPorts.FirstOrDefault(mi => mi.Name.ToLower() == portName.ToLower());
+                if (miInput == null) throw new ArgumentException(string.Format("EBC-Operation {0}: Unknown input port name '{1}'!",
+                                                                                base.Name,
+                                                                                portName));
+                return miInput;
+            }
+
+            private Action Build_input_port_method_call(object ebc, MethodInfo miInput, object parameter, Action<IMessage> continueWith)
+            {
+                var parameters = new[] { parameter };
+                if (!miInput.GetParameters().Any()) parameters = null;
+
+                return () =>
+                {
+                    Thread.SetData(Thread.GetNamedDataSlot(CONTINUATION_SLOT_NAME), continueWith);
+                    try
+                    {
+                        miInput.Invoke(ebc, parameters);
+                    }
+                    finally
+                    {
+                        Thread.FreeNamedDataSlot(CONTINUATION_SLOT_NAME);
+                    }
+                };
+            }
+
+            private void Schedule_input_port_method_call(MethodInfo miInput, Action input_call)
+            {
+                if (DispatchedMethodAttribute.HasBeenApplied(miInput))
+                    _dispatcher.Process(input_call);
+                else
+                    input_call();
+            }
+            #endregion
+        }
     }
 }

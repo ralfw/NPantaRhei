@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using npantarhei.runtime.contract;
+using npantarhei.runtime.data;
 using npantarhei.runtime.messagetypes;
 using npantarhei.runtime.patterns;
 using System.Reflection;
@@ -13,8 +14,8 @@ namespace npantarhei.runtime
 	public class FlowRuntimeConfiguration
 	{        
 		public static Func<IDispatcher> DispatcherFactory { get; set; }
-	    [Obsolete]
-	    public static Func<IDispatcher> SynchronizationFactory { get { return DispatcherFactory; } set { DispatcherFactory = value; } } 
+		[Obsolete]
+		public static Func<IDispatcher> SynchronizationFactory { get { return DispatcherFactory; } set { DispatcherFactory = value; } } 
 
 
 		static FlowRuntimeConfiguration()
@@ -139,7 +140,7 @@ namespace npantarhei.runtime
 
 		public FlowRuntimeConfiguration AddEventBasedComponent(string name, object eventBasedComponent)
 		{
-			_operations.Add(new EBCOperation(name, eventBasedComponent, FlowRuntimeConfiguration.DispatcherFactory()));
+			_operations.Add(new EBCOperation(name, eventBasedComponent, FlowRuntimeConfiguration.DispatcherFactory(), _asyncerCache));
 			return this;
 		}
 
@@ -208,56 +209,29 @@ namespace npantarhei.runtime
 		}
 
 
-		private readonly Dictionary<string, Asynchronize> _asynchronizingOps = new Dictionary<string, Asynchronize>();
+		private readonly AsynchronizerCache _asyncerCache = new AsynchronizerCache();
 		public FlowRuntimeConfiguration MakeAsync() { return MakeAsync("~~~async~~~"); }
 		public FlowRuntimeConfiguration MakeAsync(string name)
 		{
-			Asynchronize async;
-			if (!_asynchronizingOps.TryGetValue(name, out async))
-			{
-				async = new Asynchronize();
-				async.Start();
-				_asynchronizingOps.Add(name, async);
-			}
-
-			WrapLastOperation(op => new AsyncWrapperOperation(async, op));
-			
+			WrapLastOperation(op => new AsyncWrapperOperation(_asyncerCache.Get(name, () => new Asynchronize()), op));
 			return this;
 		}
 
 
-		private readonly Dictionary<string, Parallelize> _parallelizingOps = new Dictionary<string, Parallelize>();
 		public FlowRuntimeConfiguration MakeParallel() { return MakeParallel("~~~parallel~~~"); }
 		public FlowRuntimeConfiguration MakeParallel(string name)
 		{
-			Parallelize parallel;
-			if (!_parallelizingOps.TryGetValue(name, out parallel))
-			{
-				parallel = new Parallelize();
-				parallel.Start();
-				_parallelizingOps.Add(name, parallel);
-			}
-
-			WrapLastOperation(op => new AsyncWrapperOperation(parallel, op));
-
+			WrapLastOperation(op => new AsyncWrapperOperation(_asyncerCache.Get(name, () => new Parallelize()), op));
 			return this;
 		}
 
 
-		private readonly Dictionary<string, Serialize> _serializingOps = new Dictionary<string, Serialize>();
+		[Obsolete("Use MakeAsync() instead.")]
 		public FlowRuntimeConfiguration MakeSerial() { return MakeSerial("~~~serial~~~"); }
+		[Obsolete("Use MakeAsync() instead.")]
 		public FlowRuntimeConfiguration MakeSerial(string name)
 		{
-			Serialize serial;
-			if (!_serializingOps.TryGetValue(name, out serial))
-			{
-				serial = new Serialize(_ => _.Port.Fullname);
-				serial.Start();
-				_serializingOps.Add(name, serial);
-			};
-
-			WrapLastOperation(op => new AsyncWrapperOperation(serial, op));
-
+			WrapLastOperation(op => new AsyncWrapperOperation(_asyncerCache.Get(name, () => new Serialize(_ => _.Port.Fullname)), op));
 			return this;
 		}
 

@@ -61,7 +61,7 @@ namespace npantarhei.runtime.tests.integration
                 ebc.Run("hello");
 
                 var result = "";
-                Assert.IsTrue(fr.WaitForResult(_ => result = (string) _.Data));
+                Assert.IsTrue(fr.WaitForResult(1000, _ => result = (string) _.Data));
                 Assert.AreEqual("hellox", result);
             }
         }

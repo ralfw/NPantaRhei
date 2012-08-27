@@ -18,6 +18,7 @@ namespace npantarhei.runtime.flows
 			_map = new Map_message_to_input_ports();
 			var output = new Output_result();
 			_create = new Create_task();
+		    var wrap = new Wrap_EBC_method();
 			var exec = new Execute_task();
 			var nest = new Nest_message_flow();
 			
@@ -27,8 +28,9 @@ namespace npantarhei.runtime.flows
 			_map.Result += output.Process;
 			output.Result += _ => Result(_);
 			output.Continue +=_create.Process;
-			_create.Result += exec.Process;
+			_create.Result += wrap.Process;
 			_create.UnknownOperation += nest.Process;
+		    wrap.Result += exec.Process;
 			exec.Result += _ => Continue(_);
 			exec.HandledException += _ => Continue(_);
 			exec.UnhandledException += _ => UnhandledException(_);

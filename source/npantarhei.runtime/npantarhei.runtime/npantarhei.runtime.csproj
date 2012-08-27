@@ -34,6 +34,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="data\AsynchronizerCache.cs" />
     <Compile Include="contract\ActiveOperationAttribute.cs" />
     <Compile Include="contract\CausalityStack.cs" />
     <Compile Include="contract\DataContainer.cs" />
@@ -42,6 +43,7 @@
     <Compile Include="contract\FlowStack.cs" />
     <Compile Include="contract\IFlow.cs" />
     <Compile Include="data\PriorityQueue.cs" />
+    <Compile Include="operations\Wrap_EBC_method.cs" />
     <Compile Include="operations\Handle_exception.cs" />
     <Compile Include="operations\Create_activation_task.cs" />
     <Compile Include="data\INotifyingResource.cs" />
