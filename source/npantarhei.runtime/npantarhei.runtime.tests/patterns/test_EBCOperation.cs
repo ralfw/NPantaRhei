@@ -118,7 +118,7 @@ namespace npantarhei.runtime.tests.patterns
             var threads = new Dictionary<long, int>();
             var exceptions = new List<string>();
 
-            const int N = 500;
+            const int N = 2000;
             for (var i = 1; i <= N; i++)
             {
                 var input = new Message("math.Inc", i);
@@ -149,7 +149,7 @@ namespace npantarhei.runtime.tests.patterns
                                                        });
             }
 
-            Console.WriteLine("wait: {0}", are.WaitOne(2000));
+            var waitOne = are.WaitOne(2000);
             Console.WriteLine("count: {0}, thread count: {1}, ex count: {2}", results.Count, threads.Count, exceptions.Count);
 
             foreach(var th in threads)
@@ -158,7 +158,7 @@ namespace npantarhei.runtime.tests.patterns
 
             for(var i = 0; i < Math.Min(5, exceptions.Count); i++)
                 Console.WriteLine("*** {0}: {1}", i, exceptions[i]);
-
+            Assert.IsTrue(waitOne);
         }
     }
 

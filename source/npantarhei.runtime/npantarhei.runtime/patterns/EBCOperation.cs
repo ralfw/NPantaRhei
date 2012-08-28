@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -15,6 +16,9 @@ namespace npantarhei.runtime.patterns
     internal class EBCOperation : AOperation
     {
         private const string CONTINUATION_SLOT_NAME = "continueWith";
+
+        static readonly ConcurrentDictionary<Thread, Action<IMessage>> _tls = new ConcurrentDictionary<Thread, Action<IMessage>>();
+
 
         private readonly object _eventBasedComponent;
         private readonly IDispatcher _dispatcher;
@@ -34,13 +38,13 @@ namespace npantarhei.runtime.patterns
 
             Assign_handlers_to_output_port_events(_eventBasedComponent,
                                                   outputPorts,
-                                                  _ => {
-                                                            var continueWith = (Action<IMessage>)Thread.GetData(Thread.GetNamedDataSlot(CONTINUATION_SLOT_NAME))
-                                                                               ?? _active_continueWith;
-
-                                                            Debug.Assert(continueWith != null, "No continuation found to send EBC event to!");
+                                                  _ =>
+                                                      {
+                                                            Action<IMessage> continueWith;
+                                                            if (!_tls.TryGetValue(Thread.CurrentThread, out continueWith))
+                                                                continueWith = _active_continueWith;
                                                             continueWith(_);
-                                                  });
+                                                      });   
         }
 
 
@@ -245,15 +249,16 @@ namespace npantarhei.runtime.patterns
 
                 return () =>
                             {
-                                Debug.Assert(continueWith != null, "No continuation when starting EBC method!");
-
-                                Thread.SetData(Thread.GetNamedDataSlot(CONTINUATION_SLOT_NAME), continueWith);
+                                _tls.AddOrUpdate(Thread.CurrentThread, continueWith, (th, v) => { Debug.Fail("TLS slot overload!"); return null; });
                                 try
                                 {
                                     miInput.Invoke(ebc, parameters);
                                 }
                                 finally
                                 {
+                                    Action<IMessage> _;
+                                    Debug.Assert(_tls.TryRemove(Thread.CurrentThread, out _), "TLS slot fault!");
+
                                     Thread.FreeNamedDataSlot(CONTINUATION_SLOT_NAME);
                                 }
                             };
