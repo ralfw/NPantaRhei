@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -36,6 +37,8 @@ namespace npantarhei.runtime.patterns
                                                   _ => {
                                                             var continueWith = (Action<IMessage>)Thread.GetData(Thread.GetNamedDataSlot(CONTINUATION_SLOT_NAME))
                                                                                ?? _active_continueWith;
+
+                                                            Debug.Assert(continueWith != null, "No continuation found to send EBC event to!");
                                                             continueWith(_);
                                                   });
         }
@@ -225,32 +228,38 @@ namespace npantarhei.runtime.patterns
 
             protected override void Process(IMessage input, Action<IMessage> continueWith, Action<FlowRuntimeException> unhandledException)
             {
+                Debug.Assert(unhandledException != null, "No handler for exceptions!");
+
                 var call = Build_input_port_method_call(_eventBasedComponent, _inputPortMethod, input.Data, continueWith);
-                Schedule_input_port_method_call(_inputPortMethod, call);
+                Dispatch_input_port_method_call(_inputPortMethod, call);
             }
 
 
             #region Call input port method
             private Action Build_input_port_method_call(object ebc, MethodInfo miInput, object parameter, Action<IMessage> continueWith)
             {
+                Debug.Assert(continueWith != null, "No continuation passed to EBC method call builder!");
+
                 var parameters = new[] { parameter };
                 if (!miInput.GetParameters().Any()) parameters = null;
 
                 return () =>
-                {
-                    Thread.SetData(Thread.GetNamedDataSlot(CONTINUATION_SLOT_NAME), continueWith);
-                    try
-                    {
-                        miInput.Invoke(ebc, parameters);
-                    }
-                    finally
-                    {
-                        Thread.FreeNamedDataSlot(CONTINUATION_SLOT_NAME);
-                    }
-                };
+                            {
+                                Debug.Assert(continueWith != null, "No continuation when starting EBC method!");
+
+                                Thread.SetData(Thread.GetNamedDataSlot(CONTINUATION_SLOT_NAME), continueWith);
+                                try
+                                {
+                                    miInput.Invoke(ebc, parameters);
+                                }
+                                finally
+                                {
+                                    Thread.FreeNamedDataSlot(CONTINUATION_SLOT_NAME);
+                                }
+                            };
             }
 
-            private void Schedule_input_port_method_call(MethodInfo miInput, Action input_call)
+            private void Dispatch_input_port_method_call(MethodInfo miInput, Action input_call)
             {
                 if (DispatchedMethodAttribute.HasBeenApplied(miInput))
                     _dispatcher.Process(input_call);

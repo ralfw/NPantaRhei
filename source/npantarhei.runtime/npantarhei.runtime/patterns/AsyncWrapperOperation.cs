@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using npantarhei.runtime.contract;
 
 namespace npantarhei.runtime.patterns
@@ -23,6 +24,10 @@ namespace npantarhei.runtime.patterns
                                                 asyncer.Process(input, 
                                                                 output =>
                                                                     {
+                                                                        Debug.Assert(operationToWrap != null, "No operation to execute on thread!");
+                                                                        Debug.Assert(continueWith != null, "No continuation for operation!");
+                                                                        Debug.Assert(unhandledException != null, "No handler for exceptions!");
+
                                                                         try
                                                                         {
                                                                             operationToWrap.Implementation(output, continueWith, unhandledException);
