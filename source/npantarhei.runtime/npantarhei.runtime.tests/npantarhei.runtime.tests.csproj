@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="contract\test_CausalityStack.cs" />
     <Compile Include="data\test_NotifyingMultiQueue.cs" />
+    <Compile Include="data\test_NotifyingPartionedQueue.cs" />
     <Compile Include="data\test_PriorityQueue.cs" />
     <Compile Include="integration\test_correlationId_handling.cs" />
     <Compile Include="integration\test_EBC.cs" />
