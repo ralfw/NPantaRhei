@@ -1,18 +1,16 @@
-using System;
-using System.Collections.Generic;
 using System.Threading;
 
 namespace npantarhei.runtime.data
 {
-	internal class NotifyingSingleQueue<T> : IConcurrentQueue<T>
+	internal class NotifyingPartionedQueue<T> : IConcurrentQueue<T> where T : IPartionable
 	{
 		private readonly PriorityQueue<T> _messages;
 		private readonly ReaderWriterLock _lock = new ReaderWriterLock();
 		private readonly ManualResetEvent _signal = new ManualResetEvent(false);
 		
 		
-		public NotifyingSingleQueue() : this(new PriorityQueue<T>()) {}
-		internal NotifyingSingleQueue(PriorityQueue<T> messages)
+		public NotifyingPartionedQueue() : this(new PriorityQueue<T>()) {}
+		internal NotifyingPartionedQueue(PriorityQueue<T> messages)
 		{
 			_messages = messages;
 		}
@@ -72,4 +70,3 @@ namespace npantarhei.runtime.data
 		}
 	}
 }
-

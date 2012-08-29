@@ -4,7 +4,7 @@ using npantarhei.runtime.contract;
 
 namespace npantarhei.runtime.patterns
 {
-    public interface IAsynchronizer
+    public interface IScheduler
     {
         void Process(IMessage message, Action<IMessage> continueWith);
 
@@ -14,9 +14,9 @@ namespace npantarhei.runtime.patterns
 
     public class AsyncWrapperOperation : IOperation
     {
-        private readonly IAsynchronizer _asyncer;
+        private readonly IScheduler _asyncer;
 
-        public AsyncWrapperOperation(IAsynchronizer asyncer, IOperation operationToWrap)
+        public AsyncWrapperOperation(IScheduler asyncer, IOperation operationToWrap)
         {
             _asyncer = asyncer;
             this.Name = operationToWrap.Name;

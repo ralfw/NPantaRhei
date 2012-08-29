@@ -8,26 +8,27 @@ using npantarhei.runtime.messagetypes;
 
 namespace npantarhei.runtime.patterns
 {
-    internal class Parallelize : IAsynchronizer
+    internal class Parallelize : IScheduler
     {
-        private readonly NotifyingSingleQueue<ScheduledTask<IMessage>> _messages;
-        private readonly List<Wait_for_work<ScheduledTask<IMessage>>> _waitForWork;
+        private readonly IConcurrentQueue<ScheduledTask> _messages;
+        private readonly List<Wait_for_work<ScheduledTask>> _waitForWork;
 
 
         public Parallelize() : this(4) { }
-        public Parallelize(int numberOfThreads)
+        public Parallelize(int numberOfThreads) : this(numberOfThreads, new NotifyingSingleQueue<ScheduledTask>()) { }
+        public Parallelize(int numberOfThreads, IConcurrentQueue<ScheduledTask> messages)
         {
-            _messages = new NotifyingSingleQueue<ScheduledTask<IMessage>>();
+            _messages = messages;
 
-            _waitForWork = new List<Wait_for_work<ScheduledTask<IMessage>>>();
+            _waitForWork = new List<Wait_for_work<ScheduledTask>>();
             for (var i = 0; i < numberOfThreads; i++)
             {
-                var wfw = new Wait_for_work<ScheduledTask<IMessage>>(_messages,
+                var wfw = new Wait_for_work<ScheduledTask>(_messages,
                                                () =>
                                                {
-                                                   ScheduledTask<IMessage> result;
+                                                   ScheduledTask result;
                                                    var success = _messages.TryDequeue(out result);
-                                                   return new Tuple<bool, ScheduledTask<IMessage>>(success, result);
+                                                   return new Tuple<bool, ScheduledTask>(success, result);
                                                });
                 wfw.Dequeued += _ => _.ContinueWith(_.Message);
                 _waitForWork.Add(wfw);
@@ -36,7 +37,7 @@ namespace npantarhei.runtime.patterns
 
 
         public void Process(IMessage message, Action<IMessage> continueWith) { _messages.Enqueue(message.Priority, 
-                                                                                                 new ScheduledTask<IMessage>()
+                                                                                                 new ScheduledTask()
                                                                                                        {
                                                                                                            Message = message,
                                                                                                            ContinueWith = continueWith

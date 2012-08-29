@@ -1,19 +1,14 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-
 using npantarhei.runtime.contract;
-using npantarhei.runtime.messagetypes;
+using npantarhei.runtime.data;
 
 namespace npantarhei.runtime.patterns
 {
-    internal class Asynchronize : IScheduler
+    internal class AsynchronizeEvenly : IScheduler
     {
         private readonly Parallelize _parallelize;
 
-        internal Asynchronize() { _parallelize = new Parallelize(1); }
+        internal AsynchronizeEvenly() { _parallelize = new Parallelize(1, new NotifyingPartionedQueue<ScheduledTask>()); }
 
 
         public void Process(IMessage message, Action<IMessage> continueWith) { _parallelize.Process(message, continueWith); }
@@ -23,4 +18,3 @@ namespace npantarhei.runtime.patterns
         public void Stop() { _parallelize.Stop(); }
     }
 }
-

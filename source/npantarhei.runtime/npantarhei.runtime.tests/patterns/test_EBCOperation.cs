@@ -23,7 +23,7 @@ namespace npantarhei.runtime.tests.patterns
 
             var input = new Message("math.Inc", 41);
             var ebcOp = sut.Create_method_operation(input);
-            ebcOp.Implementation(input, _ => result = _, null);
+            ebcOp.Implementation(input, _ => result = _, _ => {});
 
             Assert.AreEqual("math.Result", result.Port.Fullname);
             Assert.AreEqual(42, (int)result.Data);
@@ -31,14 +31,14 @@ namespace npantarhei.runtime.tests.patterns
 
             input = new Message("math.Divide", new Tuple<int, int>(42, 7));
             ebcOp = sut.Create_method_operation(input);
-            ebcOp.Implementation(input, _ => result = _, null);
+            ebcOp.Implementation(input, _ => result = _, _ => { });
 
             Assert.AreEqual("math.Result", result.Port.Fullname);
             Assert.AreEqual(6, (int)result.Data);
 
             input = new Message("math.Divide", new Tuple<int, int>(42, 0));
             ebcOp = sut.Create_method_operation(input);
-            ebcOp.Implementation(input, _ => result = _, null);
+            ebcOp.Implementation(input, _ => result = _, _ => { });
 
             Assert.AreEqual("math.DivisionByZero", result.Port.Fullname);
             Assert.IsNull(result.Data);
@@ -59,7 +59,7 @@ namespace npantarhei.runtime.tests.patterns
             var methodOp = sut.Create_method_operation(input);
             Assert.IsInstanceOf<AsyncWrapperOperation>(methodOp);
 
-            methodOp.Implementation(input, _ => { result = _; methodThread = Thread.CurrentThread; are.Set(); }, null);
+            methodOp.Implementation(input, _ => { result = _; methodThread = Thread.CurrentThread; are.Set(); }, _ => { });
 
             Assert.IsTrue(are.WaitOne(1000));
             Assert.AreEqual(42, (int)result.Data);
@@ -81,7 +81,7 @@ namespace npantarhei.runtime.tests.patterns
             var methodOp = sut.Create_method_operation(input);
             Assert.IsInstanceOf<AsyncWrapperOperation>(methodOp);
 
-            methodOp.Implementation(input, _ => { result = _; methodThread = Thread.CurrentThread; are.Set(); }, null);
+            methodOp.Implementation(input, _ => { result = _; methodThread = Thread.CurrentThread; are.Set(); }, _ => { });
 
             Assert.IsTrue(are.WaitOne(1000));
             Assert.AreEqual(42, (int)result.Data);
@@ -101,7 +101,7 @@ namespace npantarhei.runtime.tests.patterns
             var input = new Message("math.ThrowException", 41);
             var methodOp = sut.Create_method_operation(input);
 
-            methodOp.Implementation(input, null, ex => { result = ex; are.Set(); });
+            methodOp.Implementation(input, _ => { }, ex => { result = ex; are.Set(); });
 
             Assert.IsTrue(are.WaitOne(1000));
             Assert.IsInstanceOf<ApplicationException>(result.InnerException);

@@ -7,29 +7,29 @@ using npantarhei.runtime.messagetypes;
 
 namespace npantarhei.runtime.patterns
 {
-    internal class Serialize : IAsynchronizer
+    internal class Serialize : IScheduler
     {
-        private readonly NotifyingMultiQueue<ScheduledTask<IMessage>> _messages;
-        private readonly List<Wait_for_work<ScheduledTask<IMessage>>> _waitForWork;
+        private readonly NotifyingMultiQueue<ScheduledTask> _messages;
+        private readonly List<Wait_for_work<ScheduledTask>> _waitForWork;
         private readonly Func<IMessage, string> _getQueueNameFromMessage;
  
 
         public Serialize(Func<IMessage,string> getQueuenameFromMessage) : this(4, getQueuenameFromMessage) { }
         public Serialize(int numberOfThreads, Func<IMessage,string> getQueueNameFromMessage)
         {
-            _messages = new NotifyingMultiQueue<ScheduledTask<IMessage>>();
+            _messages = new NotifyingMultiQueue<ScheduledTask>();
             _getQueueNameFromMessage = getQueueNameFromMessage;
 
-            _waitForWork = new List<Wait_for_work<ScheduledTask<IMessage>>>();
+            _waitForWork = new List<Wait_for_work<ScheduledTask>>();
             for (var i = 0; i < numberOfThreads; i++)
             {
-                var wfw = new Wait_for_work<ScheduledTask<IMessage>>(_messages,
+                var wfw = new Wait_for_work<ScheduledTask>(_messages,
                                                () =>
                                                {
-                                                   ScheduledTask<IMessage> result;
+                                                   ScheduledTask result;
                                                    var success = _messages.TryDequeue(Thread.CurrentThread.GetHashCode().ToString(),
                                                                                       out result);
-                                                   return new Tuple<bool, ScheduledTask<IMessage>>(success, result);
+                                                   return new Tuple<bool, ScheduledTask>(success, result);
                                                });
                 wfw.Dequeued += _ => _.ContinueWith(_.Message);
                 _waitForWork.Add(wfw);
@@ -40,7 +40,7 @@ namespace npantarhei.runtime.patterns
         public void Process(IMessage message, Action<IMessage> continueWith)
         {
             var queueName = _getQueueNameFromMessage(message);
-            _messages.Enqueue(new ScheduledTask<IMessage>()
+            _messages.Enqueue(new ScheduledTask()
                                   {
                                       Message = message,
                                       ContinueWith = continueWith

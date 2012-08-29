@@ -6,9 +6,9 @@ namespace npantarhei.runtime.data
 {
     class AsynchronizerCache
     {
-        private readonly ConcurrentDictionary<string, IAsynchronizer> _asyncers = new ConcurrentDictionary<string, IAsynchronizer>();
+        private readonly ConcurrentDictionary<string, IScheduler> _asyncers = new ConcurrentDictionary<string, IScheduler>();
 
-        public IAsynchronizer Get(string name, Func<IAsynchronizer> factory)
+        public IScheduler Get(string name, Func<IScheduler> factory)
         {
             return _asyncers.GetOrAdd(name, key =>
                                                 {

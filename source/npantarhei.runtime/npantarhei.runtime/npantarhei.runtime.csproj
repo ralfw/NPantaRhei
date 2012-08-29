@@ -44,6 +44,7 @@
     <Compile Include="contract\FlowRuntimeException.cs" />
     <Compile Include="contract\FlowStack.cs" />
     <Compile Include="contract\IFlow.cs" />
+    <Compile Include="data\IConcurrentQueue.cs" />
     <Compile Include="data\PriorityQueue.cs" />
     <Compile Include="operations\Wrap_EBC_method.cs" />
     <Compile Include="operations\Handle_exception.cs" />
@@ -52,6 +53,7 @@
     <Compile Include="data\NotifyingMultiQueue.cs" />
     <Compile Include="FlowRuntime.cs" />
     <Compile Include="operations\Throttle_message_flow.cs" />
+    <Compile Include="patterns\AsynchronizeEvenly.cs" />
     <Compile Include="patterns\AsyncWrapperOperation.cs" />
     <Compile Include="operations\Start_async_operations.cs" />
     <Compile Include="patterns\AutoResetJoin.cs" />
@@ -59,8 +61,10 @@
     <Compile Include="patterns\AOperation.cs" />
     <Compile Include="contract\IDispatcher.cs" />
     <Compile Include="patterns\EBCOperation.cs" />
+    <Compile Include="data\IPartionable.cs" />
     <Compile Include="patterns\ManualResetJoinOf.cs" />
     <Compile Include="patterns\ManualResetJoin.cs" />
+    <Compile Include="data\NotifyingPartionedQueue.cs" />
     <Compile Include="patterns\operations\Clock.cs" />
     <Compile Include="patterns\operations\Correlator.cs" />
     <Compile Include="patterns\operations\Gather.cs" />
@@ -68,7 +72,7 @@
     <Compile Include="FlowLoader.cs" />
     <Compile Include="patterns\PopCausality.cs" />
     <Compile Include="patterns\PushCausality.cs" />
-    <Compile Include="patterns\ScheduledTask.cs" />
+    <Compile Include="data\ScheduledTask.cs" />
     <Compile Include="patterns\DispatchWithSynchronizationContext.cs" />
     <Compile Include="patterns\DispatchForWPF.cs" />
     <Compile Include="patterns\Throttle.cs" />
