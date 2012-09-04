@@ -4,19 +4,11 @@ using npantarhei.runtime.contract;
 
 namespace npantarhei.runtime.patterns
 {
-    public interface IScheduler
-    {
-        void Process(IMessage message, Action<IMessage> continueWith);
-
-        void Start();
-        void Stop();
-    }
-
     public class AsyncWrapperOperation : IOperation
     {
-        private readonly IScheduler _asyncer;
+        private readonly IAsynchronizer _asyncer;
 
-        public AsyncWrapperOperation(IScheduler asyncer, IOperation operationToWrap)
+        public AsyncWrapperOperation(IAsynchronizer asyncer, IOperation operationToWrap)
         {
             _asyncer = asyncer;
             this.Name = operationToWrap.Name;
@@ -24,10 +16,6 @@ namespace npantarhei.runtime.patterns
                                                 asyncer.Process(input, 
                                                                 output =>
                                                                     {
-                                                                        Debug.Assert(operationToWrap != null, "No operation to execute on thread!");
-                                                                        Debug.Assert(continueWith != null, "No continuation for operation!");
-                                                                        Debug.Assert(unhandledException != null, "No handler for exceptions!");
-
                                                                         try
                                                                         {
                                                                             operationToWrap.Implementation(output, continueWith, unhandledException);

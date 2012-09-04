@@ -213,7 +213,7 @@ namespace npantarhei.runtime
 		public FlowRuntimeConfiguration MakeAsync() { return MakeAsync("~~~async~~~"); }
 		public FlowRuntimeConfiguration MakeAsync(string name)
 		{
-			WrapLastOperation(op => new AsyncWrapperOperation(_asyncerCache.Get(name, () => new Asynchronize()), op));
+			WrapLastOperation(op => new AsyncWrapperOperation(_asyncerCache.Get(name, () => new AsynchronizeFIFO()), op));
 			return this;
 		}
 

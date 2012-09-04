@@ -16,7 +16,7 @@ namespace npantarhei.runtime.tests.messagetypes
         [Test]
         public void Unhandled_exception_is_reported()
         {
-            var sut = new AsyncWrapperOperation(new Asynchronize(), new Operation("throw", (input, continueWith, unhandledException) => { throw new ApplicationException("xxx"); }));
+            var sut = new AsyncWrapperOperation(new AsynchronizeFIFO(), new Operation("throw", (input, continueWith, unhandledException) => { throw new ApplicationException("xxx"); }));
             sut.Start();
             try
             {

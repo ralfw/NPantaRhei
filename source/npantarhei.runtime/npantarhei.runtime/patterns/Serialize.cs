@@ -7,7 +7,7 @@ using npantarhei.runtime.messagetypes;
 
 namespace npantarhei.runtime.patterns
 {
-    internal class Serialize : IScheduler
+    internal class Serialize : IAsynchronizer
     {
         private readonly NotifyingMultiQueue<ScheduledTask> _messages;
         private readonly List<Wait_for_work<ScheduledTask>> _waitForWork;

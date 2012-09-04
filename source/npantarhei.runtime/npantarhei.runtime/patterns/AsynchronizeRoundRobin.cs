@@ -4,11 +4,11 @@ using npantarhei.runtime.data;
 
 namespace npantarhei.runtime.patterns
 {
-    internal class AsynchronizeEvenly : IScheduler
+    internal class AsynchronizeRoundRobin : IAsynchronizer
     {
         private readonly Parallelize _parallelize;
 
-        internal AsynchronizeEvenly() { _parallelize = new Parallelize(1, new NotifyingPartionedQueue<ScheduledTask>()); }
+        internal AsynchronizeRoundRobin() { _parallelize = new Parallelize(1, new NotifyingPartionedQueue<ScheduledTask>()); }
 
 
         public void Process(IMessage message, Action<IMessage> continueWith) { _parallelize.Process(message, continueWith); }

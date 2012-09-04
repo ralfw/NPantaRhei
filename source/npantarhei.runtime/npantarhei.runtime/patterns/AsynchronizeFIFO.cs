@@ -9,11 +9,11 @@ using npantarhei.runtime.messagetypes;
 
 namespace npantarhei.runtime.patterns
 {
-    internal class Asynchronize : IScheduler
+    internal class AsynchronizeFIFO : IAsynchronizer
     {
         private readonly Parallelize _parallelize;
 
-        internal Asynchronize() { _parallelize = new Parallelize(1); }
+        internal AsynchronizeFIFO() { _parallelize = new Parallelize(1); }
 
 
         public void Process(IMessage message, Action<IMessage> continueWith) { _parallelize.Process(message, continueWith); }

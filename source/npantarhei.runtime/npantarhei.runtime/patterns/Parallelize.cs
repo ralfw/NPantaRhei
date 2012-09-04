@@ -8,7 +8,7 @@ using npantarhei.runtime.messagetypes;
 
 namespace npantarhei.runtime.patterns
 {
-    internal class Parallelize : IScheduler
+    internal class Parallelize : IAsynchronizer
     {
         private readonly IConcurrentQueue<ScheduledTask> _messages;
         private readonly List<Wait_for_work<ScheduledTask>> _waitForWork;

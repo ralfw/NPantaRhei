@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Concurrent;
+using npantarhei.runtime.contract;
 using npantarhei.runtime.patterns;
 
 namespace npantarhei.runtime.data
 {
     class AsynchronizerCache
     {
-        private readonly ConcurrentDictionary<string, IScheduler> _asyncers = new ConcurrentDictionary<string, IScheduler>();
+        private readonly ConcurrentDictionary<string, IAsynchronizer> _asyncers = new ConcurrentDictionary<string, IAsynchronizer>();
 
-        public IScheduler Get(string name, Func<IScheduler> factory)
+        public IAsynchronizer Get(string name, Func<IAsynchronizer> factory)
         {
             return _asyncers.GetOrAdd(name, key =>
                                                 {

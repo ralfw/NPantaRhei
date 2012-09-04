@@ -46,6 +46,11 @@
     <Compile Include="contract\IFlow.cs" />
     <Compile Include="data\IConcurrentQueue.cs" />
     <Compile Include="data\PriorityQueue.cs" />
+    <Compile Include="contract\IScheduler.cs" />
+    <Compile Include="operations\Schedule_for_sync_depthfirst_processing.cs" />
+    <Compile Include="operations\Schedule_for_async_depthfirst_processing.cs" />
+    <Compile Include="operations\Schedule_for_async_breadthfirst_processing.cs" />
+    <Compile Include="operations\Schedule_for_async_roundrobin_processing.cs" />
     <Compile Include="operations\Wrap_EBC_method.cs" />
     <Compile Include="operations\Handle_exception.cs" />
     <Compile Include="operations\Create_activation_task.cs" />
@@ -53,7 +58,7 @@
     <Compile Include="data\NotifyingMultiQueue.cs" />
     <Compile Include="FlowRuntime.cs" />
     <Compile Include="operations\Throttle_message_flow.cs" />
-    <Compile Include="patterns\AsynchronizeEvenly.cs" />
+    <Compile Include="patterns\AsynchronizeRoundRobin.cs" />
     <Compile Include="patterns\AsyncWrapperOperation.cs" />
     <Compile Include="operations\Start_async_operations.cs" />
     <Compile Include="patterns\AutoResetJoin.cs" />
@@ -62,6 +67,7 @@
     <Compile Include="contract\IDispatcher.cs" />
     <Compile Include="patterns\EBCOperation.cs" />
     <Compile Include="data\IPartionable.cs" />
+    <Compile Include="contract\IAsynchronizer.cs" />
     <Compile Include="patterns\ManualResetJoinOf.cs" />
     <Compile Include="patterns\ManualResetJoin.cs" />
     <Compile Include="data\NotifyingPartionedQueue.cs" />
@@ -96,7 +102,7 @@
     <Compile Include="messagetypes\Port.cs" />
     <Compile Include="flows\Process_message.cs" />
     <Compile Include="flows\Flow_asynchronously.cs" />
-    <Compile Include="patterns\Asynchronize.cs" />
+    <Compile Include="patterns\AsynchronizeFIFO.cs" />
     <Compile Include="data\NotifyingSingleQueue.cs" />
     <Compile Include="patterns\Serialize.cs" />
     <Compile Include="patterns\Parallelize.cs" />

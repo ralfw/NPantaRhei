@@ -152,7 +152,7 @@ namespace npantarhei.runtime.patterns
                                               as AsyncMethodAttribute;
             if (asyncAttr != null)
             {
-                var asyncer = _asyncerCache.Get(asyncAttr.ThreadPoolName, () => new Asynchronize());
+                var asyncer = _asyncerCache.Get(asyncAttr.ThreadPoolName, () => new AsynchronizeFIFO());
                 return new AsyncWrapperOperation(asyncer, ebcOperation);
             }
 

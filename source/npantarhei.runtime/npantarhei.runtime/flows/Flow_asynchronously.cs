@@ -12,30 +12,28 @@ namespace npantarhei.runtime.flows
 	{
 		private readonly Process_message _processMessage;
 		
-		public Flow_asynchronously()
+		public Flow_asynchronously(IScheduler schedule)
 		{
 			// Build
-			var async = new AsynchronizeEvenly();
 			var throttle = new Throttle_message_flow();
 			var handle_exception = new Handle_exception();
 			_processMessage = new Process_message();
 
-			Action<IMessage> enqueue = _ => async.Process(_, throttle.Process);
-
 			// Bind
+			_process += schedule.ProcessExternalMessage;
+			schedule.Result += throttle.Process;
 			throttle.Continue += handle_exception.Process;
 			handle_exception.Continue += _processMessage.Process;
-		    handle_exception.UnhandledException += _ => UnhandledException(_);
-			_process += enqueue;
+			handle_exception.UnhandledException += _ => UnhandledException(_);
 			_processMessage.Message += _ => Message(_);
-			_processMessage.Continue += enqueue;
+			_processMessage.Continue += schedule.ProcessInternalMessage;
 			_processMessage.Result += _ => Result(_);
 			_processMessage.UnhandledException += _ => UnhandledException(_);
 
 			_execute += _processMessage.Execute;
 
-			_start += async.Start;
-			_stop += async.Stop;
+			_start += schedule.Start;
+			_stop += schedule.Stop;
 			_throttle += throttle.Delay;
 		}
 		

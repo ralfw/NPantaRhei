@@ -15,15 +15,17 @@ namespace npantarhei.runtime
 {
 	public class FlowRuntime : IFlowRuntime
 	{		
-        public FlowRuntime() : this(new FlowRuntimeConfiguration()) {}
-		public FlowRuntime(FlowRuntimeConfiguration config)
+		public FlowRuntime() : this(new FlowRuntimeConfiguration()) {}
+        public FlowRuntime(FlowRuntimeConfiguration config) : this(config, new Schedule_for_async_roundrobin_processing()) {}
+		public FlowRuntime(FlowRuntimeConfiguration config, IScheduler schedule)
 		{
 			// Build
 			var regStream = new Register_stream();
 			var regOp = new Register_operation();
 			var configOp = new Create_activation_task();
 			
-			var flow = new Flow_asynchronously();
+            var flow = new Flow_asynchronously(schedule);
+
 			var opStart = new Start_async_operations();
 			var opStop = new Stop_async_operations();
 			
@@ -93,11 +95,11 @@ namespace npantarhei.runtime
 
 
 		#region IFlowRuntime implementation
-        public void Configure(FlowRuntimeConfiguration config)
-        {
-            this.AddStreams(config.Streams);
-            this.AddOperations(config.Operations);
-        }
+		public void Configure(FlowRuntimeConfiguration config)
+		{
+			this.AddStreams(config.Streams);
+			this.AddOperations(config.Operations);
+		}
 
 		private readonly Action<IMessage> _process;
 		public void Process(string portname) { Process(portname, null); }
