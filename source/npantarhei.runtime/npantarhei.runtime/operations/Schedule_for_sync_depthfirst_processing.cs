@@ -8,7 +8,7 @@ using npantarhei.runtime.patterns;
 
 namespace npantarhei.runtime.operations
 {
-    class Schedule_for_sync_depthfirst_processing : IScheduler
+    public class Schedule_for_sync_depthfirst_processing : IScheduler
     {
         public void ProcessExternalMessage(IMessage message)
         {
