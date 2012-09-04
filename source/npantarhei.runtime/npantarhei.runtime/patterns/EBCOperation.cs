@@ -17,7 +17,7 @@ namespace npantarhei.runtime.patterns
     {
         private const string CONTINUATION_SLOT_NAME = "continueWith";
 
-        static readonly ConcurrentDictionary<Thread, Action<IMessage>> _tls = new ConcurrentDictionary<Thread, Action<IMessage>>();
+        static readonly ConcurrentDictionary<Thread, Stack<Action<IMessage>>> _tls = new ConcurrentDictionary<Thread, Stack<Action<IMessage>>>();
 
 
         private readonly object _eventBasedComponent;
@@ -41,8 +41,13 @@ namespace npantarhei.runtime.patterns
                                                   _ =>
                                                       {
                                                             Action<IMessage> continueWith;
-                                                            if (!_tls.TryGetValue(Thread.CurrentThread, out continueWith))
+                                                            Stack<Action<IMessage>> continuationStack;
+                                                            if (_tls.TryGetValue(Thread.CurrentThread, out continuationStack) &&
+                                                                continuationStack.Count > 0)
+                                                                continueWith = continuationStack.Peek();
+                                                            else
                                                                 continueWith = _active_continueWith;
+                                                            
                                                             continueWith(_);
                                                       });   
         }
@@ -232,8 +237,6 @@ namespace npantarhei.runtime.patterns
 
             protected override void Process(IMessage input, Action<IMessage> continueWith, Action<FlowRuntimeException> unhandledException)
             {
-                Debug.Assert(unhandledException != null, "No handler for exceptions!");
-
                 var call = Build_input_port_method_call(_eventBasedComponent, _inputPortMethod, input.Data, continueWith);
                 Dispatch_input_port_method_call(_inputPortMethod, call);
             }
@@ -248,18 +251,22 @@ namespace npantarhei.runtime.patterns
                 if (!miInput.GetParameters().Any()) parameters = null;
 
                 return () =>
-                            {
-                                _tls.AddOrUpdate(Thread.CurrentThread, continueWith, (th, v) => { Debug.Fail("TLS slot overload!"); return null; });
+                           {
+                                Stack<Action<IMessage>> continuationStack;
+                                if (!_tls.TryGetValue(Thread.CurrentThread, out continuationStack))
+                                {
+                                    continuationStack = new Stack<Action<IMessage>>();
+                                    _tls.TryAdd(Thread.CurrentThread, continuationStack);
+                                }
+
+                                continuationStack.Push(continueWith);
                                 try
                                 {
                                     miInput.Invoke(ebc, parameters);
                                 }
                                 finally
                                 {
-                                    Action<IMessage> _;
-                                    Debug.Assert(_tls.TryRemove(Thread.CurrentThread, out _), "TLS slot fault!");
-
-                                    Thread.FreeNamedDataSlot(CONTINUATION_SLOT_NAME);
+                                    continuationStack.Pop();
                                 }
                             };
             }

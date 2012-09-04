@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using npantarhei.runtime.contract;
+using npantarhei.runtime.operations;
 
 namespace npantarhei.runtime.tests.integration
 {
@@ -139,6 +140,32 @@ namespace npantarhei.runtime.tests.integration
 
                 Assert.IsTrue(fr.WaitForResult(2000, _ => result = (string)_.Data));
                 Assert.AreEqual("hellox", result);
+            }
+        }
+
+
+        [Test]
+        public void Allow_sequential_EBC_on_same_thread()
+        {
+            var config = new FlowRuntimeConfiguration()
+                                .AddStreamsFrom(@"
+                                                    /
+                                                    .in, ebc1.Run
+                                                    ebc1.Out, ebc2.Run
+                                                    ebc2.Out, .out
+                                                 ")
+                                .AddEventBasedComponent("ebc1", new ActiveEbc())
+                                .AddEventBasedComponent("ebc2", new ActiveEbc());
+
+            using (var fr = new FlowRuntime(config, new Schedule_for_sync_depthfirst_processing()))
+            {
+                var result = "";
+
+                fr.Process(".in", "hello");
+
+                fr.Result += _ => result = (string) _.Data;
+
+                Assert.AreEqual("helloxx", result);
             }
         }
 
