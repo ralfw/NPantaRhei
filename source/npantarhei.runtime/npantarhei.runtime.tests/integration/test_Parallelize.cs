@@ -6,6 +6,7 @@ using System.Threading;
 using NUnit.Framework;
 using npantarhei.runtime.contract;
 using npantarhei.runtime.messagetypes;
+using npantarhei.runtime.operations;
 
 namespace npantarhei.runtime.tests.integration
 {
@@ -35,7 +36,7 @@ namespace npantarhei.runtime.tests.integration
             frc.AddOperations(cont.Operations);
 
 
-            using (var sut = new FlowRuntime(frc))
+            using (var sut = new FlowRuntime(frc, new Schedule_for_async_breadthfirst_processing()))
             {
                 const int N = 5;
                 var results = new List<IMessage>();
