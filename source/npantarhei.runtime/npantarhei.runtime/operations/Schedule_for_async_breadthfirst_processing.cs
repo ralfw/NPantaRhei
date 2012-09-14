@@ -8,7 +8,7 @@ using npantarhei.runtime.patterns;
 
 namespace npantarhei.runtime.operations
 {
-    public class Schedule_for_async_breadthfirst_processing : IScheduler
+    public class Schedule_for_async_breadthfirst_processing : ISchedulingStrategy
     {
         private readonly IAsynchronizer _async = new AsynchronizeFIFO();
 

@@ -3,7 +3,7 @@ using npantarhei.runtime.patterns;
 
 namespace npantarhei.runtime.contract
 {
-    public interface IScheduler
+    public interface ISchedulingStrategy
     {
         void ProcessExternalMessage(IMessage message);
         void ProcessInternalMessage(IMessage message);

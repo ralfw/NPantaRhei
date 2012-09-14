@@ -12,7 +12,7 @@ namespace npantarhei.runtime.flows
 	{
 		private readonly Process_message _processMessage;
 		
-		public Flow_asynchronously(IScheduler schedule)
+		public Flow_asynchronously(ISchedulingStrategy schedule)
 		{
 			// Build
 			var throttle = new Throttle_message_flow();

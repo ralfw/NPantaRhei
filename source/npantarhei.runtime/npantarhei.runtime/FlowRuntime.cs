@@ -17,7 +17,7 @@ namespace npantarhei.runtime
 	{		
 		public FlowRuntime() : this(new FlowRuntimeConfiguration()) {}
 		public FlowRuntime(FlowRuntimeConfiguration config) : this(config, new Schedule_for_async_depthfirst_processing()) {}
-		public FlowRuntime(FlowRuntimeConfiguration config, IScheduler schedule)
+		public FlowRuntime(FlowRuntimeConfiguration config, ISchedulingStrategy schedule)
 		{
 			// Build
 			var regStream = new Register_stream();
