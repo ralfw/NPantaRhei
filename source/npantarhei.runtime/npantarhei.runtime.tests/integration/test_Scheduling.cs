@@ -110,5 +110,18 @@ namespace npantarhei.runtime.tests.integration
                 Assert.AreEqual("/a(x)/b(x1)/d(x11)/d(x12)/b(x2)/d(x21)/d(x22)/c(x3)", _payload_flow);
             }
         }
+
+        [Test]
+        public void Parallel_Depthfirst()
+        {
+            using (var fr = new FlowRuntime(_config, new Schedule_for_parallel_depthfirst_processing()))
+            {
+                fr.Process(".in", "x");
+
+                fr.WaitForResult(1000);
+
+                Assert.AreEqual("/a(x)/b(x1)/d(x11)/d(x12)/b(x2)/d(x21)/d(x22)/c(x3)", _payload_flow);
+            }
+        }
     }
 }

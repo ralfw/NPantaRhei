@@ -47,6 +47,7 @@
     <Compile Include="data\IConcurrentQueue.cs" />
     <Compile Include="data\PriorityQueue.cs" />
     <Compile Include="contract\ISchedulingStrategy.cs" />
+    <Compile Include="operations\Schedule_for_parallel_depthfirst_processing.cs" />
     <Compile Include="operations\Schedule_for_sync_depthfirst_processing.cs" />
     <Compile Include="operations\Schedule_for_async_depthfirst_processing.cs" />
     <Compile Include="operations\Schedule_for_async_breadthfirst_processing.cs" />
