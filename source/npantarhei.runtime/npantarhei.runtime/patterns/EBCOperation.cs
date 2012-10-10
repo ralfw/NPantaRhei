@@ -15,8 +15,6 @@ namespace npantarhei.runtime.patterns
     [ActiveOperation]
     internal class EBCOperation : AOperation
     {
-        private const string CONTINUATION_SLOT_NAME = "continueWith";
-
         static readonly ConcurrentDictionary<Thread, Stack<Action<IMessage>>> _tls = new ConcurrentDictionary<Thread, Stack<Action<IMessage>>>();
 
 
@@ -33,8 +31,8 @@ namespace npantarhei.runtime.patterns
             _dispatcher = dispatcher;
             _asyncerCache = asyncerCache;
 
-            _inputPorts = Find_input_ports(_eventBasedComponent);
-            var outputPorts = Find_output_ports(_eventBasedComponent);
+            _inputPorts = OperationsFactory.Find_input_ports(_eventBasedComponent);
+            var outputPorts = OperationsFactory.Find_output_ports(_eventBasedComponent);
 
             Assign_handlers_to_output_port_events(_eventBasedComponent,
                                                   outputPorts,
@@ -68,75 +66,6 @@ namespace npantarhei.runtime.patterns
             var ebcOp = new EbcMethodOperation(base.Name + "." + input.Port.Name, _eventBasedComponent, input_port_method, _dispatcher);
             return Schedule_EBC_operation(input_port_method, ebcOp);
         }
-
-
-        #region Find input ports
-        private IEnumerable<MethodInfo> Find_input_ports(object ebc)
-        {
-            var ebcType = ebc.GetType();
-
-            var candidateMethods = ebcType.GetMethods(BindingFlags.Public | BindingFlags.Instance);
-            var inputPorts = new List<MethodInfo>();
-            foreach (var mi in candidateMethods)
-                if (Is_input_port_method(mi))
-                {
-                    inputPorts.Add(mi);
-                }
-            return inputPorts;
-        }
-
-        private bool Is_input_port_method(MethodInfo mi)
-        {
-            return Is_a_procedure(mi) &&
-                   Is_not_a_property_accessor(mi) &&
-                   Is_not_an_event_modifier(mi) &&
-                   Has_the_right_number_of_params(mi);
-        }
-
-        private static bool Is_a_procedure(MethodInfo mi)
-        {
-            return mi.ReturnType == typeof(void);
-        }
-
-        private bool Is_not_a_property_accessor(MethodInfo mi)
-        {
-            return !mi.DeclaringType.GetProperties().Any(p => p.GetSetMethod() == mi);
-        }
-
-        private bool Is_not_an_event_modifier(MethodInfo mi)
-        {
-            return !mi.DeclaringType.GetEvents().Any(e => e.GetAddMethod() == mi || e.GetRemoveMethod() == mi);
-        }
-
-        private bool Has_the_right_number_of_params(MethodInfo mi)
-        {
-            return mi.GetParameters().Count() <= 1;
-        }
-        #endregion
-
-
-        #region Find output ports
-        private IEnumerable<EventInfo> Find_output_ports(object ebc)
-        {
-            var ebcType = ebc.GetType();
-
-            var candidateEvents = ebcType.GetEvents(BindingFlags.Public | BindingFlags.Instance);
-            var outputPorts = new List<EventInfo>();
-            foreach (var ei in candidateEvents)
-                if (Is_output_port_event(ei))
-                {
-                    outputPorts.Add(ei);
-                }
-
-            return outputPorts;
-        }
-
-        private bool Is_output_port_event(EventInfo ei)
-        {
-            var mi = ei.EventHandlerType.GetMethod("Invoke");
-            return mi.GetParameters().Count() <= 1;
-        }
-        #endregion
 
 
         #region Call input port method

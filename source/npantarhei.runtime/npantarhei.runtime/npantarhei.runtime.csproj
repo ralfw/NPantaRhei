@@ -72,6 +72,7 @@
     <Compile Include="patterns\ManualResetJoinOf.cs" />
     <Compile Include="patterns\ManualResetJoin.cs" />
     <Compile Include="data\NotifyingPartionedQueue.cs" />
+    <Compile Include="patterns\OperationsFactory.cs" />
     <Compile Include="patterns\operations\Clock.cs" />
     <Compile Include="patterns\operations\Correlator.cs" />
     <Compile Include="patterns\operations\Gather.cs" />

@@ -12,10 +12,15 @@ using System.IO;
 namespace npantarhei.runtime
 {
 	public class FlowRuntimeConfiguration
-	{        
+	{
 		public static Func<IDispatcher> DispatcherFactory { get; set; }
+
 		[Obsolete]
-		public static Func<IDispatcher> SynchronizationFactory { get { return DispatcherFactory; } set { DispatcherFactory = value; } } 
+		public static Func<IDispatcher> SynchronizationFactory
+		{
+			get { return DispatcherFactory; }
+			set { DispatcherFactory = value; }
+		}
 
 
 		static FlowRuntimeConfiguration()
@@ -24,48 +29,77 @@ namespace npantarhei.runtime
 		}
 
 		#region Operations
+
 		private readonly List<IOperation> _operations = new List<IOperation>();
 
-		public IEnumerable<IOperation> Operations { get { return _operations; } }
+		public IEnumerable<IOperation> Operations
+		{
+			get { return _operations; }
+		}
 
 
-		public FlowRuntimeConfiguration AddOperation(IOperation operation) { _operations.Add(operation); return this; }
-		public FlowRuntimeConfiguration AddOperations(IEnumerable<IOperation> operations) { _operations.AddRange(operations); return this; }
+		public FlowRuntimeConfiguration AddOperation(IOperation operation)
+		{
+			_operations.Add(operation);
+			return this;
+		}
+
+		public FlowRuntimeConfiguration AddOperations(IEnumerable<IOperation> operations)
+		{
+			_operations.AddRange(operations);
+			return this;
+		}
 
 
 		public FlowRuntimeConfiguration AddFunc<TOutput>(string name, Func<TOutput> implementation)
 		{
 			_operations.Add(new Operation(name,
-										  (input, outputCont, _) => { var result = implementation();
-																	  outputCont(new Message(name, result, input.CorrelationId)); }
-						   ));
+										  (input, outputCont, _) =>
+											  {
+												  var result = implementation();
+												  outputCont(new Message(name, result, input.CorrelationId));
+											  }
+								));
 			Auto_apply_MakeDispatched(implementation);
 			return this;
 		}
 
 		public FlowRuntimeConfiguration AddFunc<TInput, TOutput>(string name, Func<TInput, TOutput> implementation)
 		{
-			_operations.Add(new Operation(name, 
-										  (input, outputCont, _) => { var result = implementation((TInput)input.Data);
-																	  outputCont(new Message(name, result, input.CorrelationId)); }
-						   ));
+			_operations.Add(new Operation(name,
+										  (input, outputCont, _) =>
+											  {
+												  var result = implementation((TInput) input.Data);
+												  outputCont(new Message(name, result, input.CorrelationId));
+											  }
+								));
 			Auto_apply_MakeDispatched(implementation);
 			return this;
 		}
 
 
-		public FlowRuntimeConfiguration AddAction(string name, Action implementation, bool createContinuationSignal = false)
+		public FlowRuntimeConfiguration AddAction(string name, Action implementation,
+												  bool createContinuationSignal = false)
 		{
-			_operations.Add(new Operation(name, (input, outputCont, _) => { implementation(); 
-																			if (createContinuationSignal) outputCont(new Message(name, null, input.CorrelationId)); }));
+			_operations.Add(new Operation(name, (input, outputCont, _) =>
+													{
+														implementation();
+														if (createContinuationSignal)
+															outputCont(new Message(name, null, input.CorrelationId));
+													}));
 			Auto_apply_MakeDispatched(implementation);
 			return this;
 		}
-		
-		public FlowRuntimeConfiguration AddAction<TInput>(string name, Action<TInput> implementation, bool createContinuationSignal = false)
+
+		public FlowRuntimeConfiguration AddAction<TInput>(string name, Action<TInput> implementation,
+														  bool createContinuationSignal = false)
 		{
-			_operations.Add(new Operation(name, (input, outputCont, _) => { implementation((TInput)input.Data); 
-																			if (createContinuationSignal) outputCont(new Message(name, null, input.CorrelationId)); }));
+			_operations.Add(new Operation(name, (input, outputCont, _) =>
+													{
+														implementation((TInput) input.Data);
+														if (createContinuationSignal)
+															outputCont(new Message(name, null, input.CorrelationId));
+													}));
 			Auto_apply_MakeDispatched(implementation);
 			return this;
 		}
@@ -73,24 +107,35 @@ namespace npantarhei.runtime
 		public FlowRuntimeConfiguration AddAction<TInput>(string name, Action<TInput, Action> implementation)
 		{
 			_operations.Add(new Operation(name,
-										  (input, outputCont, _) => implementation((TInput)input.Data,
-																				   () => outputCont(new Message(name, null, input.CorrelationId)))
-						   ));
+										  (input, outputCont, _) => implementation((TInput) input.Data,
+																				   () =>
+																				   outputCont(new Message(name, null,
+																										  input.
+																											  CorrelationId)))
+								));
 			Auto_apply_MakeDispatched(implementation);
 			return this;
 		}
 
-		public FlowRuntimeConfiguration AddAction<TInput, TOutput>(string name, Action<TInput, Action<TOutput>> implementation)
+		public FlowRuntimeConfiguration AddAction<TInput, TOutput>(string name,
+																   Action<TInput, Action<TOutput>> implementation)
 		{
-			_operations.Add(new Operation(name, (input, outputCont, _) => implementation((TInput)input.Data, 
-																						 output => outputCont(new Message(name, output, input.CorrelationId)))));
+			_operations.Add(new Operation(name, (input, outputCont, _) => implementation((TInput) input.Data,
+																						 output =>
+																						 outputCont(new Message(name,
+																												output,
+																												input.
+																													CorrelationId)))));
 			Auto_apply_MakeDispatched(implementation);
 			return this;
 		}
 
 		public FlowRuntimeConfiguration AddAction<TOutput>(string name, Action<Action<TOutput>> implementation)
 		{
-			_operations.Add(new Operation(name, (input, outputCont, _) => implementation(output => outputCont(new Message(name, output, input.CorrelationId)))));
+			_operations.Add(new Operation(name,
+										  (input, outputCont, _) =>
+										  implementation(
+											  output => outputCont(new Message(name, output, input.CorrelationId)))));
 			Auto_apply_MakeDispatched(implementation);
 			return this;
 		}
@@ -98,9 +143,11 @@ namespace npantarhei.runtime
 		public FlowRuntimeConfiguration AddAction(string name, Action<Action, Action> implementation)
 		{
 			_operations.Add(new Operation(name,
-										  (input, outputCont, _) => implementation(() => outputCont(new Message(name + ".out0", null, input.CorrelationId)),
-																				   () => outputCont(new Message(name + ".out1", null, input.CorrelationId)))
-						   ));
+										  (input, outputCont, _) =>
+										  implementation(
+											  () => outputCont(new Message(name + ".out0", null, input.CorrelationId)),
+											  () => outputCont(new Message(name + ".out1", null, input.CorrelationId)))
+								));
 			Auto_apply_MakeDispatched(implementation);
 			return this;
 		}
@@ -108,31 +155,53 @@ namespace npantarhei.runtime
 		public FlowRuntimeConfiguration AddAction<TOutput>(string name, Action<Action<TOutput>, Action> implementation)
 		{
 			_operations.Add(new Operation(name,
-										  (input, outputCont, _) => implementation(output => outputCont(new Message(name + ".out0", output, input.CorrelationId)),
-																				   () => outputCont(new Message(name + ".out1", null, input.CorrelationId)))
-						   ));
+										  (input, outputCont, _) =>
+										  implementation(
+											  output =>
+											  outputCont(new Message(name + ".out0", output, input.CorrelationId)),
+											  () => outputCont(new Message(name + ".out1", null, input.CorrelationId)))
+								));
 			Auto_apply_MakeDispatched(implementation);
 			return this;
 		}
 
-		public FlowRuntimeConfiguration AddAction<TInput, TOutput>(string name, Action<TInput, Action<TOutput>, Action> implementation)
+		public FlowRuntimeConfiguration AddAction<TInput, TOutput>(string name,
+																   Action<TInput, Action<TOutput>, Action>
+																	   implementation)
 		{
 			_operations.Add(new Operation(name,
-										  (input, outputCont, _) => implementation((TInput)input.Data,
-																				   output => outputCont(new Message(name + ".out0", output, input.CorrelationId)),
-																				   () => outputCont(new Message(name + ".out1", null, input.CorrelationId)))
-						   ));
+										  (input, outputCont, _) => implementation((TInput) input.Data,
+																				   output =>
+																				   outputCont(new Message(
+																								  name + ".out0", output,
+																								  input.CorrelationId)),
+																				   () =>
+																				   outputCont(new Message(
+																								  name + ".out1", null,
+																								  input.CorrelationId)))
+								));
 			Auto_apply_MakeDispatched(implementation);
 			return this;
 		}
 
-		public FlowRuntimeConfiguration AddAction<TInput, TOutput0, TOutput1>(string name, Action<TInput, Action<TOutput0>, Action<TOutput1>> implementation)
+		public FlowRuntimeConfiguration AddAction<TInput, TOutput0, TOutput1>(string name,
+																			  Action
+																				  <TInput, Action<TOutput0>,
+																				  Action<TOutput1>> implementation)
 		{
 			_operations.Add(new Operation(name,
-										  (input, outputCont, _) => implementation((TInput)input.Data,
-																				   output0 => outputCont(new Message(name + ".out0", output0, input.CorrelationId)),
-																				   output1 => outputCont(new Message(name + ".out1", output1, input.CorrelationId)))
-						   ));
+										  (input, outputCont, _) => implementation((TInput) input.Data,
+																				   output0 =>
+																				   outputCont(new Message(
+																								  name + ".out0",
+																								  output0,
+																								  input.CorrelationId)),
+																				   output1 =>
+																				   outputCont(new Message(
+																								  name + ".out1",
+																								  output1,
+																								  input.CorrelationId)))
+								));
 			Auto_apply_MakeDispatched(implementation);
 			return this;
 		}
@@ -140,9 +209,29 @@ namespace npantarhei.runtime
 
 		public FlowRuntimeConfiguration AddEventBasedComponent(string name, object eventBasedComponent)
 		{
-			_operations.Add(new EBCOperation(name, eventBasedComponent, FlowRuntimeConfiguration.DispatcherFactory(), _asyncerCache));
+			_operations.Add(new EBCOperation(name, eventBasedComponent, FlowRuntimeConfiguration.DispatcherFactory(),
+											 _asyncerCache));
 			return this;
 		}
+
+
+		public FlowRuntimeConfiguration AddInstanceOperations(object instance)
+		{
+			var operationMethods = OperationsFactory.Find_instance_method_operations(instance);
+			foreach (var opMeth in operationMethods)
+				_operations.Add(OperationsFactory.Create_method_operation(instance, opMeth));
+			return this;
+		}
+
+
+		public FlowRuntimeConfiguration AddStaticOperations(Type type)
+		{
+			var operationMethods = OperationsFactory.Find_static_method_operations(type);
+			foreach (var opMeth in operationMethods)
+				_operations.Add(OperationsFactory.Create_method_operation(null, opMeth));
+			return this;
+		}
+
 
 		public FlowRuntimeConfiguration AddAutoResetJoin<T0, T1>(string name)
 		{
@@ -185,23 +274,31 @@ namespace npantarhei.runtime
 		public FlowRuntimeConfiguration MakeDispatched()
 		{
 			var sync = FlowRuntimeConfiguration.DispatcherFactory();
-			WrapLastOperation(op => new Operation(op.Name, (input, continueWith, unhandledException) => 
-																sync.Process(input,
-																			 output =>
-																				 {
-																					 try
-																					 {
-																						 op.Implementation(output, continueWith, unhandledException);
-																					 }
-																					 catch (Exception ex)
-																					 {
-																						 unhandledException(new FlowRuntimeException(ex, output));
-																					 }
-																				 })));
+			WrapLastOperation(op => new Operation(op.Name, (input, continueWith, unhandledException) =>
+														   sync.Process(input,
+																		output =>
+																			{
+																				try
+																				{
+																					op.Implementation(output,
+																									  continueWith,
+																									  unhandledException);
+																				}
+																				catch (Exception ex)
+																				{
+																					unhandledException(
+																						new FlowRuntimeException(ex,
+																												 output));
+																				}
+																			})));
 			return this;
 		}
+
 		[Obsolete]
-		public FlowRuntimeConfiguration MakeSync() { return MakeDispatched(); }
+		public FlowRuntimeConfiguration MakeSync()
+		{
+			return MakeDispatched();
+		}
 
 		private void Auto_apply_MakeDispatched(Delegate implementation)
 		{
@@ -210,7 +307,12 @@ namespace npantarhei.runtime
 
 
 		private readonly AsynchronizerCache _asyncerCache = new AsynchronizerCache();
-		public FlowRuntimeConfiguration MakeAsync() { return MakeAsync("~~~async~~~"); }
+
+		public FlowRuntimeConfiguration MakeAsync()
+		{
+			return MakeAsync("~~~async~~~");
+		}
+
 		public FlowRuntimeConfiguration MakeAsync(string name)
 		{
 			WrapLastOperation(op => new AsyncWrapperOperation(_asyncerCache.Get(name, () => new AsynchronizeFIFO()), op));
@@ -218,7 +320,11 @@ namespace npantarhei.runtime
 		}
 
 
-		public FlowRuntimeConfiguration MakeParallel() { return MakeParallel("~~~parallel~~~"); }
+		public FlowRuntimeConfiguration MakeParallel()
+		{
+			return MakeParallel("~~~parallel~~~");
+		}
+
 		public FlowRuntimeConfiguration MakeParallel(string name)
 		{
 			WrapLastOperation(op => new AsyncWrapperOperation(_asyncerCache.Get(name, () => new Parallelize()), op));
@@ -227,11 +333,27 @@ namespace npantarhei.runtime
 
 
 		[Obsolete("Use MakeAsync() instead.")]
-		public FlowRuntimeConfiguration MakeSerial() { return MakeSerial("~~~serial~~~"); }
+		public FlowRuntimeConfiguration MakeSerial()
+		{
+			return MakeSerial("~~~serial~~~");
+		}
+
 		[Obsolete("Use MakeAsync() instead.")]
 		public FlowRuntimeConfiguration MakeSerial(string name)
 		{
-			WrapLastOperation(op => new AsyncWrapperOperation(_asyncerCache.Get(name, () => new Serialize(_ => _.Port.Fullname)), op));
+			WrapLastOperation(
+				op => new AsyncWrapperOperation(_asyncerCache.Get(name, () => new Serialize(_ => _.Port.Fullname)), op));
+			return this;
+		}
+
+
+        public FlowRuntimeConfiguration this[string name] { get { return this.Select(name); } }
+		public FlowRuntimeConfiguration Select(string name)
+		{
+			// move op to the end of list so WrapLastOperation() can work on it
+			var op = _operations.First(_ => _.Name == name);
+			_operations.Remove(op);
+			_operations.Add(op);
 			return this;
 		}
 
