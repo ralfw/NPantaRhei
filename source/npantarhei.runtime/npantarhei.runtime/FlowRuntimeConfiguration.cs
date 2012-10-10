@@ -50,6 +50,14 @@ namespace npantarhei.runtime
 			return this;
 		}
 
+		public FlowRuntimeConfiguration AddOperations(IOperationCrawler crawler)
+		{
+			crawler.Register(t => this.AddStaticOperations(t),
+							 o => this.AddInstanceOperations(o),
+							 ebc => this.AddEventBasedComponent(ebc.GetType().Name, ebc));
+			return this;
+		}
+
 
 		public FlowRuntimeConfiguration AddFunc<TOutput>(string name, Func<TOutput> implementation)
 		{
@@ -347,7 +355,7 @@ namespace npantarhei.runtime
 		}
 
 
-        public FlowRuntimeConfiguration this[string name] { get { return this.Select(name); } }
+		public FlowRuntimeConfiguration this[string name] { get { return this.Select(name); } }
 		public FlowRuntimeConfiguration Select(string name)
 		{
 			// move op to the end of list so WrapLastOperation() can work on it

@@ -141,7 +141,7 @@ namespace npantarhei.runtime.patterns
 
         private static bool Is_not_an_object_type_method(MethodInfo mi)
         {
-            return "Equals ToString GetType GetHashCode".IndexOf(mi.Name) < 0;
+            return "<Equals><ToString><GetType><GetHashCode>".IndexOf("<" + mi.Name + ">") < 0;
         }
 
         private static bool Has_EBC_input_port_signature(MethodInfo mi)
