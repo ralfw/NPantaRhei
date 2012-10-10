@@ -13,10 +13,10 @@ namespace npantarhei.runtime.tests.patterns
         [Test]
         public void Instance_method_operations()
         {
-            var operations = OperationsFactory.Find_instance_method_operations(new InstanceMethodOperations());
+            var operations = OperationsFactory.Find_instance_method_operations(new InstanceMethodOperations<int>());
             Assert.That(operations.Select(op => op.Name).ToArray(), 
                         Is.EquivalentTo(new[]{"Procedure", "ProcedureV", "ProcedureC", "ProcedureCv", "ProcedureVC", "ProcedureCC", 
-                                              "Function", "FunctionV"}));
+                                              "Function", "FunctionV", "GFunctionV"}));
         }
 
         [Test]
@@ -29,7 +29,7 @@ namespace npantarhei.runtime.tests.patterns
     }
 
 
-    class InstanceMethodOperations
+    class InstanceMethodOperations<T>
     {
         public void Procedure() {}
         public void ProcedureV(int a) {}
@@ -39,6 +39,7 @@ namespace npantarhei.runtime.tests.patterns
         public void ProcedureCC(Action continueWith0, Action continueWith1) {}
         public int Function() { return 0; }
         public int FunctionV(int a) { return 0; }
+        public string GFunctionV(T value) { return typeof(T).Name; }
 
         // invalid operations
         public void ProcedureCC(int a, int b) {}
