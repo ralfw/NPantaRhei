@@ -227,7 +227,7 @@ namespace npantarhei.runtime
 		{
 			var operationMethods = OperationsFactory.Find_instance_method_operations(instance);
 			foreach (var opMeth in operationMethods)
-				_operations.Add(OperationsFactory.Create_method_operation(instance, opMeth));
+				_operations.Add(OperationsFactory.Create_method_operation(instance, opMeth, _asyncerCache));
 			return this;
 		}
 
@@ -236,7 +236,7 @@ namespace npantarhei.runtime
 		{
 			var operationMethods = OperationsFactory.Find_static_method_operations(type);
 			foreach (var opMeth in operationMethods)
-				_operations.Add(OperationsFactory.Create_method_operation(null, opMeth));
+				_operations.Add(OperationsFactory.Create_method_operation(null, opMeth, _asyncerCache));
 			return this;
 		}
 

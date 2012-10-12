@@ -37,7 +37,6 @@
     <Compile Include="config\AssemblyCrawler.cs" />
     <Compile Include="contract\IOperationCrawler.cs" />
     <Compile Include="contract\OperationAttributes.cs" />
-    <Compile Include="contract\ParallelMethod.cs" />
     <Compile Include="data\AsynchronizerCache.cs" />
     <Compile Include="contract\CausalityStack.cs" />
     <Compile Include="contract\DataContainer.cs" />

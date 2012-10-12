@@ -64,7 +64,7 @@ namespace npantarhei.runtime.patterns
         {
             var input_port_method = Find_input_port_method(_inputPorts, input.Port.Name);
             var ebcOp = new EbcMethodOperation(base.Name + "." + input.Port.Name, _eventBasedComponent, input_port_method, _dispatcher);
-            return Schedule_EBC_operation(input_port_method, ebcOp);
+            return OperationsFactory.Schedule_operation_according_to_attributes(_asyncerCache, input_port_method, ebcOp);
         }
 
 
@@ -76,32 +76,6 @@ namespace npantarhei.runtime.patterns
                                                                             base.Name,
                                                                             portName));
             return miInput;
-        }
-
-
-        private IOperation Schedule_EBC_operation(MethodInfo input_port_method, IOperation ebcOperation)
-        {
-            var asyncAttr = input_port_method.GetCustomAttributes(true)
-                                             .FirstOrDefault(attr => attr.GetType() == typeof (AsyncMethodAttribute)) 
-                                              as AsyncMethodAttribute;
-            if (asyncAttr != null)
-            {
-                var asyncer = _asyncerCache.Get(asyncAttr.ThreadPoolName, () => new AsynchronizeFIFO());
-                return new AsyncWrapperOperation(asyncer, ebcOperation);
-            }
-
-
-            var parallelAttr = input_port_method.GetCustomAttributes(true)
-                                            .FirstOrDefault(attr => attr.GetType() == typeof(ParallelMethod))
-                                             as ParallelMethod;
-            if (parallelAttr != null)
-            {
-                var parallelizer = _asyncerCache.Get(parallelAttr.ThreadPoolName, () => new Parallelize());
-                return new AsyncWrapperOperation(parallelizer, ebcOperation);
-            }
-
-            
-            return ebcOperation;
         }
         #endregion
 

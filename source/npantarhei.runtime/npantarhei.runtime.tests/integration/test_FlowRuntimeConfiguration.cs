@@ -230,6 +230,29 @@ namespace npantarhei.runtime.tests.integration
 		}
 
 
+		[Test]
+		public void Schedule_methode_operation_according_to_attribute()
+		{
+			var config = new FlowRuntimeConfiguration()
+				.AddInstanceOperations(new AsyncMethodOperations())
+				.AddStreamsFrom(@"
+									/
+									.in, GetThreadHashcode
+									GetThreadHashcode, .out
+								 ");
+
+			using (var fr = new FlowRuntime(config, new Schedule_for_sync_depthfirst_processing()))
+			{
+				IMessage result = null;
+
+				fr.Process(".in");
+				fr.WaitForResult(500, _ => result = _);
+
+				Assert.AreNotEqual(Thread.CurrentThread.GetHashCode(), (int)result.Data);
+			}
+		}
+
+
 		class MethodOperations
 		{
 			public int Result;
@@ -241,11 +264,19 @@ namespace npantarhei.runtime.tests.integration
 			public void ProcedureVCC(int value, Action<int> continueWith0, Action<string> continueWith1) { continueWith0(value + 1); continueWith1((value+2).ToString()); }
 
 			public int Function() { return 99; }
+
 			public int FunctionV(int value) { return value + 1; }
 
 
 			public static void SProcedureVC(int value, Action<int> continueWith) { continueWith(value+2); }
 			public static int SFunctionV(int value) { return value + 2; }
+		}
+
+
+		class AsyncMethodOperations
+		{
+			[AsyncMethod]
+			public int GetThreadHashcode() { return Thread.CurrentThread.GetHashCode(); }
 		}
 	}
 }

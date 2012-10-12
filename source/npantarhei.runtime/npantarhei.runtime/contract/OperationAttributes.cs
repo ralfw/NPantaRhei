@@ -18,16 +18,24 @@ namespace npantarhei.runtime.contract
 
 
     [Serializable, AttributeUsage(AttributeTargets.Method)]
-    public class AsyncMethodAttribute : Attribute
+    public class AsyncMethodAttribute : ThreadPoolAttribute
+    {
+        public AsyncMethodAttribute() : this("$$$asyncmethod$$$") { }
+        public AsyncMethodAttribute(string threadPoolName) : base(threadPoolName) {}
+    }
+
+    [Serializable, AttributeUsage(AttributeTargets.Method)]
+    public class ParallelMethod : ThreadPoolAttribute
+    {
+        public ParallelMethod() : this("$$$parallelmethod$$$") { }
+        public ParallelMethod(string threadPoolName) : base(threadPoolName) {}
+    }
+
+    [Serializable]
+    public class ThreadPoolAttribute : Attribute
     {
         private readonly string _threadPoolName;
-
-        public AsyncMethodAttribute() : this("$$$asyncmethod$$$") { }
-        public AsyncMethodAttribute(string threadPoolName)
-        {
-            _threadPoolName = threadPoolName;
-        }
-
+        protected ThreadPoolAttribute(string threadPoolName) { _threadPoolName = threadPoolName; }
         public string ThreadPoolName { get { return _threadPoolName; } }
     }
 
