@@ -13,6 +13,7 @@ namespace npantarhei.runtime.operations
             }
             catch(Exception ex)
             {
+                if (ex.GetType() == typeof(UnhandledFlowRuntimeException)) throw;
                 UnhandledException(new FlowRuntimeException(ex, message));
             }
         }

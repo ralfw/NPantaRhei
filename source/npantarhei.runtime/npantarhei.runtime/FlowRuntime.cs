@@ -40,8 +40,7 @@ namespace npantarhei.runtime
 			flow.Result += Pass_result_to_environment;
 			flow.UnhandledException += ex =>
 										   {
-											   if (UnhandledException == null) 
-												   throw new FlowRuntimeException("Unhandled exception! Missing causality or global exception handler.", ex.InnerException, ex.Context);
+											   if (UnhandledException == null) throw new UnhandledFlowRuntimeException(ex);
 											   UnhandledException(ex);
 										   };
 

@@ -12,4 +12,9 @@ namespace npantarhei.runtime.contract
 
         public IMessage Context { get; private set; }
     }
+
+    public class UnhandledFlowRuntimeException : FlowRuntimeException
+    {
+        public UnhandledFlowRuntimeException(FlowRuntimeException exception) : base("Unhandled exception during operation execution! Missing exception event handler or causality.", exception.InnerException, exception.Context) {}
+    }
 }

@@ -7,6 +7,7 @@ using NUnit.Framework;
 using npantarhei.runtime;
 using npantarhei.runtime.contract;
 using npantarhei.runtime.messagetypes;
+using npantarhei.runtime.operations;
 
 namespace npantarhei.runtime.tests.integration
 {
@@ -248,7 +249,7 @@ namespace npantarhei.runtime.tests.integration
 
 
 		[Test]
-		public void An_output_without_an_input()
+		public void An_output_without_an_input_causes_no_exception()
 		{
 			var frc = new FlowRuntimeConfiguration()
 						.AddStreamsFrom(@"
@@ -269,35 +270,69 @@ namespace npantarhei.runtime.tests.integration
 			}
 		}
 
-	    [Test]
-	    public void High_prio_exception_message_terminates_runtime()
-	    {
-            var config = new FlowRuntimeConfiguration()
-                                .AddStreamsFrom(@"
-                                                    /
-                                                    .in, doit
-                                                    .stop, .error
-                                                    doit, .result
-                                                 ")
-                                .AddAction("doit", (int d, Action<string> continueWith) =>
-                                                       {
-                                                           continueWith(d + "x");
-                                                           continueWith(d + "y");
-                                                           throw new ApplicationException("arrrghhh!");
-                                                       });
+		[Test]
+		public void High_prio_exception_message_terminates_runtime()
+		{
+			var config = new FlowRuntimeConfiguration()
+								.AddStreamsFrom(@"
+													/
+													.in, doit
+													.stop, .error
+													doit, .result
+												 ")
+								.AddAction("doit", (int d, Action<string> continueWith) =>
+													   {
+														   continueWith(d + "x");
+														   continueWith(d + "y");
+														   throw new ApplicationException("arrrghhh!");
+													   });
 
-            using (var fr = new FlowRuntime(config))
-            {
-                IMessage result = null;
+			using (var fr = new FlowRuntime(config))
+			{
+				IMessage result = null;
 
-                fr.UnhandledException += ex => { fr.Process(new Message(".stop", ex) { Priority = 99 }); };
+				fr.UnhandledException += ex => { fr.Process(new Message(".stop", ex) { Priority = 99 }); };
 
-                fr.Process(".in", 42);
+				fr.Process(".in", 42);
 
-                Assert.IsTrue(fr.WaitForResult(500, _ => { if (result == null) result = _; }));
-                Assert.AreEqual("error", result.Port.Name);
-            }
-	    }
+				Assert.IsTrue(fr.WaitForResult(500, _ => { if (result == null) result = _; }));
+				Assert.AreEqual("error", result.Port.Name);
+			}
+		}
+
+
+		[Test]
+		public void Avoid_nested_FlowRuntimeExceptions()
+		{
+			var config = new FlowRuntimeConfiguration()
+							.AddAction("throw", () => { throw new ApplicationException("arg!"); })
+							.AddAction("continue", () => {}, true)
+							.AddAction("continue2", () => { }, true)
+							.AddStreamsFrom(@"
+												/
+												.in, continue
+												continue, continue2
+												continue2, throw
+											 ");
+
+			using(var fr = new FlowRuntime(config, new Schedule_for_sync_depthfirst_processing()))
+			{
+				try
+				{
+					fr.Process(".in");
+				}
+				catch(FlowRuntimeException ex)
+				{
+					Assert.IsInstanceOf<UnhandledFlowRuntimeException>(ex);
+					Assert.IsTrue(ex.InnerException.GetType() != typeof(FlowRuntimeException) && 
+								  ex.InnerException.GetType() != typeof(UnhandledFlowRuntimeException));
+				}
+				catch (Exception ex)
+				{
+					Assert.Fail("Unexpected exception type: " + ex);
+				}
+			}
+		}
 	}
 }
 
