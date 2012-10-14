@@ -161,8 +161,8 @@ namespace npantarhei.runtime.tests.integration
 									.inProcedureVC, ProcedureVC
 										ProcedureVC, .outProcedureVC
 									.inProcedureVCC, ProcedureVCC
-										ProcedureVCC.out0, .outProcedureVCC0
-										ProcedureVCC.out1, .outProcedureVCC1
+										ProcedureVCC.continueWith0, .outProcedureVCC0
+										ProcedureVCC.continueWith1, .outProcedureVCC1
 									.inFunction, Function
 										Function, .outFunction
 									.inFunctionV, FunctionV

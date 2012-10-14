@@ -15,7 +15,7 @@ namespace npantarhei.runtime.tests.patterns
         {
             var operations = OperationsFactory.Find_instance_method_operations(new InstanceMethodOperations<int>());
             Assert.That(operations.Select(op => op.Name).ToArray(), 
-                        Is.EquivalentTo(new[]{"Procedure", "ProcedureV", "ProcedureC", "ProcedureCv", "ProcedureVC", "ProcedureCC", 
+                        Is.EquivalentTo(new[]{"Procedure", "ProcedureV", "ProcedureC", "ProcedureCv", "ProcedureVC", "ProcedureCC", "ProcedureVCC", 
                                               "Function", "FunctionV", "GFunctionV"}));
         }
 
@@ -37,6 +37,7 @@ namespace npantarhei.runtime.tests.patterns
         public void ProcedureCv(Action<int> continueWith) {}
         public void ProcedureVC(int a, Action continueWith) {}
         public void ProcedureCC(Action continueWith0, Action continueWith1) {}
+        public void ProcedureVCC(int a, Action continueWith0, Action continueWith1) { }
         public int Function() { return 0; }
         public int FunctionV(int a) { return 0; }
         public string GFunctionV(T value) { return typeof(T).Name; }

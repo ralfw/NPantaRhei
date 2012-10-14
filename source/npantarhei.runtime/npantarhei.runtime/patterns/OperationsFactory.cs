@@ -78,16 +78,16 @@ namespace npantarhei.runtime.patterns
                                                         });
                 else
                 if (Parameter_types_ok(operationMethod, "cc"))
-                    operation = new Operation(name, (input, outputCont, _) => operationMethod.Invoke(instance, new[] {Create_continuation(operationMethod.GetParameters()[0], name + ".out0", input, outputCont),
-                                                                                                                      Create_continuation(operationMethod.GetParameters()[1], name + ".out1", input, outputCont)}));
+                    operation = new Operation(name, (input, outputCont, _) => operationMethod.Invoke(instance, new[] {Create_continuation(operationMethod.GetParameters()[0], name + Get_continuation_output_portname(operationMethod.GetParameters()[0]), input, outputCont),
+                                                                                                                      Create_continuation(operationMethod.GetParameters()[1], name + Get_continuation_output_portname(operationMethod.GetParameters()[1]), input, outputCont)}));
                 else
                 if (Parameter_types_ok(operationMethod, "vc"))
                     operation = new Operation(name, (input, outputCont, _) => operationMethod.Invoke(instance, new[] {input.Data, Create_continuation(operationMethod.GetParameters()[1], name, input, outputCont)}));
                 else
                 if (Parameter_types_ok(operationMethod, "vcc"))
                     operation = new Operation(name, (input, outputCont, _) => operationMethod.Invoke(instance, new[] {input.Data, 
-                                                                                                                      Create_continuation(operationMethod.GetParameters()[1], name + ".out0", input, outputCont),
-                                                                                                                      Create_continuation(operationMethod.GetParameters()[2], name + ".out1", input, outputCont)}));
+                                                                                                                      Create_continuation(operationMethod.GetParameters()[1], name + Get_continuation_output_portname(operationMethod.GetParameters()[1]), input, outputCont),
+                                                                                                                      Create_continuation(operationMethod.GetParameters()[2], name + Get_continuation_output_portname(operationMethod.GetParameters()[2]), input, outputCont)}));
                 else
                     throw new NotImplementedException(string.Format("{0}.{1}: Procedure signature not supported as an operation!", instance.GetType().Name, operationMethod.Name));
             }
@@ -239,6 +239,11 @@ namespace npantarhei.runtime.patterns
 
             var delegateType = typeof (Action<>).MakeGenericType(param.ParameterType.GetGenericArguments()[0]);
             return Delegate.CreateDelegate(delegateType, continuationObject, "ContinueWith");
+        }
+
+        private static string Get_continuation_output_portname(ParameterInfo param)
+        {
+            return "." + param.Name;
         }
     }
 
