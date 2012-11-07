@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using npantarhei.runtime.config;
 using npantarhei.runtime.contract;
 using npantarhei.runtime.data;
 using npantarhei.runtime.messagetypes;
@@ -383,7 +383,7 @@ namespace npantarhei.runtime
 		public IEnumerable<IStream> Streams { get { return _streams; } }
 
 
-		public FlowRuntimeConfiguration AddStream(string fromPortName, string toPortName) { AddStream(new messagetypes.Stream(fromPortName, toPortName)); return this; }
+	    public FlowRuntimeConfiguration AddStream(string fromPortName, string toPortName) { AddStream(new messagetypes.Stream(fromPortName, toPortName)); return this; }
 		public FlowRuntimeConfiguration AddStream(IStream stream) { _streams.Add(stream); return this; }
 		public FlowRuntimeConfiguration AddStreams(IEnumerable<IStream> streams) { streams.ToList().ForEach(_ => this.AddStream(_)); return this; }
 

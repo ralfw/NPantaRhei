@@ -21,6 +21,10 @@ namespace npantarhei.runtime.contract
 		bool WaitForResult(Action<IMessage> processResult);
 		bool WaitForResult(int milliseconds, Action<IMessage> processResult);
 
+	    void RunAndWait(string portname);
+	    void RunAndWait(string portname, object data);
+	    bool RunAndWait(string portname, object data, int milliseconds);
+
 		Action CreateEventProcessor(string portname);
 		Action<T> CreateEventProcessor<T>(string portname);
 		

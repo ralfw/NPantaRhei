@@ -131,7 +131,17 @@ namespace npantarhei.runtime
 							   };
 			return are.WaitOne(milliseconds);
 		}
-		
+
+
+        public void RunAndWait(string portname) { RunAndWait(portname, null, Timeout.Infinite); }
+        public void RunAndWait(string portname, object data) { RunAndWait(portname, data, Timeout.Infinite); }
+        public bool RunAndWait(string portname, object data, int milliseconds)
+        {
+            this.Process(portname, data);
+            return this.WaitForResult(milliseconds);
+        }
+
+
 		public Action CreateEventProcessor(string portname) { return () => this.Process(new Message(portname, null)); }
 		public Action<T> CreateEventProcessor<T>(string portname) { return data => this.Process(new Message(portname, data)); }
 

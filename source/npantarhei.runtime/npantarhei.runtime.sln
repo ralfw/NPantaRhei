@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\..\doc\pantarhei backlog.txt = ..\..\doc\pantarhei backlog.txt
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "npantarhei.factory.tests", "npantarhei.factory.tests\npantarhei.factory.tests.csproj", "{1CEF8C6B-D4DB-4437-A4FC-90027936E585}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,16 @@ Global
 		{8C5859A7-0ACC-4156-A98D-A442FDCC15BB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{8C5859A7-0ACC-4156-A98D-A442FDCC15BB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{8C5859A7-0ACC-4156-A98D-A442FDCC15BB}.Release|x86.ActiveCfg = Release|Any CPU
+		{1CEF8C6B-D4DB-4437-A4FC-90027936E585}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{1CEF8C6B-D4DB-4437-A4FC-90027936E585}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{1CEF8C6B-D4DB-4437-A4FC-90027936E585}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{1CEF8C6B-D4DB-4437-A4FC-90027936E585}.Debug|x86.ActiveCfg = Debug|x86
+		{1CEF8C6B-D4DB-4437-A4FC-90027936E585}.Debug|x86.Build.0 = Debug|x86
+		{1CEF8C6B-D4DB-4437-A4FC-90027936E585}.Release|Any CPU.ActiveCfg = Release|x86
+		{1CEF8C6B-D4DB-4437-A4FC-90027936E585}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{1CEF8C6B-D4DB-4437-A4FC-90027936E585}.Release|Mixed Platforms.Build.0 = Release|x86
+		{1CEF8C6B-D4DB-4437-A4FC-90027936E585}.Release|x86.ActiveCfg = Release|x86
+		{1CEF8C6B-D4DB-4437-A4FC-90027936E585}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
