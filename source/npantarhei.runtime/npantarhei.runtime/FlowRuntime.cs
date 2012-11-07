@@ -133,9 +133,9 @@ namespace npantarhei.runtime
 		}
 
 
-        public void RunAndWait(string portname) { RunAndWait(portname, null, Timeout.Infinite); }
-        public void RunAndWait(string portname, object data) { RunAndWait(portname, data, Timeout.Infinite); }
-        public bool RunAndWait(string portname, object data, int milliseconds)
+        public void ProcessAndWait(string portname) { ProcessAndWait(portname, null, Timeout.Infinite); }
+        public void ProcessAndWait(string portname, object data) { ProcessAndWait(portname, data, Timeout.Infinite); }
+        public bool ProcessAndWait(string portname, object data, int milliseconds)
         {
             this.Process(portname, data);
             return this.WaitForResult(milliseconds);

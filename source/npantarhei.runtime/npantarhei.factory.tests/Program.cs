@@ -12,7 +12,7 @@ namespace npantarhei.factory.tests
         static void Main(string[] args)
         {
             FlowRuntimeFactory.Beginner.Process(".in", "world");
-            FlowRuntimeFactory.Basic.RunAndWait(".in", "world2");
+            FlowRuntimeFactory.Basic.ProcessAndWait(".in", "world2");
         }
     }
 
