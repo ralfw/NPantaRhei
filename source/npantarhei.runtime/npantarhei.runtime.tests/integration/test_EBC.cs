@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using npantarhei.runtime.contract;
+using npantarhei.runtime.messagetypes;
 using npantarhei.runtime.operations;
 
 namespace npantarhei.runtime.tests.integration
@@ -166,6 +167,30 @@ namespace npantarhei.runtime.tests.integration
                 fr.Result += _ => result = (string) _.Data;
 
                 Assert.AreEqual("helloxx", result);
+            }
+        }
+
+
+        [Test]
+        public void CorrelationId_is_retained()
+        {
+            var config = new FlowRuntimeConfiguration()
+                                .AddStreamsFrom(@"
+                                                    /
+                                                    .in, ebc.Run
+                                                    ebc.Out, .out
+                                                 ")
+                                .AddEventBasedComponent("ebc", new AsyncEbc());
+
+            using (var fr = new FlowRuntime(config, new Schedule_for_sync_depthfirst_processing()))
+            {
+                IMessage result = null;
+
+                var corrId = Guid.NewGuid();
+                fr.Process(new Message(".in", "hello", corrId));
+
+                Assert.IsTrue(fr.WaitForResult( _ => result = _));
+                Assert.AreEqual(corrId, result.CorrelationId);
             }
         }
 

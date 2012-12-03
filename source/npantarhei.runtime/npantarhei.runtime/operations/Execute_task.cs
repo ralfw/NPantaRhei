@@ -35,6 +35,9 @@ namespace npantarhei.runtime.operations
 									 output.Data,
 									 task.Message.CorrelationId);
 
+			if (task.Message.CorrelationId != Guid.Empty)
+				output = new Message(output.Port,output.Data, task.Message.CorrelationId);
+
 			if (!(task.Operation is IFlow)) output.FlowStack = task.Message.FlowStack;
 			output.Causalities = task.Message.Causalities;
 
