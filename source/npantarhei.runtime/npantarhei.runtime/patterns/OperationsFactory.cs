@@ -55,60 +55,77 @@ namespace npantarhei.runtime.patterns
         // But right now it´s simple and serves the purpose. It can be optimized later on.
         public static IOperation Create_method_operation(object instance, MethodInfo operationMethod, AsynchronizerCache asyncerCache)
         {
-            IOperation operation;
             var name = operationMethod.Name;
+            OperationAdapter implementation;
 
             if (Is_a_procedure(operationMethod))
             {
                 if (operationMethod.GetParameters().Length == 0)
-                    operation = new Operation(name, (input, outputCont, _) =>
+                    implementation = (input, outputCont, _) =>
                                                         {
                                                             operationMethod.Invoke(instance, null);
                                                             outputCont(new Message(name, null, input.CorrelationId));
-                                                        });
+                                                        };
                 else
                 if (Parameter_types_ok(operationMethod, "c"))
-                    operation = new Operation(name, (input, outputCont, _) => operationMethod.Invoke(instance, new[] {Create_continuation(operationMethod.GetParameters()[0], name, input, outputCont)}));
+                    implementation = (input, outputCont, _) => operationMethod.Invoke(instance, new[] {Create_continuation(operationMethod.GetParameters()[0], name, input, outputCont)});
                 else
                 if (Parameter_types_ok(operationMethod, "v"))
-                    operation = new Operation(name, (input, outputCont, _) =>
+                    implementation = (input, outputCont, _) =>
                                                         {
                                                             operationMethod.Invoke(instance, new[] { input.Data });
                                                             outputCont(new Message(name, null, input.CorrelationId));
-                                                        });
+                                                        };
                 else
                 if (Parameter_types_ok(operationMethod, "cc"))
-                    operation = new Operation(name, (input, outputCont, _) => operationMethod.Invoke(instance, new[] {Create_continuation(operationMethod.GetParameters()[0], name + Get_continuation_output_portname(operationMethod.GetParameters()[0]), input, outputCont),
-                                                                                                                      Create_continuation(operationMethod.GetParameters()[1], name + Get_continuation_output_portname(operationMethod.GetParameters()[1]), input, outputCont)}));
+                    implementation = (input, outputCont, _) => operationMethod.Invoke(instance, new[] {Create_continuation(operationMethod.GetParameters()[0], name + Get_continuation_output_portname(operationMethod.GetParameters()[0]), input, outputCont),
+                                                                                                       Create_continuation(operationMethod.GetParameters()[1], name + Get_continuation_output_portname(operationMethod.GetParameters()[1]), input, outputCont)});
                 else
                 if (Parameter_types_ok(operationMethod, "vc"))
-                    operation = new Operation(name, (input, outputCont, _) => operationMethod.Invoke(instance, new[] {input.Data, Create_continuation(operationMethod.GetParameters()[1], name, input, outputCont)}));
+                    implementation = (input, outputCont, _) => operationMethod.Invoke(instance, new[] {input.Data, Create_continuation(operationMethod.GetParameters()[1], name, input, outputCont)});
                 else
                 if (Parameter_types_ok(operationMethod, "vcc"))
-                    operation = new Operation(name, (input, outputCont, _) => operationMethod.Invoke(instance, new[] {input.Data, 
-                                                                                                                      Create_continuation(operationMethod.GetParameters()[1], name + Get_continuation_output_portname(operationMethod.GetParameters()[1]), input, outputCont),
-                                                                                                                      Create_continuation(operationMethod.GetParameters()[2], name + Get_continuation_output_portname(operationMethod.GetParameters()[2]), input, outputCont)}));
+                    implementation = (input, outputCont, _) => operationMethod.Invoke(instance, new[] {input.Data, 
+                                                                                                       Create_continuation(operationMethod.GetParameters()[1], name + Get_continuation_output_portname(operationMethod.GetParameters()[1]), input, outputCont),
+                                                                                                       Create_continuation(operationMethod.GetParameters()[2], name + Get_continuation_output_portname(operationMethod.GetParameters()[2]), input, outputCont)});
                 else
                     throw new NotImplementedException(string.Format("{0}.{1}: Procedure signature not supported as an operation!", instance.GetType().Name, operationMethod.Name));
             }
             else
             if (operationMethod.GetParameters().Length == 0)
-                operation = new Operation(name, (input, outputCont, _) =>
+                implementation = (input, outputCont, _) =>
                                                     {
                                                         var result = operationMethod.Invoke(instance, null);
                                                         outputCont(new Message(name, result, input.CorrelationId));
-                                                    });
+                                                    };
             else
             if (Parameter_types_ok(operationMethod, "v"))
-                operation = new Operation(name, (input, outputCont, _) =>
+                implementation = (input, outputCont, _) =>
                                                     {
                                                         var result = operationMethod.Invoke(instance, new[] { input.Data });
                                                         outputCont(new Message(name, result, input.CorrelationId));
-                                                    });
+                                                    };
             else
                 throw new NotImplementedException(string.Format("{0}.{1}: Function signature not supported as an operation!", instance.GetType().Name, operationMethod.Name));
 
-            return Schedule_operation_according_to_attributes(asyncerCache, operationMethod, operation);
+
+            OperationAdapter exceptionAwareImplementation = (input, outputCont, _) =>
+                                                                 {
+                                                                     try
+                                                                     {
+                                                                         implementation(input, outputCont, _);
+                                                                     }
+                                                                     catch(TargetInvocationException ex)
+                                                                     {
+                                                                         throw ex.InnerException;
+                                                                     }
+                                                                     catch(Exception ex)
+                                                                     {
+                                                                         throw ex;
+                                                                     }
+                                                                 };
+
+            return Schedule_operation_according_to_attributes(asyncerCache, operationMethod, new Operation(name, exceptionAwareImplementation));
         }
 
 
