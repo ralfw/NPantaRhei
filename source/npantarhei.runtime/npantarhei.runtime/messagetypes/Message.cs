@@ -4,7 +4,7 @@ using npantarhei.runtime.contract;
 
 namespace npantarhei.runtime.messagetypes
 {
-	public class Message : IMessage
+    public class Message : IMessage
 	{
 		public Message(string portname) : this(portname, null) {}
 		public Message(string portname, Guid correlationId) : this(portname, null, correlationId) { }
