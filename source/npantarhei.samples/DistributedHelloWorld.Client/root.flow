@@ -1,0 +1,5 @@
+﻿/
+.run, ui.wait_for_names
+ui.name, proxy#greet
+proxy#greet, ui.display_greeting
+ui.exit, .exit

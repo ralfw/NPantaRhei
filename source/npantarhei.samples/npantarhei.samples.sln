@@ -15,6 +15,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelegramProblem", "Telegram
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IOperation wrapper for EBC", "IOperation wrapper for EBC\IOperation wrapper for EBC.csproj", "{0A24C7ED-CBBB-488D-A426-C55E2E25EA61}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Distribution", "Distribution", "{B2FBA0CE-F088-4A62-A5F8-D7B778E66902}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DistributedHelloWorld.Client", "DistributedHelloWorld.Client\DistributedHelloWorld.Client.csproj", "{AD73F516-5FBF-46F2-9370-ECFFE27A3BC6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DistributedHelloWorld.Server", "DistributedHelloWorld.Server\DistributedHelloWorld.Server.csproj", "{E7700471-60C5-41C0-A4CB-AA7EBE87FCE4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -95,8 +101,32 @@ Global
 		{0A24C7ED-CBBB-488D-A426-C55E2E25EA61}.Release|Mixed Platforms.Build.0 = Release|x86
 		{0A24C7ED-CBBB-488D-A426-C55E2E25EA61}.Release|x86.ActiveCfg = Release|x86
 		{0A24C7ED-CBBB-488D-A426-C55E2E25EA61}.Release|x86.Build.0 = Release|x86
+		{AD73F516-5FBF-46F2-9370-ECFFE27A3BC6}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{AD73F516-5FBF-46F2-9370-ECFFE27A3BC6}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{AD73F516-5FBF-46F2-9370-ECFFE27A3BC6}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{AD73F516-5FBF-46F2-9370-ECFFE27A3BC6}.Debug|x86.ActiveCfg = Debug|x86
+		{AD73F516-5FBF-46F2-9370-ECFFE27A3BC6}.Debug|x86.Build.0 = Debug|x86
+		{AD73F516-5FBF-46F2-9370-ECFFE27A3BC6}.Release|Any CPU.ActiveCfg = Release|x86
+		{AD73F516-5FBF-46F2-9370-ECFFE27A3BC6}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{AD73F516-5FBF-46F2-9370-ECFFE27A3BC6}.Release|Mixed Platforms.Build.0 = Release|x86
+		{AD73F516-5FBF-46F2-9370-ECFFE27A3BC6}.Release|x86.ActiveCfg = Release|x86
+		{AD73F516-5FBF-46F2-9370-ECFFE27A3BC6}.Release|x86.Build.0 = Release|x86
+		{E7700471-60C5-41C0-A4CB-AA7EBE87FCE4}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{E7700471-60C5-41C0-A4CB-AA7EBE87FCE4}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{E7700471-60C5-41C0-A4CB-AA7EBE87FCE4}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{E7700471-60C5-41C0-A4CB-AA7EBE87FCE4}.Debug|x86.ActiveCfg = Debug|x86
+		{E7700471-60C5-41C0-A4CB-AA7EBE87FCE4}.Debug|x86.Build.0 = Debug|x86
+		{E7700471-60C5-41C0-A4CB-AA7EBE87FCE4}.Release|Any CPU.ActiveCfg = Release|x86
+		{E7700471-60C5-41C0-A4CB-AA7EBE87FCE4}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{E7700471-60C5-41C0-A4CB-AA7EBE87FCE4}.Release|Mixed Platforms.Build.0 = Release|x86
+		{E7700471-60C5-41C0-A4CB-AA7EBE87FCE4}.Release|x86.ActiveCfg = Release|x86
+		{E7700471-60C5-41C0-A4CB-AA7EBE87FCE4}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AD73F516-5FBF-46F2-9370-ECFFE27A3BC6} = {B2FBA0CE-F088-4A62-A5F8-D7B778E66902}
+		{E7700471-60C5-41C0-A4CB-AA7EBE87FCE4} = {B2FBA0CE-F088-4A62-A5F8-D7B778E66902}
 	EndGlobalSection
 EndGlobal
