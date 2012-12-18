@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using npantarhei.distribution.contract.messagetypes;
+using npantarhei.distribution.wcf.transceivers;
 
 namespace npantarhei.distribution.wcf.tests
 {

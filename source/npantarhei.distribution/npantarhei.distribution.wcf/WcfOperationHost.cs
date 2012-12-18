@@ -1,4 +1,5 @@
 ﻿using System;
+using npantarhei.distribution.wcf.transceivers;
 using npantarhei.runtime.contract;
 
 namespace npantarhei.distribution.wcf

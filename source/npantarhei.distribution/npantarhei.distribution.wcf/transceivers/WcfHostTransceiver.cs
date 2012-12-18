@@ -5,7 +5,7 @@ using npantarhei.distribution.contract.messagetypes;
 using npantarhei.distribution.wcf.contract;
 using npantarhei.distribution.wcf.services;
 
-namespace npantarhei.distribution.wcf
+namespace npantarhei.distribution.wcf.transceivers
 {
     public class WcfHostTransceiver : IHostStub, IStandInProxy
     {
