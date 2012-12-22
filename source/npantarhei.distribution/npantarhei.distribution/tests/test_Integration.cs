@@ -14,11 +14,9 @@ namespace npantarhei.distribution.tests
         public void Run()
         {
             var bus = new SyncBus();
-            var localTransceiver = bus.RegisterStandIn("local", "remote");
-            var remoteTransceiver = bus.RegisterHost("remote");
 
             var configLocal = new FlowRuntimeConfiguration()
-                                    .AddOperation(new StandInOperation("standin", localTransceiver, localTransceiver))
+                                    .AddOperation(bus.CreateStandInOperation("standIn", "host"))
                                     .AddStream(".fin", "standin#fhelloworld")
                                     .AddStream("standin#fhelloworld", ".out")
 
@@ -36,7 +34,7 @@ namespace npantarhei.distribution.tests
 
             using(var localRuntime = new FlowRuntime(configLocal, new Schedule_for_sync_depthfirst_processing()))
             using(var remoteRuntime = new FlowRuntime(configRemote, new Schedule_for_sync_depthfirst_processing()))
-            using(var host = new OperationHost(remoteRuntime, remoteTransceiver, remoteTransceiver))
+            using(bus.CreateOperationHost(remoteRuntime, "host"))
             {
                 localRuntime.Message += _ => Console.WriteLine("local: {0}", _);
                 remoteRuntime.Message += _ => Console.WriteLine("    remote: {0}", _);
