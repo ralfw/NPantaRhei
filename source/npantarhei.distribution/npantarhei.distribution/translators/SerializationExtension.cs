@@ -3,7 +3,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace npantarhei.distribution.translators
 {
-    static class SerializationExtension
+    public static class SerializationExtension
     {
         public static byte[] Serialize(this object obj)
         {

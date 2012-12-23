@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "npantarhei.distribution", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "npantarhei.distribution.wcf", "npantarhei.distribution.wcf\npantarhei.distribution.wcf.csproj", "{29363976-1DD4-48DD-AB6E-54FBFE4E6FE3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "npantarhei.distribution.pubnub", "npantarhei.distribution.pubnub\npantarhei.distribution.pubnub.csproj", "{99E8653D-2351-4AE3-B7F5-D0CE9EA035B0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{29363976-1DD4-48DD-AB6E-54FBFE4E6FE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29363976-1DD4-48DD-AB6E-54FBFE4E6FE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29363976-1DD4-48DD-AB6E-54FBFE4E6FE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99E8653D-2351-4AE3-B7F5-D0CE9EA035B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99E8653D-2351-4AE3-B7F5-D0CE9EA035B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99E8653D-2351-4AE3-B7F5-D0CE9EA035B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99E8653D-2351-4AE3-B7F5-D0CE9EA035B0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

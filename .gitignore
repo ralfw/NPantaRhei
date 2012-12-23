@@ -1,6 +1,7 @@
 .DS_Store
 bin/
 obj/
+unversioned/
 *.user
 *.cache
 *.suo

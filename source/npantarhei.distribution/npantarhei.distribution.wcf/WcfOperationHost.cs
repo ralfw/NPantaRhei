@@ -19,5 +19,4 @@ namespace npantarhei.distribution.wcf
             _operationHost.Dispose();
         }
     }
-
 }
