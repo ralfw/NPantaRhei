@@ -21,7 +21,7 @@ namespace npantarhei.distribution.pubnub.transceivers
         private readonly string _hostChannel;
 
 
-        public PubnubStandInTransceiver(Credentials credentials, string hostChannel)
+        public PubnubStandInTransceiver(PubnubCredentials credentials, string hostChannel)
         {
             _receiver = new Pubnub(credentials.PublishingKey, credentials.SubscriptionKey, credentials.SecretKey);
             _receiverChannel = Guid.NewGuid().ToString();

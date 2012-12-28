@@ -6,23 +6,23 @@ using System.Text;
 
 namespace npantarhei.distribution.pubnub.transceivers
 {
-    public class Credentials
+    public class PubnubCredentials
     {
-        public static Credentials Demo { get { return new Credentials("demo", "demo");}}
+        public static PubnubCredentials Demo { get { return new PubnubCredentials("demo", "demo");}}
 
-        public static Credentials LoadFrom(string filename)
+        public static PubnubCredentials LoadFrom(string filename)
         {
             using(var sr = new StreamReader(filename))
             {
-                return new Credentials(sr.ReadLine(), 
+                return new PubnubCredentials(sr.ReadLine(), 
                                        sr.ReadLine(), 
                                        sr.ReadLine());
             }
         }
 
 
-        public Credentials(string publishingKey, string subscriptionKey) : this(publishingKey, subscriptionKey, ""){}
-        public Credentials(string publishingKey, string subscriptionKey, string secretKey)
+        public PubnubCredentials(string publishingKey, string subscriptionKey) : this(publishingKey, subscriptionKey, ""){}
+        public PubnubCredentials(string publishingKey, string subscriptionKey, string secretKey)
         {
             PublishingKey = publishingKey;
             SubscriptionKey = subscriptionKey;

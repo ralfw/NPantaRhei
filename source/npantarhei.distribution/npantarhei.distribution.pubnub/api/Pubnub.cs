@@ -1140,6 +1140,7 @@ namespace npantarhei.distribution.pubnub.api
 
 			// Create Request
 			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(requestUri);
+		    request.ServicePoint.ConnectionLimit = 100;
 
 			try
 			{

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using Newtonsoft.Json.Linq;
 using npantarhei.distribution.contract;
 using npantarhei.distribution.contract.messagetypes;
@@ -18,11 +19,12 @@ namespace npantarhei.distribution.pubnub.transceivers
         private readonly Pubnub _standIn;
 
 
-        public PubnubHostTransceiver(Credentials credentials, string channel)
+        public PubnubHostTransceiver(PubnubCredentials credentials, string channel)
         {
             _host = new Pubnub(credentials.PublishingKey, credentials.SubscriptionKey, credentials.SecretKey);
             _host.subscribe(channel, Process_input_from_standIn);
             _channel = channel;
+
             _standIn = new Pubnub(credentials.PublishingKey, credentials.SubscriptionKey, credentials.SecretKey);
         }
 
@@ -39,18 +41,24 @@ namespace npantarhei.distribution.pubnub.transceivers
         #region IStandInProxy
         public void SendToStandIn(Tuple<string, HostOutput> output)
         {
+            Console.WriteLine("sent to standin @ {0}", Thread.CurrentThread.GetHashCode());
             var outputSerialized = output.Item2.Serialize();
-            _standIn.publish(output.Item1, outputSerialized, _ => { });
+            _standIn.publish(output.Item1, outputSerialized, _ =>
+                                                                 {
+                                                                     Console.WriteLine("sent");
+                                                                 });
         }
         #endregion
 
 
         void Process_input_from_standIn(object pubnubMsg)
         {
+            Console.WriteLine("receive from standin @ {0}", Thread.CurrentThread.GetHashCode());
             var serializedInput = (string)((JValue)((ReadOnlyCollection<object>)pubnubMsg)[0]).Value;
             var standInInput = (HostInput)Convert.FromBase64String(serializedInput).Deserialize();
             ReceivedFromStandIn(standInInput);
         }
+
 
         public void Dispose()
         {

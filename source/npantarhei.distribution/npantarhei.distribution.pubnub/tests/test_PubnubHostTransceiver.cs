@@ -19,7 +19,7 @@ namespace npantarhei.distribution.pubnub.tests
         [Test]
         public void Receive_from_standIn()
         {
-            var cre = Credentials.LoadFrom("pubnub credentials.txt");
+            var cre = PubnubCredentials.LoadFrom("pubnub credentials.txt");
             using (var sut = new PubnubHostTransceiver(cre, "hostchannel"))
             {
 
@@ -47,22 +47,24 @@ namespace npantarhei.distribution.pubnub.tests
         [Test]
         public void Send_to_standIn()
         {
-            var cre = Credentials.LoadFrom("pubnub credentials.txt");
+            var cre = PubnubCredentials.LoadFrom("pubnub credentials.txt");
             using(var sut = new PubnubHostTransceiver(cre, "hostchannel"))
             {
                 var standIn = new Pubnub(cre.PublishingKey, cre.SubscriptionKey, cre.SecretKey);
                 try
                 {
+                    var standInChannel = Guid.NewGuid().ToString();
+
                     var are = new AutoResetEvent(false);
                     ReadOnlyCollection<object> result = null;
-                    standIn.subscribe("standIn",  (ReadOnlyCollection<object> _) =>
+                    standIn.subscribe(standInChannel, (ReadOnlyCollection<object> _) =>
                                               {
                                                   result = _;
                                                   are.Set();
                                               });
 
                     var ho = new HostOutput{CorrelationId = Guid.NewGuid(), Data = "hello".Serialize(), Portname = "portname"};
-                    sut.SendToStandIn(new Tuple<string, HostOutput>("standIn", ho));
+                    sut.SendToStandIn(new Tuple<string, HostOutput>(standInChannel, ho));
 
                     Assert.IsTrue(are.WaitOne(5000));
 

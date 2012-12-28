@@ -19,7 +19,7 @@ namespace npantarhei.distribution.pubnub.tests
         [Test]
         public void Send_to_host()
         {
-            var cre = Credentials.LoadFrom("pubnub credentials.txt");
+            var cre = PubnubCredentials.LoadFrom("pubnub credentials.txt");
 
             var host = new Pubnub(cre.PublishingKey, cre.SubscriptionKey);
             try
@@ -62,7 +62,7 @@ namespace npantarhei.distribution.pubnub.tests
         [Test]
         public void Receive_from_host()
         {
-            var cre = Credentials.LoadFrom("pubnub credentials.txt");
+            var cre = PubnubCredentials.LoadFrom("pubnub credentials.txt");
 
             using (var sut = new PubnubStandInTransceiver(cre, "hostchannel"))
             {

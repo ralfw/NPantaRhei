@@ -51,6 +51,7 @@
     <Compile Include="contract\IStandInService.cs" />
     <Compile Include="services\Service.cs" />
     <Compile Include="services\SingletonServiceHost.cs" />
+    <Compile Include="tests\test_Integration.cs" />
     <Compile Include="tests\test_Transceivers.cs" />
     <Compile Include="transceivers\WcfHostTransceiver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
