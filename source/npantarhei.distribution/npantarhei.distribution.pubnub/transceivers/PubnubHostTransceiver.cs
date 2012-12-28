@@ -14,18 +14,15 @@ namespace npantarhei.distribution.pubnub.transceivers
 {
     public class PubnubHostTransceiver : IHostStub, IStandInProxy
     {
-        private readonly Pubnub _host;
+        private readonly Pubnub _transceiver;
         private readonly string _channel;
-        private readonly Pubnub _standIn;
 
 
         public PubnubHostTransceiver(PubnubCredentials credentials, string channel)
         {
-            _host = new Pubnub(credentials.PublishingKey, credentials.SubscriptionKey, credentials.SecretKey);
-            _host.subscribe(channel, Process_input_from_standIn);
+            _transceiver = new Pubnub(credentials.PublishingKey, credentials.SubscriptionKey, credentials.SecretKey);
+            _transceiver.subscribe(channel, Process_input_from_standIn);
             _channel = channel;
-
-            _standIn = new Pubnub(credentials.PublishingKey, credentials.SubscriptionKey, credentials.SecretKey);
         }
 
 
@@ -43,7 +40,7 @@ namespace npantarhei.distribution.pubnub.transceivers
         {
             Console.WriteLine("sent to standin @ {0}", Thread.CurrentThread.GetHashCode());
             var outputSerialized = output.Item2.Serialize();
-            _standIn.publish(output.Item1, outputSerialized, _ =>
+            _transceiver.publish(output.Item1, outputSerialized, _ =>
                                                                  {
                                                                      Console.WriteLine("sent");
                                                                  });
@@ -62,7 +59,7 @@ namespace npantarhei.distribution.pubnub.transceivers
 
         public void Dispose()
         {
-            _host.unsubscribe(_channel, _ => {});
+            _transceiver.unsubscribe(_channel, _ => {});
         }
     }
 }
