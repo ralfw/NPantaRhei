@@ -280,7 +280,7 @@ namespace npantarhei.runtime.tests.integration
 													.stop, .error
 													doit, .result
 												 ")
-								.AddAction("doit", (int d, Action<string> continueWith) =>
+								.AddAction<int, string>("doit", (int d, Action<string> continueWith) =>
 													   {
 														   continueWith(d + "x");
 														   continueWith(d + "y");
