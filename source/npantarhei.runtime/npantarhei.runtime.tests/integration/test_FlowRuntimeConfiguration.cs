@@ -204,7 +204,6 @@ namespace npantarhei.runtime.tests.integration
 		[Test]
 		public void Register_static_operations()
 		{
-			var iop = new MethodOperations();
 			var config = new FlowRuntimeConfiguration()
 				.AddStaticOperations(typeof(MethodOperations))
 				.AddStreamsFrom(@"
