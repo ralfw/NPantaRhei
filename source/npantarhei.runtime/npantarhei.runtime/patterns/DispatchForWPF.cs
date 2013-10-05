@@ -18,7 +18,7 @@ namespace npantarhei.runtime.patterns
 
         public void Process(Action continueWith)
         {
-            dispatcher.Invoke(continueWith);
+            dispatcher.Invoke(continueWith, new object[0]);
         }
     }
 }
