@@ -110,7 +110,7 @@ namespace npantarhei.runtime.tests.integration
                                                  ")
                                 .AddPushCausality("push")
                                 .AddPopCausality("pop")
-                                .AddAction("doit", (int d, Action<string> continueWith) =>
+                                .AddAction<int, string>("doit", (int d, Action<string> continueWith) =>
                                                        {
                                                            continueWith(d + "x");
                                                            continueWith(d + "y");
