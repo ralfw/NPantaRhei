@@ -23,16 +23,16 @@ namespace npantarhei.runtime.tests
 			
 			var are = new AutoResetEvent(false);
 			var results = new List<int>();
-			var threads = new Dictionary<long,bool>();
+			var threads = new Dictionary<int,bool>();
 			Action<IMessage> dequeue = _ => {
 				lock(results)
 				{
-					if (!threads.ContainsKey(Thread.CurrentThread.GetHashCode()))
-						threads.Add(Thread.CurrentThread.GetHashCode(), true);
+					if (!threads.ContainsKey(Thread.CurrentThread.ManagedThreadId))
+						threads.Add(Thread.CurrentThread.ManagedThreadId, true);
 				    var i = (int) _.Data;
 					results.Add(i);
 					if (results.Count == N) are.Set();
-					Thread.Sleep(i % 10);
+					Thread.Sleep(i % 20);
 				}
 			};
 			
