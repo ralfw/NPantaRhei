@@ -92,6 +92,7 @@ namespace npantarhei.runtime.tests.integration
 		[Test]
 		public void Output_with_fan_out()
 		{
+			var twoResultsReceived = new AutoResetEvent(false);
 			var frc = new FlowRuntimeConfiguration()
 							.AddStream(new Stream(".in", "A.in"))
 							.AddStream(new Stream(".in", "B.in"))
@@ -108,12 +109,12 @@ namespace npantarhei.runtime.tests.integration
 							{
 								results.Add(_);
 								n++;
-								if (n==2) _are.Set();
+								if (n==2) twoResultsReceived.Set();
 							};
 			
 			_sut.Process(new Message(".in", "hello"));
 
-			Assert.IsTrue(_are.WaitOne(4000));
+			Assert.IsTrue(twoResultsReceived.WaitOne(4000));
 			Assert.That(results.Select(m => m.Data.ToString()).ToArray(), Is.EquivalentTo(new[]{"hellox", "helloy"}));
 		}
 		
