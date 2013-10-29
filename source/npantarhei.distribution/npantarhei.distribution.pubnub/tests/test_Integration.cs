@@ -194,5 +194,40 @@ namespace npantarhei.distribution.pubnub.tests
 
             Assert.IsTrue(are.WaitOne(10000));
         }
+
+
+        [Test]
+        public void Test_request_response2()
+        {
+            var cre = PubnubCredentials.LoadFrom("pubnub credentials.txt");
+
+            var are = new AutoResetEvent(false);
+
+            var pn = new Pubnub(cre.PublishingKey, cre.SubscriptionKey, cre.SecretKey);
+            pn.subscribe("client", (object _) =>
+                                        {
+                                            Console.WriteLine("client received response");
+                                            are.Set();
+                                        },
+                                            (object _) =>
+                                            {
+                                                Console.WriteLine("subscribed client");
+                                            });
+
+
+            pn.subscribe("server", (object _) =>
+            {
+                Console.WriteLine("server received request");
+                pn.publish("client", "myresponse", __ => Console.WriteLine("responded from server"));
+            },
+                                            (object _) => Console.WriteLine("subscribed server"));
+
+            Thread.Sleep(1000); // test fails with a delay here
+
+            pn.publish("server", "myrequest", _ => Console.WriteLine("sent from client"));
+
+
+            Assert.IsTrue(are.WaitOne(10000));
+        }
     }
 }
