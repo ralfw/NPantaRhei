@@ -9,12 +9,12 @@ namespace npantarhei.runtime.data
     {
         private readonly List<Entry<T>> _entries = new List<Entry<T>>();
 
-        private class Entry<T>
+        private class Entry<ET>
         {
             public readonly int Priority;
-            public readonly T Data;
+            public readonly ET Data;
 
-            public Entry(int priority, T data)
+            public Entry(int priority, ET data)
             {
                 Priority = priority;
                 Data = data;
