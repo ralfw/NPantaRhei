@@ -6,6 +6,7 @@ using System.Threading;
 using NUnit.Framework;
 using npantarhei.runtime.contract;
 using npantarhei.runtime.messagetypes;
+using npantarhei.runtime.operations;
 
 namespace npantarhei.runtime.tests.integration
 {
@@ -117,7 +118,7 @@ namespace npantarhei.runtime.tests.integration
                                                            throw new ApplicationException("arrrghhh!");
                                                        });
 
-            using(var fr = new FlowRuntime(config))
+            using(var fr = new FlowRuntime(config, new Schedule_for_async_breadthfirst_processing()))
             {
                 var results = new List<IMessage>();
                 var are = new AutoResetEvent(false);

@@ -288,7 +288,7 @@ namespace npantarhei.runtime.tests.integration
 														   throw new ApplicationException("arrrghhh!");
 													   });
 
-			using (var fr = new FlowRuntime(config))
+			using (var fr = new FlowRuntime(config, new Schedule_for_async_breadthfirst_processing()))
 			{
 				IMessage result = null;
 
